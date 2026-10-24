@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/editor", "destination": "/editor.html" },
+    { "source": "/index10", "destination": "/index10.html" },
+    { "source": "/newcode", "destination": "/newcode.html" },
+    { "source": "/phone-dashboard", "destination": "/phone-dashboard.html" },
+    { "source": "/tablet-reels", "destination": "/tablet-reels.html" }
+  ]
+}
