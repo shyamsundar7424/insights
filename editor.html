@@ -1,0 +1,1801 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Insights Data Editor</title>
+  <style>
+    :root {
+      --bg: #f3f5f8;
+      --panel: #ffffff;
+      --text: #121417;
+      --muted: #667085;
+      --line: #e4e7ec;
+      --line-strong: #d0d5dd;
+      --blue: #4457e8;
+      --blue-soft: #eef1ff;
+      --green: #067647;
+      --red: #b42318;
+      --shadow: 0 12px 34px rgba(16, 24, 40, .08);
+      --radius: 10px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, #fbfcff 0, var(--bg) 260px),
+        var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px max(24px, calc((100vw - 1080px) / 2 + 24px));
+      background: rgba(255,255,255,.9);
+      border-bottom: 1px solid rgba(228,231,236,.88);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 rgba(16,24,40,.02);
+    }
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 22px 24px 40px;
+    }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 2px rgba(16,24,40,.04);
+    }
+    h2 {
+      margin: 0 0 16px;
+      font-size: 18px;
+      line-height: 1.25;
+      color: #1d2939;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    label {
+      display: grid;
+      gap: 7px;
+      color: #475467;
+      font-size: 13px;
+      font-weight: 650;
+    }
+    input {
+      width: 100%;
+      height: 42px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      padding: 0 11px;
+      color: var(--text);
+      font: inherit;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(16,24,40,.04);
+      transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    textarea {
+      width: 100%;
+      min-height: 92px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      padding: 10px 11px;
+      color: var(--text);
+      font: inherit;
+      background: #fff;
+      resize: vertical;
+      box-shadow: 0 1px 2px rgba(16,24,40,.04);
+    }
+    textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(68, 87, 232, .14);
+    }
+    input[type="file"] {
+      height: auto;
+      padding: 10px;
+      background: #f9fafb;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(68, 87, 232, .14);
+    }
+    .row-card {
+      border: 1px solid #eef0f4;
+      background: #fbfcfe;
+      border-radius: 9px;
+      padding: 15px;
+      margin-top: 12px;
+    }
+    .row-title {
+      margin-bottom: 10px;
+      font-weight: 760;
+      color: #1f2937;
+    }
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .mode-switch {
+      display: flex;
+      gap: 8px;
+      padding: 0 24px;
+      margin: 20px auto 0;
+      max-width: 1080px;
+      background: transparent;
+    }
+    .mode-switch button {
+      border-radius: 999px;
+      background: #fff;
+      color: #344054;
+      box-shadow: 0 1px 2px rgba(16,24,40,.04);
+    }
+    .mode-switch button.active {
+      background: #111827;
+      border-color: #111827;
+      color: #fff;
+    }
+    .thumb-edit {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 12px;
+      align-items: center;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 9px;
+      background: #fff;
+      border: 1px solid #eef0f4;
+    }
+    .thumb-preview {
+      width: 76px;
+      height: 102px;
+      border-radius: 7px;
+      border: 1px solid var(--line-strong);
+      object-fit: cover;
+      background: #f1f2f4;
+    }
+    .reel-media-preview {
+      display: grid;
+      grid-template-columns: 86px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid #eef0f4;
+      border-radius: 9px;
+      background: #fff;
+    }
+    .reel-media-preview img,
+    .reel-media-preview video {
+      width: 76px;
+      height: 102px;
+      border-radius: 8px;
+      border: 1px solid var(--line-strong);
+      background: #f1f2f4;
+      object-fit: cover;
+      display: block;
+    }
+    .reel-media-preview video {
+      background: #111827;
+    }
+    .media-status {
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .graph-editor {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid #e8ebf0;
+      border-radius: 9px;
+      background: #fff;
+    }
+    .graph-editor-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      color: #475467;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .graph-editor-hint {
+      margin: -4px 0 12px;
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .graph-preview-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 6px 0 14px;
+      color: #111827;
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .graph-preview-title svg {
+      width: 16px;
+      height: 16px;
+      color: #1f2933;
+      stroke: currentColor;
+      stroke-width: 2.05;
+    }
+    .graph-preview-title .info-dot,
+    .graph-preview-title .info-bar {
+      fill: currentColor;
+      stroke: none;
+    }
+    .graph-shell {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .graph-yaxis {
+      height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #98a2b3;
+      font-size: 12px;
+      padding: 10px 0 28px;
+      text-align: right;
+    }
+    .graph-stage {
+      position: relative;
+      height: 190px;
+      border-radius: 6px;
+      background: #fff;
+      overflow: hidden;
+      touch-action: none;
+    }
+    .graph-stage canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+    }
+    .graph-stage canvas:active {
+      cursor: grabbing;
+    }
+    .graph-xaxis {
+      grid-column: 2;
+      display: flex;
+      justify-content: space-between;
+      color: #98a2b3;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+    .graph-editor input[type="hidden"] {
+      display: none;
+    }
+    button, a.button {
+      min-height: 40px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      padding: 0 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      color: #344054;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+      box-shadow: 0 1px 2px rgba(16,24,40,.04);
+    }
+    button:hover, a.button:hover {
+      border-color: #b8c0cc;
+      box-shadow: 0 3px 10px rgba(16,24,40,.08);
+      transform: translateY(-1px);
+    }
+    .primary {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+    .danger {
+      color: var(--red);
+      background: #fff7f7;
+    }
+    #status {
+      color: var(--green);
+      font-weight: 700;
+      min-height: 20px;
+      margin-top: 6px;
+      font-size: 13px;
+    }
+    .index-only textarea {
+      width: 100%;
+      min-height: 76px;
+      padding: 14px;
+      border: 1px solid #d7dce3;
+      border-radius: 12px;
+      background: #fff;
+      color: #20242a;
+      font: inherit;
+      resize: vertical;
+    }
+    .index-only section { box-shadow:none; margin:14px 0; padding:17px; }
+    .index-only h3 { margin:18px 0 8px; color:#344054; font-size:15px; }
+    .index-only .row-card { background:#fff; }
+    .index-row-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+    .index-row-grid label { min-width:0; }
+    .index-row-grid input { min-width:0; }
+    .index-remove { margin-top:10px; color:#b42318; }
+    .index-only button[data-index-add] { margin:8px 0; }
+    .index-advanced { margin-top:10px; color:#475467; }
+    .index-advanced summary { cursor:pointer; font-size:13px; font-weight:650; }
+    .index-advanced .index-row-grid { margin-top:10px; }
+    #indexOverviewPoints { font:13px/1.5 ui-monospace,Consolas,monospace; }
+    .index-graph-preview { width:100%; height:112px; margin-top:8px; border:1px solid #eef0f4; border-radius:8px; background:#fff; touch-action:none; }
+    #indexOverviewHandles g circle:last-child { fill:#fff; stroke:#bd00b5; stroke-width:2.5; cursor:ns-resize; }
+    .index-day-row { display:grid; grid-template-columns:70px 1fr; gap:10px; align-items:center; margin:9px 0; }
+    .index-day-row input { grid-column:2; }
+    .index-day-chart { grid-column:2; width:100%; height:86px; border:1px solid #eef0f4; border-radius:8px; background:linear-gradient(#fff 49%,#f0f1f3 50%,#fff 51%); touch-action:none; }
+    .index-day-chart rect.active-bar-fill { fill:#d000c2; rx:4; pointer-events:none; }
+    .index-day-chart rect[data-index-hit] { fill:transparent; stroke:transparent; pointer-events:all; cursor:ns-resize; }
+    @media (max-width:700px) { .index-row-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    .editor-help { max-width: 900px; margin: 0 0 12px; color:#626974; line-height:1.55; }
+    @media (max-width: 820px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      header { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 520px) {
+      .grid { grid-template-columns: 1fr; }
+      main { padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Insights Data Editor</h1>
+      <div id="status"></div>
+    </div>
+    <div class="actions">
+      <button class="primary" id="saveBtn">Save data</button>
+      <button id="reloadBtn">Reload saved</button>
+      <button class="danger" id="resetBtn">Reset default</button>
+      <a class="button" id="openTarget" href="index.html" target="_blank">Open main page</a>
+    </div>
+  </header>
+
+  <div class="mode-switch">
+    <button type="button" class="active" data-mode="index">Insights page (index.html)</button>
+    <button type="button" data-mode="desktop">Professional dashboard data</button>
+    <button type="button" data-mode="phone">Phone dashboard data</button>
+    <button type="button" data-mode="reel">Reel editor</button>
+    <button type="button" data-mode="tablet">Tablet reel page (tablet-reels.html)</button>
+  </div>
+
+  <main>
+    <form id="editorForm">
+      <section class="index-only">
+        <h2>Insights page data</h2>
+        <p class="editor-help">Neeche diye gaye boxes mein values badlo. Save karne ke baad <b>Open Insights page</b> dabao. Graph badalne ke liye points ke numbers comma se likho: 0 upar, 100 neeche.</p>
+        <section><h2>Overview metrics</h2><div id="indexOverviewFields" class="grid"></div></section>
+        <section><h2>Overview graph</h2><div class="grid"><label>Y-axis labels (top, middle, bottom)<input data-index-scalar="overview.chart.labels" data-index-type="list"></label><label>Date labels (left, middle, right)<input data-index-scalar="overview.chart.dates" data-index-type="list"></label></div><label>Graph points (comma separated)<textarea id="indexOverviewPoints" rows="3"></textarea></label><p class="editor-help">Graph preview mein point par touch/click karke upar ya neeche drag karo. Values neeche khud update hongi.</p><svg class="index-graph-preview" viewBox="0 0 340 100" preserveAspectRatio="none" aria-label="Overview graph preview"><path d="M0 0H340M0 50H340M0 100H340" stroke="#e4e7ec" fill="none"/><path id="indexOverviewPreviewLine" d="" fill="none" stroke="#bd00b5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><g id="indexOverviewHandles"></g></svg></section>
+        <section><h2>Views by content type</h2><div id="indexContentTypes"></div></section>
+        <section><h2>All content (Content tab)</h2><p class="editor-help">Yahan har post/reel ki row edit karo. Title, time, date, type, views, viewers, follows, likes, comments, shares aur thumbnail path badal sakte ho. Sorting ke extra numbers “More stats and sorting” mein hain. Naya item jodne ke liye Add content dabao.</p><div id="indexContentItems"></div><button type="button" data-index-add="contentItems">Add content</button></section>
+        <section><h2>Audience overview</h2><div id="indexAudienceFields" class="grid"></div><label>Follower growth date labels<input data-index-scalar="audience.growthDates" data-index-type="list"></label><h3>Gender</h3><div id="indexGenderRows"></div><h3>Age ranges</h3><div id="indexAgeRows"></div><h3>Follower growth graph values</h3><p class="editor-help">Graph ke points ko touch/click karke drag karo; teenon graphs alag edit hote hain.</p><div class="grid"><label>Overall points<input data-index-growth="Overall"><svg class="index-graph-preview" viewBox="0 0 340 100" preserveAspectRatio="none"><path data-index-growth-preview="Overall" fill="none" stroke="#bd00b5" stroke-width="3"/><g data-index-growth-handles="Overall"></g></svg></label><label>Follows points<input data-index-growth="Follows"><svg class="index-graph-preview" viewBox="0 0 340 100" preserveAspectRatio="none"><path data-index-growth-preview="Follows" fill="none" stroke="#bd00b5" stroke-width="3"/><g data-index-growth-handles="Follows"></g></svg></label><label>Unfollows points<input data-index-growth="Unfollows"><svg class="index-graph-preview" viewBox="0 0 340 100" preserveAspectRatio="none"><path data-index-growth-preview="Unfollows" fill="none" stroke="#bd00b5" stroke-width="3"/><g data-index-growth-handles="Unfollows"></g></svg></label></div></section>
+        <section><h2>Top locations</h2><h3>Countries</h3><div id="indexCountries"></div><h3>Cities</h3><div id="indexCities"></div></section>
+        <section><h2>Follower active times</h2><p class="editor-help">Har din ke bars ko touch/click karke upar-neeche drag karo; har bar ek time slot hai. Values neeche input mein bhi update hongi.</p><div id="indexActiveTimes"></div></section>
+        <section><h2>Interactions &amp; profile activity</h2><div id="indexInteractionFields" class="grid"></div><div id="indexProfileActivity"></div></section>
+      </section>
+      <section>
+        <h2 id="dashboardHeading">1. Professional dashboard insights</h2>
+        <div class="grid">
+          <label>Insights date <input data-key="dashboardDate"></label>
+          <label>Views <input data-key="dashboardViews"></label>
+          <label>Interactions <input data-key="dashboardInteractions"></label>
+          <label>New followers <input data-key="dashboardNewFollowers"></label>
+          <label>Content you shared <input data-key="dashboardContentShared"></label>
+          <label class="phone-only">Insight title <input data-key="insightTitle"></label>
+          <label class="phone-only">Insight copy <input data-key="insightCopy"></label>
+        </div>
+        <div class="thumb-edit phone-only">
+          <img class="thumb-preview" data-preview-index="0" src="" alt="">
+          <div class="actions">
+            <label>Insights post image
+              <input type="file" accept="image/*" data-image-index="0">
+            </label>
+            <button type="button" data-remove-image="0">Remove image</button>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>2. Views page metrics</h2>
+        <div class="grid">
+          <label>Date <input data-key="viewsDateRange"></label>
+          <label>Views <input data-key="viewsTotal"></label>
+          <label>Followers <input data-key="followersPercent"></label>
+          <label>Non-followers <input data-key="nonFollowersPercent"></label>
+          <label>Accounts reached <input data-key="accountsReached"></label>
+          <label>Accounts reached change <input data-key="accountsReachedChange"></label>
+          <label class="phone-only">Content type label <input data-key="contentTypeLabel"></label>
+          <label class="phone-only">Content type percent <input data-key="contentTypePercent"></label>
+        </div>
+      </section>
+
+      <section>
+        <h2>By top content</h2>
+        <div id="topContentEditor"></div>
+      </section>
+
+      <section>
+        <h2>Audience: Top cities, Top countries, Age range, Gender</h2>
+        <div id="audienceEditor"></div>
+      </section>
+
+      <section>
+        <h2>Profile activity</h2>
+        <div class="grid">
+          <label>Compare text <input data-key="profileCompare"></label>
+          <label>Total <input data-key="profileTotal"></label>
+          <label>Total change <input data-key="profileTotalChange"></label>
+          <label>Profile visits <input data-key="profileVisits"></label>
+          <label>Profile visits change <input data-key="profileVisitsChange"></label>
+          <label>External link taps <input data-key="externalLinkTaps"></label>
+          <label>External link taps change <input data-key="externalLinkTapsChange"></label>
+        </div>
+      </section>
+
+      <section class="reel-only" style="display:none;">
+        <h2>Reel editor: media, metrics, and graphs</h2>
+        <div id="reelEditor"></div>
+      </section>
+    </form>
+  </main>
+
+  <script>
+    const DATA_KEY = "instagramInsightsCloneData";
+    const PHONE_DATA_KEY = "phoneDashboardCloneData";
+    const REEL_DATA_KEY = "reelEditorCloneData";
+    const TABLET_REEL_DATA_KEY = "tabletReelEditorCloneData";
+    const INDEX_DATA_KEY = "indexInsightsPageData";
+    let currentMode = "index";
+    const defaultIndexData = {
+      overview: { metrics: { Views: "206,077", "Net followers": "--", Interactions: "5,512" }, viewers: "111,948", contentTypes: [{name:"Reels",value:"205K",width:100},{name:"Posts",value:"0",width:0},{name:"Stories",value:"0",width:0},{name:"Live videos",value:"0",width:0}], followerShare: "0.5% followers", nonFollowerShare: "99.5% non-followers", chart: { labels: ["19.3K", "9.6K", "0"], dates: ["22 Sept", "7 Oct", "21 Oct"], path: "M0 24 L10 4 L21 55 L34 88 L47 49 L60 72 L73 64 L86 91 L99 90 L112 87 L125 64 L138 90 L151 98 L164 83 L177 87 L190 97 L203 81 L216 99 L229 90 L242 86 L255 98 L268 82 L281 93 L294 84 L307 71 L320 18 L328 31 L334 20 L340 34" } },
+      contentItems: [
+  { title: 'SamFrank shares her perspective on faith…', age: '4h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261021, views: '174', viewCount: 174, viewers: '174', viewerCount: 174, follows: "0", followCount: 0, likes: '5', likeCount: 5, comments: '0', commentCount: 0, shares: '0', shareCount: 0, topViews: '14T', image: "assets/content-reference-1.jpg" },
+  { title: 'SamFrank reflects on sharing Romans…', age: '6h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261020, views: '292', viewCount: 292, viewers: '292', viewerCount: 292, follows: "0", followCount: 0, likes: '7', likeCount: 7, comments: '0', commentCount: 0, shares: '0', shareCount: 0, topViews: '5.3T', image: "assets/content-reference-2.jpg" },
+  { title: 'SamFrank joins a powerful moment of…', age: '6h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261019, views: '168', viewCount: 168, viewers: '168', viewerCount: 168, follows: "0", followCount: 0, likes: '5', likeCount: 5, comments: '0', commentCount: 0, shares: '0', shareCount: 0, topViews: '4.8T', image: "assets/content-reference-3.jpg" },
+  { title: 'SamFrank embraces the moment, celebrating…', age: '12h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261018, views: '1.1K', viewCount: 1100, viewers: '1.1K', viewerCount: 1100, follows: "0", followCount: 0, likes: '25', likeCount: 25, comments: '0', commentCount: 0, shares: '0', shareCount: 0, topViews: '3.9T', image: "assets/content-reference-4.jpg" },
+  { title: 'SamFrank has an unexpected interaction…', age: '15h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261017, views: '584', viewCount: 584, viewers: '584', viewerCount: 584, follows: "0", followCount: 0, likes: '14', likeCount: 14, comments: '0', commentCount: 0, shares: '0', shareCount: 0, topViews: '3.9T', image: "assets/content-reference-5.jpg" },
+  { title: 'SamFrank opens up about his journey…', age: '18h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261016, views: '1.6K', viewCount: 1600, viewers: '1.6K', viewerCount: 1600, follows: "0", followCount: 0, likes: '55', likeCount: 55, comments: '1', commentCount: 1, shares: '1', shareCount: 1, topViews: '3.9T', image: "assets/content-reference-6.jpg" },
+  { title: 'SamFrank shares a powerful reminder…', age: '18h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261015, views: '497', viewCount: 497, viewers: '497', viewerCount: 497, follows: "0", followCount: 0, likes: '21', likeCount: 21, comments: '0', commentCount: 0, shares: '1', shareCount: 1, topViews: '3.9T', image: "assets/content-reference-7.jpg" },
+  { title: 'SamFrank shares a heartfelt conversation…', age: '20h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261014, views: '1.3K', viewCount: 1300, viewers: '1.3K', viewerCount: 1300, follows: "0", followCount: 0, likes: '33', likeCount: 33, comments: '0', commentCount: 0, shares: '3', shareCount: 3, topViews: '3.9T', image: "assets/content-reference-8.jpg" },
+  { title: 'SamFrank opens up about his personal…', age: '20h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261013, views: '3.3K', viewCount: 3300, viewers: '3.3K', viewerCount: 3300, follows: "0", followCount: 0, likes: '77', likeCount: 77, comments: '1', commentCount: 1, shares: '6', shareCount: 6, topViews: '3.9T', image: "assets/content-reference-9.jpg" },
+  { title: 'SamFrank shares a powerful reminder …', age: '1d', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261012, views: '1.3K', viewCount: 1300, viewers: '1.3K', viewerCount: 1300, follows: "0", followCount: 0, likes: '77', likeCount: 77, comments: '1', commentCount: 1, shares: '3', shareCount: 3, topViews: '3.9T', image: "assets/content-reference-10.jpg" },
+  { title: 'SamFrank shares a powerful, heartfelt…', age: '1d', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261011, views: '1.3K', viewCount: 1300, viewers: '1.3K', viewerCount: 1300, follows: "0", followCount: 0, likes: '64', likeCount: 64, comments: '0', commentCount: 0, shares: '3', shareCount: 3, topViews: '3.9T', image: "assets/content-reference-11.jpg" },
+  { title: 'SamFrank’s conversation with Steve…', age: '1d', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261010, views: '2K', viewCount: 2000, viewers: '2K', viewerCount: 2000, follows: "0", followCount: 0, likes: '28', likeCount: 28, comments: '1', commentCount: 1, shares: '3', shareCount: 3, topViews: '3.9T', image: "assets/content-reference-12.jpg" }
+],
+      locations: { Countries: [["India", "58.1%"], ["United States", "6.8%"], ["Thailand", "4.1%"], ["Egypt", "4.1%"], ["Vietnam", "2.7%"]], Cities: [["Bangalore", "2.7%"], ["Mesa", "2.7%"], ["Sitamau", "1.4%"], ["Lalsot", "1.4%"], ["Delhi", "1.4%"]] },
+      audience: { followers: "114", trend: "−0.9% since 22 Sept", growthDates: ["22 Sept", "6 Oct", "20 Oct"], growth: { Overall: "M0 52 L60 52 L120 52 L180 52 L228 52 L250 52 L262 70 L274 52 L292 52 L340 52", Follows: "M0 52 L60 52 L120 52 L180 52 L228 52 L250 38 L262 52 L274 52 L292 52 L340 52", Unfollows: "M0 52 L60 52 L120 52 L180 52 L228 52 L250 52 L262 70 L274 52 L292 52 L340 52" }, gender: [{ label: "Women", percent: "23.5%", color: "#d000c2" }, { label: "Men", percent: "76.5%", color: "#79008f" }], ageRanges: [{label:"13–17",percent:"5.9%",women:0,men:5.9},{label:"18–24",percent:"53.0%",women:5.9,men:47.1},{label:"25–34",percent:"17.6%",women:11.8,men:5.8},{label:"35–44",percent:"23.5%",women:5.9,men:17.6},{label:"45–54",percent:"0.0%",women:0,men:0},{label:"55–64",percent:"0.0%",women:0,men:0},{label:"65+",percent:"0.0%",women:0,men:0}], activeTimes: [[100,100,100,30,100,100,30,30],[82,92,100,72,88,100,76,65],[70,85,96,100,80,94,72,60],[92,100,84,70,91,100,76,62],[78,90,100,82,72,96,88,70],[65,78,92,100,90,72,84,96],[72,86,100,92,76,88,96,80]] },
+      interactionTotals: { All: 5512, Likes: 4260, Comments: 430, Reposts: 210, Saves: 405, Shares: 207 },
+      profileActivity: [{ label: "Profile visits", value: "430" }, { label: "Bio link taps", value: "0" }, { label: "Business address taps", value: "0" }]
+    };
+    const defaultData = {
+      dashboardDate: "26 Apr-25 May",
+      dashboardViews: "34.7K",
+      dashboardInteractions: "951",
+      dashboardNewFollowers: "0",
+      dashboardContentShared: "19",
+      viewsDateRange: "26 Apr - 25 May",
+      viewsTotal: "34,720",
+      followersPercent: "2.6%",
+      nonFollowersPercent: "97.4%",
+      accountsReached: "634",
+      accountsReachedChange: "+130.5%",
+      topContent: [
+        { count: "2.7K", date: "9 May", image: "" },
+        { count: "2.5K", date: "12 May", image: "" },
+        { count: "2.5K", date: "9 May", image: "" },
+        { count: "2.2K", date: "9 May", image: "" },
+        { count: "1.9K", date: "8 May", image: "" }
+      ],
+      audience: [
+        {
+          title: "Top towns/cities",
+          rows: [
+            { label: "Istanbul, Turkey", percent: "2.2%", width: "13" },
+            { label: "Sydney", percent: "1.3%", width: "8" },
+            { label: "Dubai", percent: "1.0%", width: "6" },
+            { label: "Novi Sad", percent: "1.0%", width: "6" }
+          ]
+        },
+        {
+          title: "Top countries",
+          rows: [
+            { label: "Turkiye", percent: "12.5%", width: "25" },
+            { label: "Germany", percent: "8.7%", width: "18" },
+            { label: "United States", percent: "6.7%", width: "14" },
+            { label: "Australia", percent: "5.4%", width: "11" }
+          ]
+        },
+        {
+          title: "Top age ranges",
+          rows: [
+            { label: "25-34", percent: "34.6%", width: "69" },
+            { label: "18-24", percent: "28.7%", width: "57" },
+            { label: "35-44", percent: "18.9%", width: "38" },
+            { label: "45-54", percent: "8.3%", width: "17" }
+          ]
+        },
+        {
+          title: "Gender",
+          rows: [
+            { label: "Men", percent: "94.7%", width: "94.7" },
+            { label: "Women", percent: "5.3%", width: "5.3", purple: true }
+          ]
+        }
+      ],
+      profileCompare: "vs 27 Mar-25 Apr",
+      profileTotal: "38",
+      profileTotalChange: "+153.3%",
+      profileVisits: "38",
+      profileVisitsChange: "+153.3%",
+      externalLinkTaps: "0",
+      externalLinkTapsChange: "--"
+    };
+    const defaultPhoneData = {
+      dashboardDate: "Apr 26 - May 25",
+      dashboardViews: "22.6K",
+      dashboardInteractions: "108",
+      dashboardNewFollowers: "5",
+      dashboardContentShared: "59",
+      insightTitle: "Your reel is getting played more",
+      insightCopy: "Congrats, this reel received 26% more plays than any of your last 5 reels.",
+      viewsDateRange: "Apr 26 - May 25",
+      viewsTotal: "22,550",
+      followersPercent: "0.0%",
+      nonFollowersPercent: "100.0%",
+      accountsReached: "2,997",
+      accountsReachedChange: "-48.0%",
+      contentTypeLabel: "Reels",
+      contentTypePercent: "100%",
+      topContent: [
+        { count: "2.6K", date: "May 26", image: "" },
+        { count: "2.5K", date: "May 26", image: "" },
+        { count: "2K", date: "May 26", image: "" },
+        { count: "1.9K", date: "May 26", image: "" }
+      ],
+      audience: [
+        {
+          title: "Top towns/cities",
+          rows: [
+            { label: "New York", percent: "1.3%", width: "28" },
+            { label: "Los Angeles", percent: "1.2%", width: "25" },
+            { label: "Chicago", percent: "0.8%", width: "17" },
+            { label: "London", percent: "0.7%", width: "15" }
+          ]
+        },
+        {
+          title: "Top countries",
+          rows: [
+            { label: "United States", percent: "24.4%", width: "62" },
+            { label: "Germany", percent: "6.8%", width: "18" },
+            { label: "India", percent: "6.7%", width: "17" },
+            { label: "United Kingdom", percent: "5.9%", width: "15" }
+          ]
+        },
+        {
+          title: "Top age ranges",
+          rows: [
+            { label: "18-24", percent: "41.8%", width: "84" },
+            { label: "25-34", percent: "31.6%", width: "63" },
+            { label: "35-44", percent: "12.0%", width: "24" },
+            { label: "45-54", percent: "4.5%", width: "9" }
+          ]
+        },
+        {
+          title: "Gender",
+          rows: [
+            { label: "Men", percent: "93.7%", width: "93.7" },
+            { label: "Women", percent: "6.3%", width: "6.3", purple: true }
+          ]
+        }
+      ],
+      profileCompare: "vs Mar 27 - Apr 25",
+      profileTotal: "6",
+      profileTotalChange: "-78.6%",
+      profileVisits: "6",
+      profileVisitsChange: "-78.6%",
+      externalLinkTaps: "0",
+      externalLinkTapsChange: "--"
+    };
+    const defaultReelData = {
+      thumbnailImage: "",
+      reelVideo: "",
+      description: "Doctor mode OFF 🩺…",
+      meta: "April 21 · Duration 0:35",
+      likes: "27",
+      comments: "0",
+      shares: "4",
+      reposts: "2",
+      saves: "2",
+      overviewViews: "2,006",
+      overviewWatchTime: "8h 30m 20s",
+      overviewInteractions: "35",
+      overviewProfileActivity: "1",
+      viewsTotal: "2,006",
+      viewsFollowers: "0.6%",
+      viewsNonFollowers: "99.4%",
+      sourceProfile: "4.2%",
+      sourceReelsTab: "61.7%",
+      sourceExplore: "22.6%",
+      accountsReached: "1,270",
+      retentionDuration: "0:35",
+      retentionCurve: "100,40,40,20",
+      retentionPath: "",
+      skipRate: "38.2%",
+      typicalSkipRate: "43.2%",
+      watchTime: "10h 4m 30s",
+      averageWatchTime: "15 sec",
+      interactionsTotal: "35",
+      interactionsFollowers: "0.6%",
+      interactionsNonFollowers: "99.4%",
+      likeGraph: "100,30,35,30,50,48,51,46,45,49,38,31,49,30,40",
+      likeGraphManual: "",
+      genderMen: "88.6%",
+      genderWomen: "11.4%",
+      country1Label: "United states",
+      country1Percent: "41.4%",
+      country2Label: "Australia",
+      country2Percent: "20.6%",
+      country3Label: "Turkey",
+      country3Percent: "10.0%",
+      country4Label: "Indonasia",
+      country4Percent: "9.6%",
+      country5Label: "Japan",
+      country5Percent: "6.4%",
+      profileFollows: "0"
+    };
+    Object.assign(defaultReelData, {
+      templateVersion: "reel-v2-athletes",
+      description: "Two athletes go...",
+      meta: "May 27 · Duration 0:15",
+      likes: "41",
+      comments: "0",
+      shares: "0",
+      reposts: "0",
+      saves: "5",
+      overviewViews: "4,674",
+      overviewWatchTime: "8h 57m 16s",
+      overviewInteractions: "46",
+      overviewProfileActivity: "7",
+      viewsTotal: "4,674",
+      viewsFollowers: "0.5%",
+      viewsNonFollowers: "99.5%",
+      sourceProfile: "2.9%",
+      sourceReelsTab: "85.3%",
+      sourceExplore: "8.4%",
+      accountsReached: "4,127",
+      retentionDuration: "0:15",
+      retentionCurve: "100,88,66,8",
+      retentionPath: "100,88,81,76,72,69,66,63,60,58,55,53,51,49,47,45,43,41,39,37,34,31,28,26,24,22,20,18,16,14,11,8",
+      skipRate: "27.4%",
+      typicalSkipRate: "30.1%",
+      watchTime: "8h 57m 16s",
+      averageWatchTime: "7 sec",
+      interactionsTotal: "46",
+      interactionsFollowers: "0.5%",
+      interactionsNonFollowers: "99.5%",
+      likeGraph: "1,5,11,4,6,27,23,3,3,6,3,7,22,22,47,9,21,13,8,7,45",
+      likeGraphManual: "",
+      genderMen: "77.1%",
+      genderWomen: "22.9%",
+      country1Label: "United States",
+      country1Percent: "44.7%",
+      country2Label: "United Kingdom",
+      country2Percent: "19.2%",
+      country3Label: "Canada",
+      country3Percent: "11.7%",
+      country4Label: "Australia",
+      country4Percent: "9.5%",
+      country5Label: "Germany",
+      country5Percent: "5.1%",
+      profileFollows: "4"
+    });
+    const defaultTabletReelData = {
+      templateVersion: "tablet-reel-v3",
+      tabletThumbnailImage: "",
+      likes: "376",
+      comments: "13",
+      reposts: "5",
+      shares: "4",
+      saves: "31",
+      summaryViews: "14,136",
+      summaryAccountsReached: "11,581",
+      summaryAverageWatchTime: "24s",
+      summaryFollows: "0",
+      viewsTotal: "14,136",
+      viewsDate1: "18 Oct",
+      viewsDate2: "21 Oct",
+      viewsDate3: "23 Oct",
+      viewsGraph: "0,2100,7400,13000,13600,13800,13950,14050,14100,14136",
+      skipRate: "30.8%",
+      shareRate: "0.0%",
+      likeRate: "3.3%",
+      saveRate: "0.3%",
+      repostRate: "0.0%",
+      commentRate: "0.1%",
+      retentionDuration: "0:52",
+      retentionGraph: "100,88,74,61,52,47,43,41,39,37,35,33,31,28,22,20,8",
+      source1Label: "Reels tab",
+      source1Percent: "84.4%",
+      source2Label: "Explore",
+      source2Percent: "13.2%",
+      adLabel: "Boost this Reel",
+      engagementGraph: "1,4,7,3,8,6,2,3,1,2,1,1,1,0,1,2,3,2,4,2,1,2,1,2,1,2,1,2,1,1,2,1",
+      profileVisits: "28",
+      actionFollows: "0",
+      interactionLikes: "376",
+      interactionComments: "13",
+      interactionReposts: "5",
+      interactionShares: "4",
+      interactionSaves: "31",
+      audienceFollowers: "0.1%",
+      audienceNonFollowers: "99.9%",
+      audienceMen: "54.5%",
+      audienceWomen: "45.5%"
+    };
+
+    function activeDefaults() {
+      if (currentMode === "index") return defaultIndexData;
+      if (currentMode === "tablet") return defaultTabletReelData;
+      if (currentMode === "reel") return defaultReelData;
+      return currentMode === "phone" ? defaultPhoneData : defaultData;
+    }
+
+    function activeKey() {
+      if (currentMode === "index") return INDEX_DATA_KEY;
+      if (currentMode === "tablet") return TABLET_REEL_DATA_KEY;
+      if (currentMode === "reel") return REEL_DATA_KEY;
+      return currentMode === "phone" ? PHONE_DATA_KEY : DATA_KEY;
+    }
+
+    function normalizeAudience(savedCards) {
+      if (currentMode === "reel" || currentMode === "tablet" || !activeDefaults().audience) return [];
+      const cards = Array.isArray(savedCards) ? savedCards : [];
+      return activeDefaults().audience.map(defaultCard => {
+        const savedCard = cards.find(card => card?.title === defaultCard.title);
+        if (!savedCard) return defaultCard;
+        return {
+          ...defaultCard,
+          ...savedCard,
+          rows: defaultCard.rows.map((defaultRow, index) => ({
+            ...defaultRow,
+            ...(savedCard.rows?.[index] || {})
+          }))
+        };
+      });
+    }
+
+    function mergeData(saved) {
+      const defaults = activeDefaults();
+      if (currentMode === "index") return { ...defaults, ...(saved || {}), overview: { ...defaults.overview, ...(saved?.overview || {}), metrics: { ...defaults.overview.metrics, ...(saved?.overview?.metrics || {}) }, chart: { ...defaults.overview.chart, ...(saved?.overview?.chart || {}) } }, locations: { ...defaults.locations, ...(saved?.locations || {}) }, audience: { ...defaults.audience, ...(saved?.audience || {}), gender: saved?.audience?.gender || defaults.audience.gender, ageRanges: saved?.audience?.ageRanges || defaults.audience.ageRanges, activeTimes: saved?.audience?.activeTimes || defaults.audience.activeTimes }, interactionTotals: { ...defaults.interactionTotals, ...(saved?.interactionTotals || {}) }, contentItems: saved?.contentItems || defaults.contentItems, profileActivity: saved?.profileActivity || defaults.profileActivity };
+      if ((currentMode === "reel" || currentMode === "tablet") && saved?.templateVersion !== defaults.templateVersion) {
+        saved = null;
+      }
+      return {
+        ...defaults,
+        ...(saved || {}),
+        topContent: defaults.topContent && saved?.topContent?.length ? defaults.topContent.map((item, index) => ({
+          ...item,
+          ...(saved.topContent[index] || {})
+        })) : (defaults.topContent || []),
+        audience: normalizeAudience(saved?.audience)
+      };
+    }
+
+    function readData() {
+      try {
+        return mergeData(JSON.parse(localStorage.getItem(activeKey())));
+      } catch {
+        return mergeData();
+      }
+    }
+
+    function showStatus(text) {
+      const status = document.getElementById("status");
+      status.textContent = text;
+      clearTimeout(showStatus.timer);
+      showStatus.timer = setTimeout(() => status.textContent = "", 2500);
+    }
+
+    function encodeDataForUrl(data) {
+      return btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    }
+
+    function updateOpenTargetHref(data = readData()) {
+      const target = document.getElementById("openTarget");
+      if (currentMode === "index") {
+        target.href = `index.html#data=${encodeDataForUrl(data)}`;
+        target.textContent = "Open Insights page";
+        return;
+      }
+      if (currentMode === "phone") {
+        target.href = `phone-dashboard.html#data=${encodeDataForUrl(data)}`;
+        target.textContent = "Open phone page";
+        return;
+      }
+      if (currentMode === "reel") {
+        target.href = `index10.html#data=${encodeDataForUrl(data)}`;
+        target.textContent = "Open reel page";
+        return;
+      }
+      if (currentMode === "tablet") {
+        target.href = `tablet-reels.html#data=${encodeDataForUrl(data)}`;
+        target.textContent = "Open tablet reel page";
+        return;
+      }
+      target.href = `index.html#data=${encodeDataForUrl(data)}`;
+      target.textContent = "Open main page";
+    }
+
+    function makeIndexGraphPath(value) {
+      const points = String(value || "").split(",").map(Number).filter(Number.isFinite);
+      if (points.length < 2) throw new Error("Graph ke liye kam se kam 2 comma-separated numbers dein.");
+      return points.map((point, index) => ` ${index ? "L" : "M"}${(340 * index / (points.length - 1)).toFixed(1)} ${Math.max(0, Math.min(100, point)).toFixed(1)}`).join("");
+    }
+
+    function drawIndexGraphPreview(svg, field, lineSelector = "#indexOverviewPreviewLine", handlesSelector = "#indexOverviewHandles") {
+      const values = field.value.split(",").map(Number).filter(Number.isFinite);
+      if (values.length < 2) return;
+      svg.querySelector(lineSelector).setAttribute("d", makeIndexGraphPath(values.join(",")));
+      const handles = svg.querySelector(handlesSelector);
+      handles.replaceChildren(...values.map((value, index) => {
+        const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        group.setAttribute("data-index-point", index);
+        const hit = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        hit.setAttribute("r", "10"); hit.setAttribute("fill", "transparent"); hit.setAttribute("stroke", "transparent");
+        const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        dot.setAttribute("r", "3.8");
+        const x = (340 * index / (values.length - 1)).toFixed(1);
+        const y = Math.max(0, Math.min(100, value)).toFixed(1);
+        [hit, dot].forEach(circle => { circle.setAttribute("cx", x); circle.setAttribute("cy", y); });
+        group.append(hit, dot);
+        return group;
+      }));
+    }
+
+    function bindIndexGraphDragging(svg, field, lineSelector = "#indexOverviewPreviewLine", handlesSelector = "#indexOverviewHandles") {
+      if (svg.dataset.dragBound) return;
+      svg.dataset.dragBound = "true";
+      let activePoint = -1;
+      svg.addEventListener("pointerdown", event => {
+        const handle = event.target.closest("[data-index-point]");
+        if (!handle) return;
+        event.preventDefault();
+        activePoint = Number(handle.dataset.indexPoint);
+        svg.setPointerCapture(event.pointerId);
+      });
+      svg.addEventListener("pointermove", event => {
+        if (activePoint < 0) return;
+        const bounds = svg.getBoundingClientRect();
+        const values = field.value.split(",").map(Number).filter(Number.isFinite);
+        const y = Math.max(0, Math.min(100, Math.round((event.clientY - bounds.top) / bounds.height * 100)));
+        if (activePoint >= values.length) return;
+        values[activePoint] = y;
+        field.value = values.join(", ");
+        drawIndexGraphPreview(svg, field, lineSelector, handlesSelector);
+      });
+      const endDrag = event => {
+        activePoint = -1;
+        if (svg.hasPointerCapture(event.pointerId)) svg.releasePointerCapture(event.pointerId);
+      };
+      svg.addEventListener("pointerup", endDrag);
+      svg.addEventListener("pointercancel", endDrag);
+    }
+
+    function drawActiveTimeBars(svg, input) {
+      const values = input.value.split(",").map(Number).filter(Number.isFinite);
+      const slot = 280 / Math.max(values.length, 1);
+      svg.replaceChildren(...values.map((value, index) => {
+        const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        group.setAttribute("data-active-bar", index);
+        const x = (index * slot + slot * 0.16).toFixed(1);
+        const width = (slot * 0.68).toFixed(1);
+        const hit = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        hit.setAttribute("x", x); hit.setAttribute("y", "0"); hit.setAttribute("width", width); hit.setAttribute("height", "100"); hit.setAttribute("data-index-hit", "true");
+        const bar = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        const height = Math.max(0, Math.min(100, value));
+        bar.setAttribute("x", x);
+        bar.setAttribute("y", (100 - height).toFixed(1));
+        bar.setAttribute("width", width);
+        bar.setAttribute("height", height.toFixed(1));
+        bar.setAttribute("class", "active-bar-fill");
+        group.append(hit, bar);
+        return group;
+      }));
+    }
+
+    function bindActiveTimeDragging(svg, input) {
+      if (svg.dataset.dragBound) return;
+      svg.dataset.dragBound = "true";
+      let activeBar = -1;
+      svg.addEventListener("pointerdown", event => {
+        const bar = event.target.closest("[data-active-bar]");
+        if (!bar) return;
+        event.preventDefault(); activeBar = Number(bar.dataset.activeBar); svg.setPointerCapture(event.pointerId);
+      });
+      svg.addEventListener("pointermove", event => {
+        if (activeBar < 0) return;
+        const bounds = svg.getBoundingClientRect();
+        const values = input.value.split(",").map(Number).filter(Number.isFinite);
+        values[activeBar] = Math.max(0, Math.min(100, Math.round((bounds.bottom - event.clientY) / bounds.height * 100)));
+        input.value = values.join(", "); drawActiveTimeBars(svg, input);
+      });
+      const end = event => { activeBar = -1; if (svg.hasPointerCapture(event.pointerId)) svg.releasePointerCapture(event.pointerId); };
+      svg.addEventListener("pointerup", end); svg.addEventListener("pointercancel", end);
+    }
+
+    function renderIndexRows(containerId, arrayKey, rows, fields, tuple = false) {
+      const root = document.getElementById(containerId);
+      root.innerHTML = rows.map((row, index) => {
+        const item = tuple ? { name: row[0], value: row[1] } : row;
+        const makeInput = ([key, label]) => `<label>${label}<input data-index-field="${arrayKey}|${index}|${key}" value="${escapeAttr(item?.[key] ?? "")}"></label>`;
+        const inputs = fields.filter(field => !field[2]).map(makeInput).join("");
+        const advancedFields = fields.filter(field => field[2]);
+        const advanced = advancedFields.length ? `<details class="index-advanced"><summary>More stats and sorting</summary><div class="index-row-grid">${advancedFields.map(makeInput).join("")}</div></details>` : "";
+        const removeButton = arrayKey === "contentItems" ? `<button type="button" class="index-remove" data-index-remove="${arrayKey}" data-index-row-index="${index}">Remove content</button>` : "";
+        return `<div class="row-card"><div class="row-title">${escapeHtml(fields[0]?.[1] || "Item")} ${index + 1}</div><div class="index-row-grid">${inputs}</div>${advanced}${removeButton}</div>`;
+      }).join("");
+    }
+
+    function renderIndexForm(data) {
+      const overview = data.overview;
+      document.getElementById("indexOverviewFields").innerHTML = [
+        ["overview.metrics.Views", "Views", overview.metrics.Views], ["overview.metrics.Net followers", "Net followers", overview.metrics["Net followers"]],
+        ["overview.metrics.Interactions", "Interactions", overview.metrics.Interactions], ["overview.viewers", "Viewers", overview.viewers],
+        ["overview.followerShare", "Followers share", overview.followerShare], ["overview.nonFollowerShare", "Non-followers share", overview.nonFollowerShare]
+      ].map(([path, label, value]) => `<label>${label}<input data-index-value="${escapeAttr(path)}" value="${escapeAttr(value)}"></label>`).join("");
+      document.querySelectorAll("[data-index-scalar]").forEach(input => { const path = input.dataset.indexScalar.split("."); input.value = (input.dataset.indexType === "list" ? getIndexValue(data, path).join(", ") : getIndexValue(data, path)) || ""; });
+      const points = overview.chart.points || [24,4,55,88,49,72,64,91,90,87,64,90,98,83,87,97,81,99,90,86,98,82,93,84,71,18,31,20,34];
+      const pointField = document.getElementById("indexOverviewPoints");
+      pointField.value = points.join(", ");
+      pointField.dataset.original = pointField.value;
+      const graphPreview = document.getElementById("indexOverviewPreviewLine").closest("svg");
+      bindIndexGraphDragging(graphPreview, pointField);
+      drawIndexGraphPreview(graphPreview, pointField);
+      pointField.oninput = () => { try { drawIndexGraphPreview(graphPreview, pointField); } catch {} };
+      renderIndexRows("indexContentTypes", "overview.contentTypes", overview.contentTypes, [["name","Type name"],["value","Displayed total"],["width","Bar width %"]]);
+      renderIndexRows("indexContentItems", "contentItems", data.contentItems, [["title","Content title"],["age","Age/time"],["date","Date/category text"],["type","Type"],["views","Views"],["viewCount","Views number for sorting",true],["viewers","Viewers"],["viewerCount","Viewers number for sorting",true],["follows","Follows"],["followCount","Follows number for sorting",true],["likes","Likes"],["likeCount","Likes number for sorting",true],["comments","Comments"],["commentCount","Comments number",true],["shares","Shares"],["shareCount","Shares number",true],["topViews","Top views label",true],["dateOrder","Date sort number",true],["image","Thumbnail path"]]);
+      const audience = data.audience;
+      document.getElementById("indexAudienceFields").innerHTML = `<label>Followers<input data-index-value="audience.followers" value="${escapeAttr(audience.followers)}"></label><label>Follower change text<input data-index-value="audience.trend" value="${escapeAttr(audience.trend)}"></label>`;
+      renderIndexRows("indexGenderRows", "audience.gender", audience.gender, [["label","Gender label"],["percent","Percent"],["color","Bar color"]]);
+      renderIndexRows("indexAgeRows", "audience.ageRanges", audience.ageRanges, [["label","Age range"],["percent","Displayed percent"],["women","Women bar %"],["men","Men bar %"]]);
+      document.querySelectorAll("[data-index-growth]").forEach(input => { const key = input.dataset.indexGrowth; input.value = (audience.growthPoints?.[key] || (key === "Follows" ? [52,52,52,52,52,38,52,52,52,52] : [52,52,52,52,52,52,70,52,52,52])).join(", "); input.dataset.original = input.value; const svg = input.parentElement.querySelector("svg"); const lineSelector = `[data-index-growth-preview="${key}"]`; const handlesSelector = `[data-index-growth-handles="${key}"]`; bindIndexGraphDragging(svg, input, lineSelector, handlesSelector); drawIndexGraphPreview(svg, input, lineSelector, handlesSelector); input.oninput = () => { try { drawIndexGraphPreview(svg, input, lineSelector, handlesSelector); } catch {} }; });
+      renderIndexRows("indexCountries", "locations.Countries", data.locations.Countries, [["name","Country"],["value","Percent"]], true);
+      renderIndexRows("indexCities", "locations.Cities", data.locations.Cities, [["name","City"],["value","Percent"]], true);
+      document.getElementById("indexActiveTimes").innerHTML = audience.activeTimes.map((day, index) => `<div class="index-day-row"><b>${["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][index] || `Day ${index + 1}`}</b><input data-index-active-day="${index}" value="${escapeAttr(day.join(", "))}"><svg class="index-day-chart" data-index-day-chart="${index}" viewBox="0 0 280 100" preserveAspectRatio="none" aria-label="${["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][index] || `Day ${index + 1}`} active times"></svg></div>`).join("");
+      document.querySelectorAll("[data-index-active-day]").forEach(input => { const svg = document.querySelector(`[data-index-day-chart="${input.dataset.indexActiveDay}"]`); bindActiveTimeDragging(svg, input); drawActiveTimeBars(svg, input); input.oninput = () => drawActiveTimeBars(svg, input); });
+      document.getElementById("indexInteractionFields").innerHTML = Object.entries(data.interactionTotals).map(([key,value]) => `<label>${escapeHtml(key)} interactions<input data-index-interaction="${escapeAttr(key)}" value="${escapeAttr(value)}"></label>`).join("");
+      renderIndexRows("indexProfileActivity", "profileActivity", data.profileActivity, [["label","Activity label"],["value","Total"]]);
+    }
+
+    function getIndexValue(root, path) { return path.reduce((value, key) => value?.[key], root); }
+
+    function collectIndexForm() {
+      const data = readData();
+      document.querySelectorAll("[data-index-value]").forEach(input => {
+        const path = input.dataset.indexValue.split(".");
+        let node = data;
+        path.slice(0, -1).forEach(key => node = node[key] ||= {});
+        node[path.at(-1)] = input.value.trim();
+      });
+      document.querySelectorAll("[data-index-scalar]").forEach(input => {
+        const path = input.dataset.indexScalar.split("."); let node = data;
+        path.slice(0, -1).forEach(key => node = node[key] ||= {});
+        node[path.at(-1)] = input.dataset.indexType === "list" ? input.value.split(",").map(value => value.trim()) : input.value.trim();
+      });
+      const overviewPoints = document.getElementById("indexOverviewPoints");
+      if (overviewPoints.value !== overviewPoints.dataset.original) { data.overview.chart.points = overviewPoints.value.split(",").map(Number); data.overview.chart.path = makeIndexGraphPath(overviewPoints.value); }
+      const readRows = (arrayKey, tuple = false) => {
+        const fieldNodes = [...document.querySelectorAll("[data-index-field]")].filter(input => input.dataset.indexField.startsWith(`${arrayKey}|`));
+        const rows = [];
+        fieldNodes.forEach(input => { const [, indexText, field] = input.dataset.indexField.split("|"); const index = Number(indexText); rows[index] ||= {}; rows[index][field] = input.value.trim(); });
+        return tuple ? rows.map(row => [row.name || "", row.value || ""]) : rows;
+      };
+      data.overview.contentTypes = readRows("overview.contentTypes").map(row => ({ ...row, width: Number(row.width) || 0 }));
+      const numericFields = new Set(["viewCount","viewerCount","followCount","likeCount","commentCount","shareCount","dateOrder"]);
+      data.contentItems = readRows("contentItems").map(row => Object.fromEntries(Object.entries(row).map(([key,value]) => [key, numericFields.has(key) ? Number(value) || 0 : value])));
+      data.audience.gender = readRows("audience.gender");
+      data.audience.ageRanges = readRows("audience.ageRanges").map(row => ({ ...row, women: Number(row.women) || 0, men: Number(row.men) || 0 }));
+      data.locations.Countries = readRows("locations.Countries", true);
+      data.locations.Cities = readRows("locations.Cities", true);
+      document.querySelectorAll("[data-index-growth]").forEach(input => {
+        const key = input.dataset.indexGrowth;
+        if (input.value !== input.dataset.original) { const points = input.value.split(",").map(Number); data.audience.growthPoints ||= {}; data.audience.growthPoints[key] = points; data.audience.growth ||= {}; data.audience.growth[key] = makeIndexGraphPath(input.value); }
+      });
+      data.audience.activeTimes = [...document.querySelectorAll("[data-index-active-day]")].map(input => input.value.split(",").map(value => Math.max(0, Math.min(100, Number(value.trim()) || 0))));
+      document.querySelectorAll("[data-index-interaction]").forEach(input => data.interactionTotals[input.dataset.indexInteraction] = Number(input.value) || 0);
+      data.profileActivity = readRows("profileActivity");
+      return mergeData(data);
+    }
+
+    document.addEventListener("click", event => {
+      const remove = event.target.closest("[data-index-remove]");
+      if (remove) {
+        const data = collectIndexForm();
+        const key = remove.dataset.indexRemove;
+        const rows = key.startsWith("locations.") ? data.locations[key.split(".")[1]] : getIndexValue(data, key.split("."));
+        rows.splice(Number(remove.dataset.indexRowIndex), 1);
+        renderIndexForm(data);
+        return;
+      }
+      const add = event.target.closest("[data-index-add]");
+      if (!add) return;
+      const data = collectIndexForm();
+      const key = add.dataset.indexAdd;
+      if (key === "contentItems") data.contentItems.push({ title:"New content", age:"", date:"", type:"Reel", dateOrder:20261021, views:"0", viewCount:0, viewers:"0", viewerCount:0, follows:"0", followCount:0, likes:"0", likeCount:0, comments:"0", commentCount:0, shares:"0", shareCount:0, topViews:"0", image:"assets/content-reference-1.jpg" });
+      else if (key === "contentTypes") data.overview.contentTypes.push({ name:"New type", value:"0", width:0 });
+      else if (key === "gender") data.audience.gender.push({ label:"New group", percent:"0%", color:"#79008f" });
+      else if (key === "ageRanges") data.audience.ageRanges.push({ label:"New range", percent:"0%", women:0, men:0 });
+      else if (key === "Countries" || key === "Cities") data.locations[key].push([key === "Countries" ? "New country" : "New city", "0%"]);
+      else if (key === "profileActivity") data.profileActivity.push({ label:"New activity", value:"0" });
+      renderIndexForm(data);
+    });
+
+    function renderForm() {
+      const data = readData();
+      const isReel = currentMode === "reel";
+      const isTablet = currentMode === "tablet";
+      const isIndex = currentMode === "index";
+      document.querySelectorAll("#editorForm > section:not(.reel-only)").forEach(section => {
+        section.style.display = isIndex ? (section.classList.contains("index-only") ? "" : "none") : ((isReel || isTablet) ? "none" : (section.classList.contains("index-only") ? "none" : ""));
+      });
+      document.querySelectorAll(".reel-only").forEach(section => {
+        section.style.display = (isReel || isTablet) ? "" : "none";
+      });
+      if (isReel) {
+        updateOpenTargetHref(data);
+        renderReelForm(data);
+        return;
+      }
+      if (isTablet) {
+        updateOpenTargetHref(data);
+        renderTabletReelForm(data);
+        return;
+      }
+      if (isIndex) {
+        updateOpenTargetHref(data);
+        renderIndexForm(data);
+        return;
+      }
+      document.getElementById("dashboardHeading").textContent = currentMode === "phone"
+        ? "1. Phone professional dashboard insights"
+        : "1. Professional dashboard insights";
+      updateOpenTargetHref(data);
+      document.querySelectorAll(".phone-only").forEach(item => {
+        item.style.display = currentMode === "phone" ? "grid" : "none";
+      });
+      document.querySelectorAll("[data-key]").forEach(input => {
+        input.value = data[input.dataset.key] ?? "";
+      });
+
+      document.getElementById("topContentEditor").innerHTML = data.topContent.map((item, index) => `
+        <div class="row-card">
+          <div class="row-title">Content ${index + 1}</div>
+          <div class="grid">
+            <label>Count <input data-top-index="${index}" data-top-key="count" value="${escapeAttr(item.count)}"></label>
+            <label>Date <input data-top-index="${index}" data-top-key="date" value="${escapeAttr(item.date)}"></label>
+          </div>
+          <div class="thumb-edit">
+            <img class="thumb-preview" data-preview-index="${index}" src="${escapeAttr(item.image || "")}" alt="">
+            <div class="actions">
+              <label>Video image
+                <input type="file" accept="image/*" data-image-index="${index}">
+              </label>
+              <button type="button" data-remove-image="${index}">Remove image</button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-preview-index]").forEach(preview => {
+        const item = data.topContent[Number(preview.dataset.previewIndex)];
+        preview.src = item?.image || "";
+      });
+
+      document.getElementById("audienceEditor").innerHTML = data.audience.map((card, cardIndex) => `
+        <div class="row-card">
+          <div class="grid">
+            <label>Card title <input data-aud-card="${cardIndex}" data-aud-key="title" value="${escapeAttr(card.title)}"></label>
+          </div>
+          ${(card.rows || []).map((row, rowIndex) => `
+            <div class="row-card">
+              <div class="row-title">${escapeHtml(card.title)} row ${rowIndex + 1}</div>
+              <div class="grid">
+                <label>Label <input data-aud-card="${cardIndex}" data-aud-row="${rowIndex}" data-aud-key="label" value="${escapeAttr(row.label)}"></label>
+                <label>Percent text <input data-aud-card="${cardIndex}" data-aud-row="${rowIndex}" data-aud-key="percent" value="${escapeAttr(row.percent)}"></label>
+                <label>Bar width number <input data-aud-card="${cardIndex}" data-aud-row="${rowIndex}" data-aud-key="width" value="${escapeAttr(row.width)}"></label>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      `).join("");
+    }
+
+    function renderReelForm(data) {
+      const groups = [
+        ["Media", [
+          ["thumbnailImage", "Thumbnail image", "file:image"],
+          ["reelVideo", "Reel video", "file:video"]
+        ]],
+        ["Top reel details", [
+          ["description", "Description"],
+          ["meta", "Meta/date"],
+          ["likes", "Likes"], ["comments", "Comments"], ["shares", "Shares"],
+          ["reposts", "Reposts"], ["saves", "Saves"]
+        ]],
+        ["Overview", [
+          ["overviewViews", "Views"], ["overviewWatchTime", "Watch time"],
+          ["overviewInteractions", "Interactions"], ["overviewProfileActivity", "Profile activity"]
+        ]],
+        ["Views donut and sources", [
+          ["viewsTotal", "Views total"], ["viewsFollowers", "Followers percent"],
+          ["viewsNonFollowers", "Non-followers percent"], ["sourceProfile", "Feed source"],
+          ["sourceReelsTab", "Reels tab source"], ["sourceExplore", "Explore source"],
+          ["accountsReached", "Accounts reached"]
+        ]],
+        ["Retention graph", [
+          ["retentionDuration", "Duration label"],
+          ["retentionCurve", "Retention curve points: start, control1, control2, end"],
+          ["skipRate", "This reel skip rate"], ["typicalSkipRate", "Typical skip rate"],
+          ["watchTime", "Watch time"], ["averageWatchTime", "Average watch time"]
+        ]],
+        ["Interactions donut and like graph", [
+          ["interactionsTotal", "Interactions total"], ["interactionsFollowers", "Followers percent"],
+          ["interactionsNonFollowers", "Non-followers percent"],
+          ["likeGraph", "Like graph values, comma separated"]
+        ]],
+        ["Audience and profile", [
+          ["genderMen", "Gender men"], ["genderWomen", "Gender women"],
+          ["country1Label", "Country 1 label"], ["country1Percent", "Country 1 percent"],
+          ["country2Label", "Country 2 label"], ["country2Percent", "Country 2 percent"],
+          ["country3Label", "Country 3 label"], ["country3Percent", "Country 3 percent"],
+          ["country4Label", "Country 4 label"], ["country4Percent", "Country 4 percent"],
+          ["country5Label", "Country 5 label"], ["country5Percent", "Country 5 percent"],
+          ["profileFollows", "Profile follows"]
+        ]]
+      ];
+      document.getElementById("reelEditor").innerHTML = groups.map(([title, fields]) => `
+        <div class="row-card">
+          <div class="row-title">${escapeHtml(title)}</div>
+          <div class="grid">
+            ${fields.map(([key, label, type]) => {
+              if (type?.startsWith("file:")) {
+                const accept = type === "file:video" ? "video/*" : "image/*";
+                return `<label>${escapeHtml(label)}
+                  <input type="file" accept="${accept}" data-reel-file="${escapeAttr(key)}">
+                  <input type="hidden" data-reel-key="${escapeAttr(key)}" value="${escapeAttr(data[key] || "")}">
+                </label>`;
+              }
+              const value = escapeAttr(data[key] ?? "");
+              if (key === "likeGraph" || key === "retentionCurve") {
+                return `<label>${escapeHtml(label)}<textarea data-reel-key="${escapeAttr(key)}">${value}</textarea></label>`;
+              }
+              return `<label>${escapeHtml(label)}<input data-reel-key="${escapeAttr(key)}" value="${value}"></label>`;
+            }).join("")}
+          </div>
+          ${fields.some(([, , type]) => type?.startsWith("file:")) ? `
+            <div class="actions" style="margin-top:12px;">
+              ${fields.filter(([, , type]) => type?.startsWith("file:")).map(([key, label]) => `
+                <button type="button" data-remove-reel-file="${escapeAttr(key)}">Remove ${escapeHtml(label)}</button>
+              `).join("")}
+            </div>` : ""}
+          ${fields.some(([key]) => key === "thumbnailImage") ? mediaPreviewMarkup(data) : ""}
+          ${fields.some(([key]) => key === "retentionCurve") ? graphEditorMarkup("retentionPath", "Retention", "retentionCurve", data) : ""}
+          ${fields.some(([key]) => key === "likeGraph") ? graphEditorMarkup("likeGraphManual", "When people liked your reel", "likeGraph", data) : ""}
+        </div>
+      `).join("");
+      initReelGraphEditors();
+      initReelMediaPreviews();
+    }
+
+    function renderTabletReelForm(data) {
+      const groups = [
+        ["Media and top stats", [
+          ["tabletThumbnailImage", "Reel thumbnail", "file:image"],
+          ["likes", "Likes"], ["comments", "Comments"], ["reposts", "Reposts"],
+          ["shares", "Shares"], ["saves", "Saves"]
+        ]],
+        ["Overview summary", [
+          ["summaryViews", "Summary views"], ["summaryAccountsReached", "Viewers"],
+          ["summaryAverageWatchTime", "Average watch time"], ["summaryFollows", "Follows"],
+          ["viewsTotal", "Views header total"],
+          ["viewsDate1", "Views x-axis date 1"], ["viewsDate2", "Views x-axis date 2"], ["viewsDate3", "Views x-axis date 3"],
+          ["viewsGraph", "Views graph values, comma separated"]
+        ]],
+        ["What affects your views", [
+          ["skipRate", "Skip rate"], ["shareRate", "Share rate"], ["likeRate", "Like rate"],
+          ["saveRate", "Save rate"], ["repostRate", "Repost rate"], ["commentRate", "Comment rate"]
+        ]],
+        ["Watch retention and sources", [
+          ["retentionDuration", "Retention duration label"], ["retentionGraph", "Retention graph values, comma separated"],
+          ["source1Label", "Source 1 label"], ["source1Percent", "Source 1 percent"],
+          ["source2Label", "Source 2 label"], ["source2Percent", "Source 2 percent"],
+          ["adLabel", "Ad row label"]
+        ]],
+        ["Engagement tab", [
+          ["engagementGraph", "When people liked your reel graph values, comma separated"],
+          ["profileVisits", "Profile visits"], ["actionFollows", "Follows"],
+          ["interactionLikes", "Interaction likes"], ["interactionComments", "Interaction comments"],
+          ["interactionReposts", "Interaction reposts"], ["interactionShares", "Interaction shares"],
+          ["interactionSaves", "Interaction saves"]
+        ]],
+        ["Audience tab", [
+          ["audienceFollowers", "Followers percent"], ["audienceNonFollowers", "Non-followers percent"],
+          ["audienceMen", "Men percent"], ["audienceWomen", "Women percent"]
+        ]]
+      ];
+
+      document.getElementById("reelEditor").innerHTML = groups.map(([title, fields]) => `
+        <div class="row-card">
+          <div class="row-title">${escapeHtml(title)}</div>
+          <div class="grid">
+            ${fields.map(([key, label, type]) => {
+              if (type?.startsWith("file:")) {
+                return `<label>${escapeHtml(label)}
+                  <input type="file" accept="image/*" data-reel-file="${escapeAttr(key)}">
+                  <input type="hidden" data-reel-key="${escapeAttr(key)}" value="${escapeAttr(data[key] || "")}">
+                </label>`;
+              }
+              const value = escapeAttr(data[key] ?? "");
+              if (key.includes("Graph")) {
+                return `<label>${escapeHtml(label)}<textarea data-reel-key="${escapeAttr(key)}">${value}</textarea></label>`;
+              }
+              return `<label>${escapeHtml(label)}<input data-reel-key="${escapeAttr(key)}" value="${value}"></label>`;
+            }).join("")}
+          </div>
+          ${fields.some(([, , type]) => type?.startsWith("file:")) ? `
+            <div class="actions" style="margin-top:12px;">
+              ${fields.filter(([, , type]) => type?.startsWith("file:")).map(([key, label]) => `
+                <button type="button" data-remove-reel-file="${escapeAttr(key)}">Remove ${escapeHtml(label)}</button>
+              `).join("")}
+            </div>` : ""}
+          ${fields.some(([key]) => key === "tabletThumbnailImage") ? tabletMediaPreviewMarkup(data) : ""}
+          ${fields.some(([key]) => key === "viewsGraph") ? graphEditorMarkup("tabletViewsGraphManual", "Views", "viewsGraph", data) : ""}
+          ${fields.some(([key]) => key === "retentionGraph") ? graphEditorMarkup("tabletRetentionGraphManual", "How long people watched your reel", "retentionGraph", data) : ""}
+          ${fields.some(([key]) => key === "engagementGraph") ? graphEditorMarkup("tabletEngagementGraphManual", "When people liked your reel", "engagementGraph", data) : ""}
+        </div>
+      `).join("");
+      initReelGraphEditors();
+      initReelMediaPreviews();
+    }
+
+    function tabletMediaPreviewMarkup(data) {
+      const thumbnail = data.tabletThumbnailImage || "";
+      return `
+        <div class="reel-media-preview">
+          <img data-media-preview="tabletThumbnailImage" src="${thumbnail && !isIndexedDbMediaRef(thumbnail) ? escapeAttr(thumbnail) : "assets/reel-insights-thumbnail.jpg"}" alt="Selected tablet thumbnail">
+          <div>
+            <div class="row-title" style="margin-bottom:6px;">Current tablet thumbnail</div>
+            <div class="media-status">${thumbnail ? "Thumbnail image is saved and will show on tablet-reels.html." : "Default tablet thumbnail will show."}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function mediaPreviewMarkup(data) {
+      const thumbnail = data.thumbnailImage || "";
+      const video = data.reelVideo || "";
+      return `
+        <div class="reel-media-preview">
+          <img data-media-preview="thumbnailImage" src="${thumbnail && !isIndexedDbMediaRef(thumbnail) ? escapeAttr(thumbnail) : ""}" alt="Selected thumbnail">
+          <div>
+            <div class="row-title" style="margin-bottom:6px;">Current thumbnail</div>
+            <div class="media-status">${thumbnail ? "Thumbnail image is saved and will show on index10.html." : "No thumbnail selected yet. Default page image will show."}</div>
+          </div>
+        </div>
+        <div class="reel-media-preview">
+          <video data-media-preview="reelVideo" src="${video && !isIndexedDbMediaRef(video) ? escapeAttr(video) : ""}" muted controls playsinline></video>
+          <div>
+            <div class="row-title" style="margin-bottom:6px;">Current reel video</div>
+            <div class="media-status">${video ? "Reel video is saved and will update both video sections on index10.html." : "No video selected yet. Default page videos will show."}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function graphEditorMarkup(key, title, sourceKey, data) {
+      const axisLabels = key === "likeGraphManual"
+        ? ["50%", "25%", "0"]
+        : (key === "tabletEngagementGraphManual"
+          ? ["20%", "10%", "0"]
+          : (key === "tabletViewsGraphManual" ? ["1K", "500", "0"] : ["100%", "50%", "0"]));
+      const endLabel = key === "retentionPath" || key === "tabletRetentionGraphManual" || key === "tabletEngagementGraphManual"
+        ? (data.retentionDuration || "0:35")
+        : (key === "tabletViewsGraphManual" ? (data.viewsDate3 || "28 May") : "0:35");
+      return `
+        <div class="graph-editor" data-graph-editor="${escapeAttr(key)}">
+          <div class="graph-editor-head">
+            <span>Optional manual graph designer</span>
+            <button type="button" data-clear-graph="${escapeAttr(key)}">Clear manual line</button>
+          </div>
+          <div class="graph-editor-hint">Use the canvas below to shape the line visually in real time. The numeric graph fields above still work as the fallback if you leave this manual graph empty.</div>
+          <div class="graph-preview-title">
+            ${escapeHtml(title)}
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><circle class="info-dot" cx="12" cy="7.8" r="1.45"/><rect class="info-bar" x="10.75" y="10.15" width="2.5" height="7.45" rx="1.25"/></svg>
+          </div>
+          <input type="hidden" data-reel-key="${escapeAttr(key)}" data-manual-graph="${escapeAttr(sourceKey)}" value="${escapeAttr(data[key] || "")}">
+          <div class="graph-shell">
+            <div class="graph-yaxis">
+              ${axisLabels.map(label => `<span>${label}</span>`).join("")}
+            </div>
+            <div class="graph-stage">
+              <canvas data-graph-canvas="${escapeAttr(key)}" data-source-graph="${escapeAttr(sourceKey)}"></canvas>
+            </div>
+            <div class="graph-xaxis">
+              <span>0:00</span>
+              <span>${escapeHtml(endLabel)}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function graphValueMax(key) {
+      if (key === "tabletViewsGraphManual") return 1000;
+      if (key === "tabletEngagementGraphManual") return 20;
+      return 100;
+    }
+
+    function parseGraphValues(value, fallback, max = 100) {
+      const values = String(value ?? "")
+        .split(",")
+        .map(item => Number(item.trim()))
+        .filter(Number.isFinite)
+        .map(value => Math.max(0, Math.min(max, Math.round(value))));
+      return values.length ? values : fallback;
+    }
+
+    function sampledRetentionCurve(value) {
+      const points = parseGraphValues(value, [100, 40, 40, 20]);
+      const anchors = [
+        { x: 0, y: 1 - (points[0] ?? 100) / 100 },
+        { x: .2, y: 1 - (points[1] ?? 40) / 100 },
+        { x: .55, y: 1 - (points[2] ?? 40) / 100 },
+        { x: 1, y: 1 - (points[3] ?? 20) / 100 }
+      ];
+      const samples = [];
+      for (let i = 0; i < 36; i += 1) {
+        const t = i / 35;
+        const mt = 1 - t;
+        const y = mt * mt * mt * anchors[0].y
+          + 3 * mt * mt * t * anchors[1].y
+          + 3 * mt * t * t * anchors[2].y
+          + t * t * t * anchors[3].y;
+        samples.push(Math.max(0, Math.min(100, Math.round((1 - y) * 100))));
+      }
+      return samples;
+    }
+
+    function retentionControlsFromSamples(samples) {
+      const values = Array.isArray(samples) && samples.length ? samples : [100, 40, 40, 20];
+      const pick = fraction => values[Math.max(0, Math.min(values.length - 1, Math.round(fraction * (values.length - 1))))];
+      return [pick(0), pick(.2), pick(.55), pick(1)];
+    }
+
+    function initReelGraphEditors() {
+      document.querySelectorAll("[data-graph-canvas]").forEach(canvas => {
+        const key = canvas.dataset.graphCanvas;
+        const sourceKey = canvas.dataset.sourceGraph;
+        const input = document.querySelector(`[data-reel-key="${key}"]`);
+        const sourceInput = document.querySelector(`[data-reel-key="${sourceKey}"]`);
+        if (!input) return;
+        const maxValue = graphValueMax(key);
+        const fallback = key === "retentionPath"
+          ? sampledRetentionCurve(sourceInput?.value)
+          : parseGraphValues(sourceInput?.value, [100, 30, 35, 30, 50, 48, 51, 46, 45, 49, 38, 31, 49, 30, 40], maxValue);
+        let values = parseGraphValues(input.value, fallback, maxValue);
+        let activeIndex = -1;
+        const ctx = canvas.getContext("2d");
+        const padTop = 10;
+        const padBottom = 28;
+
+        function resize() {
+          const rect = canvas.getBoundingClientRect();
+          if (!rect.width || !rect.height) {
+            requestAnimationFrame(resize);
+            return;
+          }
+          const dpr = window.devicePixelRatio || 1;
+          canvas.width = Math.floor(rect.width * dpr);
+          canvas.height = Math.floor(rect.height * dpr);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          draw();
+        }
+
+        function pointAt(index) {
+          const width = canvas.clientWidth;
+          const height = canvas.clientHeight;
+          const x = values.length === 1 ? width / 2 : (index / (values.length - 1)) * width;
+          const y = padTop + (1 - values[index] / maxValue) * (height - padTop - padBottom);
+          return { x, y };
+        }
+
+        function draw() {
+          const width = canvas.clientWidth;
+          const height = canvas.clientHeight;
+          if (!width || !height) return;
+          ctx.clearRect(0, 0, width, height);
+          ctx.strokeStyle = "#eef0f4";
+          ctx.lineWidth = 1;
+          [maxValue, maxValue / 2, 0].forEach(value => {
+            const y = padTop + (1 - value / maxValue) * (height - padTop - padBottom);
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(width, y);
+            ctx.stroke();
+          });
+
+          ctx.beginPath();
+          values.forEach((_, index) => {
+            const point = pointAt(index);
+            index === 0 ? ctx.moveTo(point.x, point.y) : ctx.lineTo(point.x, point.y);
+          });
+          ctx.strokeStyle = "#e338c1";
+          ctx.lineWidth = 4;
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          ctx.stroke();
+
+          if (activeIndex >= 0) {
+            const point = pointAt(activeIndex);
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, 7, 0, Math.PI * 2);
+            ctx.fillStyle = "#e338c1";
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, 3.5, 0, Math.PI * 2);
+            ctx.fillStyle = "#fff";
+            ctx.fill();
+          }
+        }
+
+        function nearestValueFromEvent(event) {
+          const rect = canvas.getBoundingClientRect();
+          const y = Math.max(0, Math.min(rect.height, event.clientY - rect.top));
+          return Math.max(0, Math.min(maxValue, Math.round((1 - (y - padTop) / (rect.height - padTop - padBottom)) * maxValue)));
+        }
+
+        function fillBetween(previousIndex, nextIndex, previousValue, nextValue) {
+          if (previousIndex < 0 || previousIndex === nextIndex) {
+            values[nextIndex] = nextValue;
+            return;
+          }
+          const start = Math.min(previousIndex, nextIndex);
+          const end = Math.max(previousIndex, nextIndex);
+          for (let index = start; index <= end; index += 1) {
+            const ratio = (index - previousIndex) / (nextIndex - previousIndex);
+            values[index] = Math.round(previousValue + (nextValue - previousValue) * ratio);
+          }
+        }
+
+        function syncTextFieldsFromCanvas() {
+          const valueText = values.join(", ");
+          input.value = valueText;
+          if (!sourceInput) return;
+          sourceInput.value = key === "retentionPath"
+            ? retentionControlsFromSamples(values).join(", ")
+            : valueText;
+        }
+
+        function syncCanvasFromTextField() {
+          if (key === "retentionPath") {
+            values = sampledRetentionCurve(sourceInput?.value);
+            input.value = values.join(", ");
+          } else {
+            values = parseGraphValues(sourceInput?.value, fallback, maxValue);
+            input.value = values.join(", ");
+          }
+          activeIndex = -1;
+          draw();
+        }
+
+        function indexFromEvent(event) {
+          const rect = canvas.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const raw = values.length === 1 ? 0 : Math.round((x / rect.width) * (values.length - 1));
+          return Math.max(0, Math.min(values.length - 1, raw));
+        }
+
+        function setValueFromEvent(event) {
+          const nextIndex = indexFromEvent(event);
+          const previousIndex = activeIndex;
+          const previousValue = previousIndex >= 0 ? values[previousIndex] : null;
+          const nextValue = nearestValueFromEvent(event);
+          activeIndex = nextIndex;
+          fillBetween(previousIndex, nextIndex, previousValue, nextValue);
+          syncTextFieldsFromCanvas();
+          draw();
+        }
+
+        canvas.onpointerdown = event => {
+          activeIndex = indexFromEvent(event);
+          canvas.setPointerCapture(event.pointerId);
+          setValueFromEvent(event);
+        };
+        canvas.onpointermove = event => {
+          if (activeIndex < 0) return;
+          setValueFromEvent(event);
+        };
+        canvas.onpointerup = event => {
+          canvas.releasePointerCapture(event.pointerId);
+          activeIndex = -1;
+          draw();
+        };
+        canvas.onpointercancel = () => {
+          activeIndex = -1;
+          draw();
+        };
+        input.addEventListener("input", () => {
+          values = parseGraphValues(input.value, fallback, maxValue);
+          activeIndex = -1;
+          if (sourceInput) {
+            sourceInput.value = key === "retentionPath"
+              ? retentionControlsFromSamples(values).join(", ")
+              : values.join(", ");
+          }
+          draw();
+        });
+        document.querySelector(`[data-clear-graph="${key}"]`)?.addEventListener("click", () => {
+          input.value = "";
+          values = key === "retentionPath"
+            ? sampledRetentionCurve(sourceInput?.value)
+            : parseGraphValues(sourceInput?.value, fallback, maxValue);
+          activeIndex = -1;
+          draw();
+          showStatus("Manual graph cleared. The old graph values are active again.");
+        });
+        sourceInput?.addEventListener("input", () => {
+          syncCanvasFromTextField();
+        });
+        resize();
+        requestAnimationFrame(resize);
+        if ("ResizeObserver" in window) {
+          new ResizeObserver(resize).observe(canvas);
+        }
+        window.addEventListener("resize", resize);
+      });
+    }
+
+    function collectData() {
+      const data = readData();
+      if (currentMode === "index") {
+        return collectIndexForm();
+      }
+      if (currentMode === "reel" || currentMode === "tablet") {
+        document.querySelectorAll("[data-reel-key]").forEach(input => {
+          data[input.dataset.reelKey] = input.value.trim();
+        });
+        return data;
+      }
+      document.querySelectorAll("[data-key]").forEach(input => {
+        data[input.dataset.key] = input.value.trim();
+      });
+      document.querySelectorAll("[data-top-index]").forEach(input => {
+        const index = Number(input.dataset.topIndex);
+        data.topContent[index][input.dataset.topKey] = input.value.trim();
+      });
+      document.querySelectorAll("[data-aud-card]").forEach(input => {
+        const card = data.audience[Number(input.dataset.audCard)];
+        if (input.dataset.audKey === "title") {
+          card.title = input.value.trim();
+          return;
+        }
+        const row = card.rows[Number(input.dataset.audRow)];
+        row[input.dataset.audKey] = input.value.trim();
+      });
+      return data;
+    }
+
+    function isIndexedDbMediaRef(value) {
+      return String(value || "").startsWith("idb-media:");
+    }
+
+    function openReelMediaDb() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("reelEditorMediaDb", 1);
+        request.onupgradeneeded = () => {
+          request.result.createObjectStore("media");
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function putReelMedia(key, file) {
+      const db = await openReelMediaDb();
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction("media", "readwrite");
+        tx.objectStore("media").put({
+          blob: file,
+          name: file.name,
+          type: file.type,
+          updatedAt: Date.now()
+        }, key);
+        tx.oncomplete = resolve;
+        tx.onerror = () => reject(tx.error);
+      });
+      db.close();
+      return `idb-media:${key}`;
+    }
+
+    async function getReelMediaUrl(ref) {
+      if (!isIndexedDbMediaRef(ref)) return ref || "";
+      const key = ref.replace("idb-media:", "");
+      const db = await openReelMediaDb();
+      const record = await new Promise((resolve, reject) => {
+        const request = db.transaction("media", "readonly").objectStore("media").get(key);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      db.close();
+      return record?.blob ? URL.createObjectURL(record.blob) : "";
+    }
+
+    async function deleteReelMedia(key) {
+      const db = await openReelMediaDb();
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction("media", "readwrite");
+        tx.objectStore("media").delete(key);
+        tx.oncomplete = resolve;
+        tx.onerror = () => reject(tx.error);
+      });
+      db.close();
+    }
+
+    async function initReelMediaPreviews() {
+      const data = readData();
+      for (const preview of document.querySelectorAll("[data-media-preview]")) {
+        const key = preview.dataset.mediaPreview;
+        const src = await getReelMediaUrl(data[key]);
+        if (src) preview.src = src;
+      }
+    }
+
+    function saveActiveData(data, successMessage) {
+      try {
+        localStorage.setItem(activeKey(), JSON.stringify(data));
+      } catch (error) {
+        const isQuota = error?.name === "QuotaExceededError" || String(error?.message || "").toLowerCase().includes("quota");
+        showStatus(isQuota
+          ? "File is too large for browser storage. Try a smaller/compressed video."
+          : "Could not save data in browser storage.");
+        return false;
+      }
+      updateOpenTargetHref(data);
+      renderForm();
+      showStatus(successMessage);
+      return true;
+    }
+
+    document.addEventListener("change", async (event) => {
+      const reelFile = event.target.closest("[data-reel-file]");
+      if (reelFile && reelFile.files?.[0]) {
+        const file = reelFile.files[0];
+        const isVideo = reelFile.dataset.reelFile === "reelVideo";
+        try {
+          const ref = await putReelMedia(reelFile.dataset.reelFile, file);
+          const data = collectData();
+          data[reelFile.dataset.reelFile] = ref;
+          saveActiveData(data, isVideo ? "Reel video saved. Open reel page to see it." : "Thumbnail image saved. Open the selected page to see it.");
+        } catch {
+          showStatus("Could not save this media file in browser storage.");
+        }
+        return;
+      }
+      const input = event.target.closest("[data-image-index]");
+      if (!input || !input.files?.[0]) return;
+      const index = Number(input.dataset.imageIndex);
+      const reader = new FileReader();
+      reader.onload = () => {
+        const data = collectData();
+        data.topContent[index].image = reader.result;
+        saveActiveData(data, "Image saved. Selected page thumbnail updated.");
+      };
+      reader.onerror = () => showStatus("Could not read this image file.");
+      reader.readAsDataURL(input.files[0]);
+    });
+
+    document.addEventListener("click", (event) => {
+      const removeReelFile = event.target.closest("[data-remove-reel-file]");
+      if (removeReelFile) {
+        const data = collectData();
+        deleteReelMedia(removeReelFile.dataset.removeReelFile).catch(() => {});
+        data[removeReelFile.dataset.removeReelFile] = "";
+        saveActiveData(data, "Reel media removed.");
+        return;
+      }
+      const button = event.target.closest("[data-remove-image]");
+      if (!button) return;
+      const data = collectData();
+      data.topContent[Number(button.dataset.removeImage)].image = "";
+      saveActiveData(data, "Image removed. Default thumbnail will show.");
+    });
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[char]));
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value).replace(/`/g, "&#096;");
+    }
+
+    document.getElementById("saveBtn").addEventListener("click", () => {
+      try {
+        const data = collectData();
+        saveActiveData(data, currentMode === "index" ? "Insights data saved. Open Insights page to view it." : (currentMode === "tablet" ? "Saved. Tablet reel page data updated." : (currentMode === "reel" ? "Saved. Reel page data updated." : (currentMode === "phone" ? "Saved. Phone page data updated." : "Saved. Main page data updated."))));
+      } catch (error) { showStatus(error.message || "Data could not be saved."); }
+    });
+
+    document.getElementById("reloadBtn").addEventListener("click", () => {
+      renderForm();
+      showStatus("Saved data reloaded.");
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      localStorage.removeItem(activeKey());
+      renderForm();
+      showStatus("Reset to default data.");
+    });
+
+    document.querySelectorAll("[data-mode]").forEach(button => {
+      button.addEventListener("click", () => {
+        currentMode = button.dataset.mode;
+        document.querySelectorAll("[data-mode]").forEach(item => item.classList.toggle("active", item === button));
+        renderForm();
+        const modeMessages = {
+          index: "Editing Insights page data.",
+          desktop: "Editing professional dashboard data.",
+          phone: "Editing phone dashboard data.",
+          reel: "Editing reel page data.",
+          tablet: "Editing tablet reel page data."
+        };
+        showStatus(modeMessages[currentMode] || "Editor ready.");
+      });
+    });
+
+    document.getElementById("editorForm").addEventListener("submit", event => {
+      event.preventDefault();
+    });
+
+    renderForm();
+  </script>
+</body>
+</html>

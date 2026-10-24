@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tablet Reel Insights</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #fff; color: #15171a; font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+    button { border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+    .tablet {
+      width: 720px;
+      min-height: 1152px;
+      margin: 0 auto;
+      background: #fff;
+      position: relative;
+      padding-left: 144px;
+    }
+    .side-nav { position: fixed; top: 37%; left: max(calc((100vw - 720px) / 2), 0px); width: 72px; display: flex; flex-direction: column; align-items: center; gap: 20px; z-index: 60; }
+    .side-nav button { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; }
+    .side-nav button:hover, .side-nav button:focus-visible { background: #f2f2f2; outline: none; }
+    .side-nav svg { width: 27px; height: 27px; stroke: #161616; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .side-nav .profile-mark { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #e6e6e6; object-fit: cover; }
+    .topbar {
+      height: 70px;
+      display: grid;
+      grid-template-columns: 42px 1fr 42px 42px;
+      align-items: center;
+      width: 576px;
+      padding: 0 16px;
+      column-gap: 8px;
+      position: sticky;
+      top: 0;
+      z-index: 49;
+      background: #fff;
+    }
+    .topbar h1 { margin: 0; font-size: 22px; line-height: 1; font-weight: 780; letter-spacing: 0; }
+    .icon { width: 27px; height: 27px; stroke: #111; stroke-width: 2.1; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .top-icon { display: grid; place-items: center; width: 38px; height: 38px; }
+    .content { width: 444px; margin: 0 0 0 27px; }
+    .hero { padding-top: 25px; text-align: center; }
+    .reel-thumb {
+      width: 146px;
+      height: 258px;
+      display: block;
+      margin: 0 auto;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #2c201b;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      align-items: end;
+      margin: 24px 42px 0;
+      text-align: center;
+    }
+    .stat img { width: 25px; height: 25px; object-fit: contain; display: block; margin: 0 auto; mix-blend-mode: multiply; }
+    .stat img.like-icon { width: 30px; height: 30px; margin-top: -3px; margin-bottom: -2px; mix-blend-mode: normal; }
+    .stat-value { margin-top: 6px; font-size: 16px; line-height: 1; color: #111; }
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 26px;
+      border-bottom: 1px solid #d7dce0;
+      color: #60656f;
+      font-size: 15px;
+      position: sticky;
+      top: 70px;
+      z-index: 45;
+      background: #fff;
+    }
+    .tab {
+      height: 34px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      color: #5e636d;
+    }
+    .tab.active { color: #111; }
+    .tab.active::after {
+      content: "";
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: -1px;
+      height: 2px;
+      background: #12171c;
+      border-radius: 4px 4px 0 0;
+    }
+    .panel { display: none; padding: 26px 16px 0; }
+    .panel.active { display: block; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 24px;
+      font-size: 18px;
+      line-height: 1.15;
+      font-weight: 780;
+      letter-spacing: 0;
+    }
+    .info {
+      width: 17px;
+      height: 17px;
+      display: inline-grid;
+      place-items: center;
+      border: 2px solid #111;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 13px;
+      margin-bottom: 28px;
+    }
+    .summary-card {
+      min-height: 84px;
+      padding: 19px 17px;
+      border-radius: 11px;
+      background: #f1f4f6;
+    }
+    .summary-card .label { color: #6c727d; font-size: 14px; line-height: 1.1; }
+    .summary-card .value { margin-top: 10px; color: #101216; font-size: 22px; line-height: 1; font-weight: 780; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 0 16px;
+      font-size: 18px;
+      line-height: 1.1;
+      font-weight: 780;
+    }
+    .head-left { display: flex; align-items: center; gap: 8px; }
+    .pill-row { display: flex; gap: 8px; margin-bottom: 42px; }
+    .pill {
+      min-height: 39px;
+      padding: 0 17px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #d4d8dd;
+      border-radius: 20px;
+      color: #15171a;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .pill.active { background: #f3f5f6; border-color: #f3f5f6; }
+    .pill:focus-visible, .tab:focus-visible, .top-icon:focus-visible { outline: 2px solid #b000b5; outline-offset: 2px; }
+    .chart-wrap { height: 205px; position: relative; margin-bottom: 22px; }
+    .chart-label {
+      position: absolute;
+      left: 0;
+      color: #7b818a;
+      font-size: 14px;
+      transform: translateY(-50%);
+    }
+    .chart-label.top { top: 13px; }
+    .chart-label.mid { top: 78px; }
+    .chart-label.base { bottom: 2px; transform: none; }
+    .line-chart { width: 100%; height: 170px; margin-top: 10px; display: block; }
+    .xaxis {
+      display: flex;
+      justify-content: space-between;
+      padding-left: 36px;
+      color: #777e86;
+      font-size: 14px;
+      margin-top: -4px;
+    }
+    .affects { padding-top: 6px; }
+    .subcopy { margin: -13px 0 13px; color: #777e86; font-size: 13px; }
+    .factor-row {
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
+      align-items: center;
+      min-height: 76px;
+      column-gap: 12px;
+      font-size: 16px;
+    }
+    .factor-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #f2f4f6;
+    }
+    .factor-icon img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+    .factor-value-wrap { min-width: 62px; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+    .factor-value { font-size: 18px; font-weight: 780; }
+    .factor-value-wrap small { color: #54a878; font-size: 13px; line-height: 1.1; }
+    .watched { padding-top: 24px; }
+    .watched-thumb-wrap { display: flex; justify-content: center; margin: 18px 0 38px; }
+    .watched-thumb {
+      width: 98px;
+      height: 173px;
+      border-radius: 8px;
+      object-fit: cover;
+      display: block;
+      background: #2c201b;
+    }
+    .watched-media { position: relative; }
+    .watched-media::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 32px;
+      height: 32px;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,.45));
+    }
+    .watched-media::before {
+      content: "";
+      position: absolute;
+      left: calc(50% - 3px);
+      top: calc(50% - 8px);
+      border-left: 13px solid #fff;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      z-index: 2;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,.45));
+    }
+    .retention-chart { width: 100%; height: 194px; display: block; margin: 0 0 28px; }
+    .source-list { margin: 30px 0 28px; }
+    .source-row { margin: 19px 0; }
+    .source-label { margin-bottom: 10px; font-size: 16px; color: #34373b; }
+    .source-line { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
+    .source-track { height: 8px; border-radius: 999px; overflow: hidden; background: #eef1f3; }
+    .source-fill { height: 100%; border-radius: 999px; background: #d800c8; }
+    .source-percent { font-size: 16px; color: #1c1f23; }
+    .ad-row {
+      display: grid;
+      grid-template-columns: 28px 1fr 28px;
+      gap: 10px;
+      align-items: center;
+      min-height: 56px;
+      font-size: 18px;
+      color: #33363a;
+    }
+    .ad-row svg { width: 27px; height: 27px; stroke: #111; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .ad-row .chev { stroke: #777e86; }
+    .eng-chart { width: 100%; height: 205px; display: block; margin: 36px 0 35px; }
+    .metric-list { margin: 0 0 30px; }
+    .metric-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 44px;
+      font-size: 18px;
+      color: #33363a;
+    }
+    .metric-row strong { color: #272a2f; font-size: 18px; }
+    .aud-section { margin-bottom: 33px; }
+    .aud-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      margin: 16px 0;
+      font-size: 16px;
+      color: #33363a;
+    }
+    .track {
+      grid-column: 1;
+      height: 8px;
+      background: #f0f2f4;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .fill {
+      height: 100%;
+      background: #5e11dd;
+      border-radius: 999px;
+    }
+    .fill.pink { background: #d800c8; }
+    .aud-percent { grid-column: 2; grid-row: 2; color: #202328; }
+    .aud-pills { margin: -5px 0 20px; display: flex; gap: 10px; }
+    .audience-detail-list { margin-top: 8px; }
+    .audience-detail-list .aud-row { margin: 19px 0; }
+    .liked-reel { display: flex; justify-content: center; margin: 10px 0 24px; }
+    .liked-reel button { position: relative; padding: 0; border-radius: 8px; }
+    .liked-reel img { width: 98px; height: 173px; display: block; object-fit: cover; border-radius: 8px; }
+    .liked-reel button::after { content: "▶"; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 35px; height: 35px; display: grid; place-items: center; padding-left: 2px; color: #fff; border: 2px solid #fff; border-radius: 50%; text-shadow: 0 1px 3px #000; filter: drop-shadow(0 1px 2px #0008); }
+    .popover { position: fixed; z-index: 80; right: max(calc((100vw - 720px) / 2 + 24px), 18px); top: 56px; width: 210px; padding: 8px; border: 1px solid #e7e7e7; border-radius: 12px; background: #fff; box-shadow: 0 5px 24px #0002; }
+    .popover[hidden] { display: none; }
+    .popover button { width: 100%; padding: 11px 12px; text-align: left; border-radius: 8px; font-size: 14px; }
+    .popover button:hover { background: #f5f5f5; }
+    .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 90; padding: 10px 15px; border-radius: 22px; background: #222; color: #fff; font-size: 13px; box-shadow: 0 3px 14px #0002; }
+    .toast[hidden] { display: none; }
+    .preview-modal { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 24px; background: #0009; }
+    .preview-modal[hidden] { display: none; }
+    .preview-card { position: relative; padding: 12px; border-radius: 14px; background: #fff; box-shadow: 0 12px 40px #0005; }
+    .preview-card img { display: block; max-height: min(78vh, 620px); width: auto; border-radius: 8px; }
+    .preview-card button { position: absolute; top: 18px; right: 18px; width: 34px; height: 34px; border-radius: 50%; background: #fff; font-size: 22px; line-height: 1; }
+    .scrollbar {
+      position: fixed;
+      right: calc((100vw - 720px) / 2 + 2px);
+      top: 119px;
+      width: 4px;
+      height: 91px;
+      background: #d9d9d9;
+      border-radius: 999px;
+    }
+    @media (max-width: 720px) {
+      .tablet { width: 100vw; padding-left: 144px; }
+      .side-nav { left: 0; }
+      .topbar { width: calc(100vw - 144px); padding: 0 16px; }
+      .content { width: min(444px, calc(100vw - 171px)); margin: 0 0 0 27px; }
+      .scrollbar { right: 2px; }
+    }
+    @media (max-width: 560px) {
+      .tablet { padding-left: 0; }
+      .side-nav { display: none; }
+      .topbar { width: 100%; padding: 0 20px; }
+      .content { width: calc(100vw - 48px); }
+      .content { margin: 0 auto; }
+      .stats { margin-left: 10px; margin-right: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="tablet">
+    <aside class="side-nav" aria-label="Main navigation">
+      <button type="button" aria-label="Home" data-nav-label="Home"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></button>
+      <button type="button" aria-label="Search" data-nav-label="Search"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="7.2"/><path d="m16.2 16.2 5 5"/></svg></button>
+      <button type="button" aria-label="Reels" data-nav-label="Reels"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="m10 8 6 4-6 4z"/></svg></button>
+      <button type="button" aria-label="Messages" data-nav-label="Messages"><svg viewBox="0 0 24 24"><path d="m21 3-7.5 18-3.2-7.3L3 10.5z"/><path d="M10.3 13.7 21 3"/></svg></button>
+      <button type="button" aria-label="Notifications" data-nav-label="Notifications"><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.1-8.8 12-8.8 12S3.2 13.9 3.2 8.8a4.8 4.8 0 0 1 8.8-2.6 4.8 4.8 0 0 1 8.8 2.6Z"/></svg></button>
+      <button type="button" aria-label="Create" data-nav-label="Create"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button type="button" aria-label="Profile" data-nav-label="Profile"><img class="profile-mark" src="assets/reel-profile-avatar.jpg" alt=""></button>
+    </aside>
+    <header class="topbar">
+      <button class="top-icon" id="backButton" aria-label="Back"><svg class="icon" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg></button>
+      <h1>Reel Insights</h1>
+      <button class="top-icon" id="trendButton" aria-label="Open overview"><svg class="icon" viewBox="0 0 24 24"><path d="m4 16 6-6 4 4 6-8"/><path d="M15 6h5v5"/></svg></button>
+      <button class="top-icon" id="moreButton" aria-label="More options" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5h.01"/><path d="M12 12h.01"/><path d="M12 19h.01"/></svg></button>
+    </header>
+    <div class="popover" id="moreMenu" hidden><button type="button" data-menu-action="share">Share insights</button><button type="button" data-menu-action="copy">Copy page link</button></div>
+
+    <div class="content">
+      <section class="hero">
+        <img class="reel-thumb" src="assets/reel-insights-thumbnail.jpg" alt="Reel thumbnail shown in the recording">
+        <div class="stats">
+          <div class="stat"><img class="like-icon" src="assets/top-like.jpg" alt="Likes"><div class="stat-value">376</div></div>
+          <div class="stat"><img src="assets/top-comment.jpg" alt="Comments"><div class="stat-value">13</div></div>
+          <div class="stat"><img src="assets/top-repost.jpg" alt="Reposts"><div class="stat-value">5</div></div>
+          <div class="stat"><img src="assets/top-share.jpg" alt="Shares"><div class="stat-value">4</div></div>
+          <div class="stat"><img src="assets/top-save.jpg" alt="Saves"><div class="stat-value">31</div></div>
+        </div>
+      </section>
+
+      <nav class="tabs" aria-label="Insight tabs">
+        <button class="tab active" data-tab="overview">Overview</button>
+        <button class="tab" data-tab="engagement">Engagement</button>
+        <button class="tab" data-tab="audience">Audience</button>
+      </nav>
+
+      <section class="panel active" id="overview">
+        <h2 class="section-title">Summary <span class="info">i</span></h2>
+        <div class="summary-grid">
+          <div class="summary-card"><div class="label">Views</div><div class="value">14,136</div></div>
+          <div class="summary-card"><div class="label">Viewers</div><div class="value">11,581</div></div>
+          <div class="summary-card"><div class="label">Average watch time</div><div class="value">24s</div></div>
+          <div class="summary-card"><div class="label">Follows</div><div class="value">0</div></div>
+        </div>
+
+        <div class="section-head"><span class="head-left">Views over time <span class="info" title="Views accumulated over time">i</span></span><span>14,136</span></div>
+        <div class="pill-row" role="group" aria-label="View audience filter"><button class="pill active" data-view-filter="all">All</button><button class="pill" data-view-filter="followers">Followers</button><button class="pill" data-view-filter="nonfollowers">Non-followers</button></div>
+        <div class="chart-wrap">
+          <span class="chart-label top">15K</span>
+          <span class="chart-label mid">7.5K</span>
+          <span class="chart-label base">0</span>
+          <svg class="line-chart" viewBox="0 0 444 170" preserveAspectRatio="none" aria-label="Views over time">
+            <line x1="36" y1="18" x2="412" y2="18" stroke="#edf0f2"/>
+            <line x1="36" y1="82" x2="412" y2="82" stroke="#edf0f2"/>
+            <line x1="36" y1="145" x2="412" y2="145" stroke="#edf0f2"/>
+            <path class="view-typical" d="M36 145 L64 134 L86 133 L112 132 L144 132 L181 132 L220 131 L259 132 L303 131 L349 132 L412 132" fill="none" stroke="#8a8c91" stroke-width="2" stroke-dasharray="7 6" stroke-linecap="round"/>
+            <path class="view-main" d="M36 145 L64 120 L86 104 L112 88 L144 45 L181 40 L220 36 L259 34 L303 33 L349 32 L412 31" fill="none" stroke="#d000cf" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="xaxis"><span>26 May</span><span>27 May</span><span>28 May</span></div>
+        </div>
+
+        <div class="affects">
+          <h2 class="section-title">What affects your views <span class="info">i</span></h2>
+          <p class="subcopy">Rates are listed in order of importance to reach.</p>
+          <div class="factor-row"><span class="factor-icon"><img src="assets/icon-skip-rate.jpg" alt=""></span><span>Skip rate</span><div class="factor-value-wrap"><strong class="factor-value">30.8%</strong><small>Higher</small></div></div>
+          <div class="factor-row"><span class="factor-icon"><img src="assets/icon-share-rate.jpg" alt=""></span><span>Share rate</span><div class="factor-value-wrap"><strong class="factor-value">0.0%</strong><small>Higher</small></div></div>
+          <div class="factor-row"><span class="factor-icon"><img src="assets/icon-like-rate.jpg" alt=""></span><span>Like rate</span><div class="factor-value-wrap"><strong class="factor-value">3.3%</strong><small>Higher</small></div></div>
+          <div class="factor-row"><span class="factor-icon"><img src="assets/icon-save-rate.jpg" alt=""></span><span>Save rate</span><div class="factor-value-wrap"><strong class="factor-value">0.3%</strong><small>Higher</small></div></div>
+          <div class="factor-row"><span class="factor-icon"><img src="assets/icon-repost-rate.jpg" alt=""></span><span>Repost rate</span><div class="factor-value-wrap"><strong class="factor-value">0.0%</strong><small>Higher</small></div></div>
+          <div class="factor-row"><span class="factor-icon"><img src="assets/icon-comment-rate.jpg" alt=""></span><span>Comment rate</span><div class="factor-value-wrap"><strong class="factor-value">0.1%</strong><small>Higher</small></div></div>
+        </div>
+
+        <div class="watched">
+          <h2 class="section-title">How long people watched your reel <span class="info">i</span></h2>
+          <div class="watched-thumb-wrap">
+            <div class="watched-media"><img class="watched-thumb" src="assets/reel-insights-thumbnail.jpg" alt="Reel thumbnail"></div>
+          </div>
+          <svg class="retention-chart" viewBox="0 0 412 194" preserveAspectRatio="none" aria-label="Watch retention">
+            <text x="0" y="53" fill="#747b84" font-size="14">100%</text>
+            <text x="0" y="93" fill="#747b84" font-size="14">50%</text>
+            <text x="0" y="134" fill="#747b84" font-size="14">0</text>
+            <line x1="44" y1="52" x2="412" y2="52" stroke="#edf0f2"/>
+            <line x1="44" y1="92" x2="412" y2="92" stroke="#edf0f2"/>
+            <line x1="44" y1="132" x2="412" y2="132" stroke="#edf0f2"/>
+            <path d="M44 52 L58 56 L70 69 L96 81 L112 91 L149 94 L195 96 L238 99 L263 104 L294 108 L324 111 L350 113 L373 117 L399 118 L412 135" fill="none" stroke="#d400c4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="45" y="155" fill="#747b84" font-size="14">0:00</text>
+            <text x="380" y="155" fill="#747b84" font-size="14">0:52</text>
+          </svg>
+        </div>
+
+        <div class="source-list">
+          <h2 class="section-title">Top sources of views <span class="info">i</span></h2>
+          <div class="source-row"><div class="source-label">Reels tab</div><div class="source-line"><div class="source-track"><div class="source-fill" style="width:84.4%"></div></div><span class="source-percent">84.4%</span></div></div>
+          <div class="source-row"><div class="source-label">Explore</div><div class="source-line"><div class="source-track"><div class="source-fill" style="width:13.2%"></div></div><span class="source-percent">13.2%</span></div></div>
+          <div class="source-row"><div class="source-label">Feed</div><div class="source-line"><div class="source-track"><div class="source-fill" style="width:1.8%"></div></div><span class="source-percent">1.8%</span></div></div>
+          <div class="source-row"><div class="source-label">Profile</div><div class="source-line"><div class="source-track"><div class="source-fill" style="width:0.4%"></div></div><span class="source-percent">0.4%</span></div></div>
+          <div class="source-row"><div class="source-label">Search</div><div class="source-line"><div class="source-track"><div class="source-fill" style="width:0.1%"></div></div><span class="source-percent">0.1%</span></div></div>
+        </div>
+
+        <div class="ad">
+          <h2 class="section-title">Ad</h2>
+          <div class="ad-row">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 16 6-6 4 4 6-8"/><path d="M15 6h5v5"/></svg>
+            <span>Boost this Reel</span>
+            <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="engagement">
+        <h2 class="section-title">When people liked your reel <span class="info" title="When likes happened during this reel">i</span></h2>
+        <div class="liked-reel"><button type="button" id="previewReel" aria-label="Preview reel thumbnail"><img src="assets/reel-insights-thumbnail.jpg" alt="Reel preview"></button></div>
+        <svg class="eng-chart" viewBox="0 0 444 205" preserveAspectRatio="none" aria-label="Like graph">
+          <text x="0" y="42" fill="#747b84" font-size="14">10%</text>
+          <text x="0" y="114" fill="#747b84" font-size="14">5%</text>
+          <text x="0" y="186" fill="#747b84" font-size="14">0%</text>
+          <line x1="37" y1="42" x2="412" y2="42" stroke="#edf0f2"/>
+          <line x1="37" y1="114" x2="412" y2="114" stroke="#edf0f2"/>
+          <line x1="37" y1="185" x2="412" y2="185" stroke="#edf0f2"/>
+          <path d="M37 185 L52 63.5 L67 63.5 L82 185 L97 63.5 L112 63.5 L127 185 L142 185 L157 185 L172 185 L187 185 L202 185 L217 185 L232 185 L247 185 L262 185 L277 185 L292 185 L307 63.5 L322 185 L337 185 L352 185 L367 185 L382 185 L397 185 L412 63.5" fill="none" stroke="#d400c4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="39" y="205" fill="#747b84" font-size="14">0:00</text>
+          <text x="386" y="205" fill="#747b84" font-size="14">0:52</text>
+        </svg>
+        <div class="metric-list">
+          <h2 class="section-title">Actions after viewing <span class="info">i</span></h2>
+          <div class="metric-row"><span>Profile visits</span><strong>28</strong></div>
+          <div class="metric-row"><span>Follows</span><strong>0</strong></div>
+        </div>
+        <div class="metric-list">
+          <h2 class="section-title">Interactions <span class="info">i</span></h2>
+          <div class="metric-row"><span>Likes</span><strong>376</strong></div>
+          <div class="metric-row"><span>Comments</span><strong>13</strong></div>
+          <div class="metric-row"><span>Reposts</span><strong>5</strong></div>
+          <div class="metric-row"><span>Shares</span><strong>4</strong></div>
+          <div class="metric-row"><span>Saves</span><strong>31</strong></div>
+        </div>
+      </section>
+
+      <section class="panel" id="audience">
+        <div class="aud-section">
+          <h2 class="section-title">Who viewed your reel <span class="info">i</span></h2>
+          <div class="aud-row"><span>Followers</span><div class="track"><div class="fill" style="width:0.1%"></div></div><span class="aud-percent">0.1%</span></div>
+          <div class="aud-row"><span>Non-followers</span><div class="track"><div class="fill" style="width:99.9%"></div></div><span class="aud-percent">99.9%</span></div>
+        </div>
+        <h2 class="section-title">Audience details <span class="info">i</span></h2>
+        <div class="aud-pills" role="tablist" aria-label="Audience details"><button class="pill" role="tab" aria-selected="false" data-audience="Age">Age</button><button class="pill active" role="tab" aria-selected="true" data-audience="Country">Country</button><button class="pill" role="tab" aria-selected="false" data-audience="Gender">Gender</button></div>
+        <div class="audience-detail-list" id="audienceDetails" aria-live="polite">
+          <div class="aud-row"><span>United States</span><div class="track"><div class="fill pink" style="width:79.9%"></div></div><span class="aud-percent">79.9%</span></div>
+          <div class="aud-row"><span>Canada</span><div class="track"><div class="fill pink" style="width:5.8%"></div></div><span class="aud-percent">5.8%</span></div>
+          <div class="aud-row"><span>United Kingdom</span><div class="track"><div class="fill pink" style="width:3.7%"></div></div><span class="aud-percent">3.7%</span></div>
+          <div class="aud-row"><span>Australia</span><div class="track"><div class="fill pink" style="width:2.6%"></div></div><span class="aud-percent">2.6%</span></div>
+          <div class="aud-row"><span>South Africa</span><div class="track"><div class="fill pink" style="width:0.9%"></div></div><span class="aud-percent">0.9%</span></div>
+        </div>
+      </section>
+    </div>
+    <div class="scrollbar" aria-hidden="true"></div>
+    <div class="toast" id="screenToast" role="status" hidden></div>
+    <div class="preview-modal" id="previewModal" role="dialog" aria-modal="true" aria-label="Reel preview" hidden>
+      <div class="preview-card"><button type="button" id="closePreview" aria-label="Close preview">×</button><img src="assets/reel-insights-thumbnail.jpg" alt="Reel thumbnail"></div>
+    </div>
+  </main>
+
+  <script>
+    const TABLET_REEL_DATA_KEY = "tabletReelEditorCloneData";
+    const defaultTabletReelData = {
+      templateVersion: "tablet-reel-v3",
+      tabletThumbnailImage: "",
+      likes: "376",
+      comments: "13",
+      reposts: "5",
+      shares: "4",
+      saves: "31",
+      summaryViews: "14,136",
+      summaryAccountsReached: "11,581",
+      summaryAverageWatchTime: "24s",
+      summaryFollows: "0",
+      viewsTotal: "14,136",
+      viewsDate1: "18 Oct",
+      viewsDate2: "21 Oct",
+      viewsDate3: "23 Oct",
+      viewsGraph: "0,2100,7400,13000,13600,13800,13950,14050,14100,14136",
+      skipRate: "30.8%",
+      shareRate: "0.0%",
+      likeRate: "3.3%",
+      saveRate: "0.3%",
+      repostRate: "0.0%",
+      commentRate: "0.1%",
+      retentionDuration: "0:52",
+      retentionGraph: "100,88,74,61,52,47,43,41,39,37,35,33,31,28,22,20,8",
+      source1Label: "Reels tab",
+      source1Percent: "84.4%",
+      source2Label: "Explore",
+      source2Percent: "13.2%",
+      adLabel: "Boost this Reel",
+      engagementGraph: "1,4,7,3,8,6,2,3,1,2,1,1,1,0,1,2,3,2,4,2,1,2,1,2,1,2,1,2,1,1,2,1",
+      profileVisits: "28",
+      actionFollows: "0",
+      interactionLikes: "376",
+      interactionComments: "13",
+      interactionReposts: "5",
+      interactionShares: "4",
+      interactionSaves: "31",
+      audienceFollowers: "0.1%",
+      audienceNonFollowers: "99.9%",
+      audienceMen: "54.5%",
+      audienceWomen: "45.5%"
+    };
+
+    function parseNumberList(value, fallback) {
+      const values = String(value ?? "").split(",").map(item => Number(item.trim())).filter(Number.isFinite);
+      return values.length ? values : fallback;
+    }
+
+    function parsePercent(value) {
+      const number = parseFloat(String(value ?? "").replace("%", ""));
+      return Number.isFinite(number) ? Math.max(0, Math.min(100, number)) : 0;
+    }
+
+    function isIndexedDbMediaRef(value) {
+      return String(value || "").startsWith("idb-media:");
+    }
+
+    function openReelMediaDb() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("reelEditorMediaDb", 1);
+        request.onupgradeneeded = () => request.result.createObjectStore("media");
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function getReelMediaUrl(ref) {
+      if (!isIndexedDbMediaRef(ref)) return ref || "";
+      const key = ref.replace("idb-media:", "");
+      const db = await openReelMediaDb();
+      const record = await new Promise((resolve, reject) => {
+        const request = db.transaction("media", "readonly").objectStore("media").get(key);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      db.close();
+      return record?.blob ? URL.createObjectURL(record.blob) : "";
+    }
+
+    function readTabletData() {
+      const hash = window.location.hash || "";
+      if (hash.startsWith("#data=")) {
+        try {
+          const decoded = JSON.parse(decodeURIComponent(escape(atob(hash.slice(6)))));
+          const next = { ...defaultTabletReelData, ...decoded, templateVersion: defaultTabletReelData.templateVersion };
+          localStorage.setItem(TABLET_REEL_DATA_KEY, JSON.stringify(next));
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+          return next;
+        } catch {
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+        }
+      }
+      try {
+        const saved = JSON.parse(localStorage.getItem(TABLET_REEL_DATA_KEY));
+        if (saved?.templateVersion !== defaultTabletReelData.templateVersion) return { ...defaultTabletReelData };
+        return { ...defaultTabletReelData, ...saved };
+      } catch {
+        return { ...defaultTabletReelData };
+      }
+    }
+
+    function setText(selector, value, index = 0) {
+      const node = document.querySelectorAll(selector)[index];
+      if (node) node.textContent = value;
+    }
+
+    function graphPath(values, box) {
+      const { x, y, width, height, max } = box;
+      const safeValues = values.length > 1 ? values : [0, 0];
+      return safeValues.map((value, index) => {
+        const px = x + (index / (safeValues.length - 1)) * width;
+        const py = y + (1 - Math.max(0, Math.min(max, value)) / max) * height;
+        return `${index ? "L" : "M"}${px.toFixed(1)} ${py.toFixed(1)}`;
+      }).join(" ");
+    }
+
+    function applyGraphData(data) {
+      const viewsPath = document.querySelector(".line-chart path");
+      if (viewsPath) {
+        viewsPath.setAttribute("d", graphPath(parseNumberList(data.viewsGraph, [0, 500, 535, 555, 565, 580, 595, 612, 620, 626]), {
+          x: 36, y: 18, width: 376, height: 127, max: 15000
+        }));
+      }
+      const retentionPath = document.querySelector(".retention-chart path");
+      if (retentionPath) {
+        retentionPath.setAttribute("d", graphPath(parseNumberList(data.retentionGraph, [100, 94, 76, 66, 55, 52, 50, 48, 45, 39, 35, 31, 28, 12]), {
+          x: 44, y: 52, width: 368, height: 83, max: 100
+        }));
+      }
+      const engagementPath = document.querySelector(".eng-chart path");
+      if (engagementPath) {
+        engagementPath.setAttribute("d", graphPath(parseNumberList(data.engagementGraph, [0, 17, 17, 0, 17, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 17]), {
+          x: 37, y: 42, width: 375, height: 143, max: 10
+        }));
+      }
+    }
+
+    let currentTabletData = defaultTabletReelData;
+    async function applyTabletData() {
+      const data = readTabletData();
+      currentTabletData = data;
+      const thumbnail = await getReelMediaUrl(data.tabletThumbnailImage).catch(() => "");
+      document.querySelectorAll(".reel-thumb, .watched-thumb").forEach(img => {
+        img.src = thumbnail || "assets/reel-insights-thumbnail.jpg";
+      });
+
+      document.querySelectorAll(".stats .stat-value").forEach((item, index) => {
+        item.textContent = [data.likes, data.comments, data.reposts, data.shares, data.saves][index];
+      });
+      document.querySelectorAll(".summary-card .value").forEach((item, index) => {
+        item.textContent = [data.summaryViews, data.summaryAccountsReached, data.summaryAverageWatchTime, data.summaryFollows][index];
+      });
+      setText(".section-head > span:last-child", data.viewsTotal);
+      document.querySelectorAll(".xaxis span").forEach((item, index) => {
+        item.textContent = [data.viewsDate1, data.viewsDate2, data.viewsDate3][index];
+      });
+      document.querySelectorAll(".factor-value").forEach((item, index) => {
+        item.textContent = [data.skipRate, data.shareRate, data.likeRate, data.saveRate, data.repostRate, data.commentRate][index];
+      });
+      const retentionEnd = document.querySelector(".retention-chart text:last-child");
+      if (retentionEnd) retentionEnd.textContent = data.retentionDuration;
+
+      const sourceRows = document.querySelectorAll(".source-row");
+      [[data.source1Label, data.source1Percent], [data.source2Label, data.source2Percent]].forEach(([label, percent], index) => {
+        const row = sourceRows[index];
+        if (!row) return;
+        row.querySelector(".source-label").textContent = label;
+        row.querySelector(".source-percent").textContent = percent;
+        row.querySelector(".source-fill").style.width = parsePercent(percent) + "%";
+      });
+      setText(".ad-row span", data.adLabel);
+
+      document.querySelectorAll(".metric-list")[0]?.querySelectorAll(".metric-row strong").forEach((item, index) => {
+        item.textContent = [data.profileVisits, data.actionFollows][index];
+      });
+      document.querySelectorAll(".metric-list")[1]?.querySelectorAll(".metric-row strong").forEach((item, index) => {
+        item.textContent = [data.interactionLikes, data.interactionComments, data.interactionReposts, data.interactionShares, data.interactionSaves][index];
+      });
+
+      const audienceRows = document.querySelectorAll("#audience .aud-section .aud-row");
+      [[data.audienceFollowers, 0], [data.audienceNonFollowers, 1], [data.audienceMen, 2], [data.audienceWomen, 3]].forEach(([percent, index]) => {
+        const row = audienceRows[index];
+        if (!row) return;
+        row.querySelector(".aud-percent").textContent = percent;
+        row.querySelector(".fill").style.width = parsePercent(percent) + "%";
+      });
+      applyGraphData(data);
+    }
+
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach((item) => item.classList.toggle("active", item === tab));
+        document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active", panel.id === tab.dataset.tab));
+      });
+    });
+    function showToast(message) {
+      const toast = document.getElementById("screenToast");
+      toast.textContent = message;
+      toast.hidden = false;
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => { toast.hidden = true; }, 2200);
+    }
+    document.getElementById("backButton").addEventListener("click", () => {
+      if (history.length > 1) history.back();
+      else location.href = "index.html";
+    });
+    document.getElementById("trendButton").addEventListener("click", () => {
+      document.querySelector('[data-tab="overview"]').click();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    const moreButton = document.getElementById("moreButton");
+    const moreMenu = document.getElementById("moreMenu");
+    moreButton.addEventListener("click", () => {
+      moreMenu.hidden = !moreMenu.hidden;
+      moreButton.setAttribute("aria-expanded", String(!moreMenu.hidden));
+    });
+    document.addEventListener("click", event => {
+      if (!moreMenu.hidden && !moreMenu.contains(event.target) && !moreButton.contains(event.target)) {
+        moreMenu.hidden = true;
+        moreButton.setAttribute("aria-expanded", "false");
+      }
+    });
+    moreMenu.addEventListener("click", async event => {
+      const action = event.target.closest("[data-menu-action]")?.dataset.menuAction;
+      if (!action) return;
+      try {
+        if (action === "share" && navigator.share) await navigator.share({ title: document.title, url: location.href });
+        else { await navigator.clipboard.writeText(location.href); showToast("Page link copied"); }
+      } catch { showToast("Use your browser menu to share this page"); }
+      moreMenu.hidden = true;
+      moreButton.setAttribute("aria-expanded", "false");
+    });
+    document.querySelectorAll(".side-nav button").forEach(button => button.addEventListener("click", () => {
+      const label = button.dataset.navLabel;
+      if (label === "Home") location.href = "index.html";
+      else if (label === "Reels") document.querySelector(".hero").scrollIntoView({ behavior: "smooth", block: "start" });
+      else showToast(`${label} navigation`);
+    }));
+    const allViewsPath = document.querySelector(".view-main").getAttribute("d");
+    const viewSeries = {
+      all: allViewsPath,
+      followers: "M36 145 L64 139 L86 133 L112 129 L144 116 L181 110 L220 106 L259 104 L303 102 L349 101 L412 100",
+      nonfollowers: "M36 145 L64 123 L86 108 L112 91 L144 51 L181 45 L220 41 L259 38 L303 36 L349 34 L412 32"
+    };
+    document.querySelectorAll("[data-view-filter]").forEach(button => button.addEventListener("click", () => {
+      document.querySelectorAll("[data-view-filter]").forEach(item => item.classList.toggle("active", item === button));
+      document.querySelector(".view-main").setAttribute("d", viewSeries[button.dataset.viewFilter]);
+      document.querySelector(".view-typical").style.display = button.dataset.viewFilter === "all" ? "" : "none";
+    }));
+    const audienceOptions = {
+      Country: [["United States",79.9],["Canada",5.8],["United Kingdom",3.7],["Australia",2.6],["South Africa",0.9]],
+      Age: [["18–24",47.2],["25–34",33.7],["35–44",11.9],["45–54",4.6],["55+",2.6]],
+      Gender: [["Men",54.5],["Women",45.5]]
+    };
+    const audienceDetails = document.getElementById("audienceDetails");
+    document.querySelectorAll("[data-audience]").forEach(button => button.addEventListener("click", () => {
+      document.querySelectorAll("[data-audience]").forEach(item => { item.classList.toggle("active", item === button); item.setAttribute("aria-selected", String(item === button)); });
+      const values = button.dataset.audience === "Gender"
+        ? [["Men", parsePercent(currentTabletData.audienceMen)], ["Women", parsePercent(currentTabletData.audienceWomen)]]
+        : audienceOptions[button.dataset.audience];
+      audienceDetails.innerHTML = values.map(([label, amount]) => `<div class="aud-row"><span>${label}</span><div class="track"><div class="fill ${button.dataset.audience === "Gender" ? "" : "pink"}" style="width:${amount}%"></div></div><span class="aud-percent">${amount}%</span></div>`).join("");
+    }));
+    const previewModal = document.getElementById("previewModal");
+    document.getElementById("previewReel").addEventListener("click", () => { previewModal.hidden = false; document.getElementById("closePreview").focus(); });
+    document.getElementById("closePreview").addEventListener("click", () => { previewModal.hidden = true; document.getElementById("previewReel").focus(); });
+    previewModal.addEventListener("click", event => { if (event.target === previewModal) previewModal.hidden = true; });
+    document.addEventListener("keydown", event => { if (event.key === "Escape") { previewModal.hidden = true; moreMenu.hidden = true; moreButton.setAttribute("aria-expanded", "false"); } });
+    window.addEventListener("storage", event => { if (event.key === TABLET_REEL_DATA_KEY) applyTabletData(); });
+    applyTabletData();
+  </script>
+</body>
+</html>

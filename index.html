@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>Insights · Creator dashboard</title>
+  <style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#f3f3f4;color:#101114;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}.phone{width:min(100%,430px);min-height:100vh;margin:0 auto;background:#fff;position:relative;box-shadow:0 0 30px #0000000d}.topbar{height:52px;display:grid;grid-template-columns:42px 1fr 36px 36px;align-items:center;padding:0 14px;gap:8px;position:sticky;top:0;background:#fff;z-index:8}.topbar h1{font-size:18px;font-weight:720;margin:0}.icon-button{width:32px;height:34px;display:grid;place-items:center}.icon-button svg{width:22px;height:22px;fill:none;stroke:#16171a;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.tabs{height:43px;display:grid;grid-template-columns:repeat(3,1fr);padding:0 18px;border-bottom:1px solid #f0f0f1;position:sticky;top:52px;background:#fff;z-index:7}.tab{font-size:12px;color:#777980;position:relative}.tab.active{font-weight:650;color:#18191c}.tab.active:after{content:"";height:2px;position:absolute;bottom:0;left:0;right:0;background:#17181a;border-radius:2px}.page{padding:18px 18px 0;display:none}.page.active{display:block}.page[hidden]{display:none}.section-heading{height:36px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.section-heading h2{font-size:14px;margin:0;font-weight:700}.date-select{background:#f5f5f6;border-radius:20px;padding:8px 11px;font-size:11px;font-weight:550;white-space:nowrap}.date-select span{font-size:15px;margin-left:5px;color:#676970}.metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.metric-card{height:66px;border:1px solid #ededf0;border-radius:12px;text-align:left;padding:9px 8px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}.metric-card.selected{border-color:#c8cbd1;box-shadow:0 0 0 1px #e1e2e5 inset}.metric-card span{font-size:10px;color:#60636b;white-space:nowrap}.metric-card strong{font-size:15px;line-height:1;font-weight:720}.split-legend{display:flex;justify-content:center;gap:13px;padding:14px 0 6px;font-size:9px;color:#51535a}.dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:1px}.dot.pink{background:#db38bf}.dot.purple{background:#6400c9}.chart-card{position:relative;padding:12px 0 0 28px;height:177px}.chart-labels{position:absolute;left:0;top:11px;bottom:28px;display:flex;flex-direction:column;justify-content:space-between;color:#8b8c92;font-size:8px}.line-chart{width:100%;height:128px;overflow:visible}.gridline{fill:none;stroke:#ededf0;stroke-width:1}.chart-line{fill:none;stroke:#bf00ba;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.chart-point{fill:#fff;stroke:#c900c3;stroke-width:2}.chart-dates{display:flex;justify-content:space-between;padding:0 0 0 0;color:#898a90;font-size:9px}.panel{border-top:1px solid #f0f0f2;padding:17px 0 18px}.panel-title{display:grid;grid-template-columns:1fr 22px auto;align-items:center;min-height:22px;margin-bottom:15px;gap:6px}.panel-title h3{font-size:13px;margin:0;font-weight:690}.panel-title>strong{font-size:12px}.info-mini{font-size:14px;color:#777a81;width:20px;text-align:center}.legend-small{display:flex;gap:12px;color:#666870;font-size:9px;margin:0 0 15px}.bar-row{display:grid;grid-template-columns:74px 1fr 34px;align-items:center;gap:7px;margin:14px 0;font-size:10px;color:#44464c}.bar-row b{font-size:10px;text-align:right;font-weight:550}.bar-track{height:4px;background:#f0e5f2;border-radius:8px;overflow:hidden}.bar-track i{height:100%;display:block;border-radius:8px;background:#ba00b8}.bar-track.muted{background:#ededee}.bar-track.muted i{background:#b8b9be}.top-content{padding-bottom:16px}.see-all{font-size:11px;color:#5844d8;font-weight:600;justify-self:end}.panel-title:has(.see-all){grid-template-columns:1fr auto}.thumb-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.thumb{height:96px;border-radius:6px;overflow:hidden;position:relative;text-align:left;background:#ddd}.thumb img{width:100%;height:100%;object-fit:cover}.thumb>span{position:absolute;right:5px;top:4px;color:#fff;font-size:8px;text-shadow:0 1px 3px #000}.thumb>b{position:absolute;bottom:0;left:0;right:0;padding:15px 5px 5px;color:#fff;font-size:10px;background:linear-gradient(transparent,#0009)}.pills{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 17px}.pills::-webkit-scrollbar{display:none}.pill{flex:none;height:29px;border:1px solid #e4e5e8;border-radius:18px;padding:0 11px;font-size:10px;color:#44464c;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}.pill.active{background:#f5f5f6;border-color:#bfc0c5;font-weight:620}.pill img{width:12px;height:12px;object-fit:contain;border-radius:50%}.activity{padding-bottom:12px}.activity .panel-title{margin-bottom:7px}.activity-row{display:grid;grid-template-columns:28px 1fr auto;align-items:center;padding:11px 0;font-size:11px;color:#33353a}.activity-row strong{font-size:11px}.activity-icon{width:20px;height:20px;border:1px solid #777;border-radius:50%;display:grid;place-items:center;font-size:14px;color:#60636a}.bottom-space{height:26px}.content-filters{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;margin:2px 0 20px}.filter-chip{padding:8px 13px;border:1px solid #e8e8eb;border-radius:18px;font-size:11px;white-space:nowrap}.filter-chip.active{background:#17181a;color:#fff;border-color:#17181a}.sort-head h3{font-size:13px;margin:0 0 12px}.sort-tabs{display:flex;gap:14px;overflow-x:auto;border-bottom:1px solid #eee;scrollbar-width:none}.sort-tabs button{height:35px;white-space:nowrap;font-size:10px;color:#777980;position:relative}.sort-tabs button.active{font-weight:700;color:#191a1d}.sort-tabs button.active:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:#17181a}.content-list{padding-top:5px}.content-item{display:grid;grid-template-columns:48px 1fr auto;gap:10px;align-items:center;min-height:69px;border-bottom:1px solid #f1f1f2}.content-item img{width:46px;height:56px;object-fit:cover;border-radius:4px}.content-copy{min-width:0}.content-copy strong{display:block;font-size:11px;font-weight:610;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.content-copy span{display:block;color:#7b7c82;font-size:9px;margin-top:5px}.content-value{font-size:11px;font-weight:600}.follower-count{padding:8px 0 20px;display:flex;flex-direction:column;gap:5px}.follower-count strong{font-size:27px;line-height:1;font-weight:740}.follower-count span{font-size:10px;color:#73757c}.growth-panel{padding-top:15px}.growth-panel .panel-title{margin-bottom:10px}.growth-pills{margin-bottom:4px}.growth-pills .pill,.location-pills .pill,.day-pills .pill{height:27px}.audience-chart{height:145px;position:relative;padding:11px 0 20px 22px}.audience-chart svg{width:100%;height:100px}.chart-y{position:absolute;left:0;top:10px;bottom:33px;display:flex;flex-direction:column;justify-content:space-between;color:#8c8d92;font-size:8px}.audience-chart .chart-dates{margin-left:0}.demographics .panel-title{margin-bottom:16px}.demographic-row{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 5px;gap:6px 8px;margin:16px 0 19px;font-size:10px;color:#404249}.demographic-row b{font-weight:500;color:#55575e}.demo-track{height:4px;background:#ededee;border-radius:5px;grid-column:1/3;overflow:hidden}.demo-track i{height:100%;display:block;background:#bc00ba;border-radius:5px}.location-pills{margin-bottom:17px}.location-row{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 5px;gap:6px 8px;margin:15px 0 18px;font-size:10px}.location-row b{font-weight:500;color:#565860}.location-row .demo-track{grid-column:1/3}.active-times .panel-title{margin-bottom:6px}.active-times p{margin:0 0 14px;color:#74767d;font-size:9px}.day-pills{justify-content:space-between;gap:3px;margin-bottom:12px}.day-pills .pill{padding:0 9px}.active-chart{height:125px;display:flex;align-items:end;gap:5px;padding:5px 3px 0;border-bottom:1px solid #dedee1}.active-chart i{flex:1;background:#c100bd;border-radius:4px 4px 0 0;min-width:5px;transition:height .2s}.hour-labels{display:flex;justify-content:space-between;color:#8c8d92;font-size:8px;padding:5px 0}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,12px);opacity:0;pointer-events:none;transition:.2s;background:#202124;color:#fff;padding:10px 15px;border-radius:20px;font-size:11px;z-index:20;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}.modal-backdrop{position:fixed;inset:0;background:#0006;z-index:30;display:flex;align-items:end;justify-content:center}.modal-backdrop[hidden]{display:none}.sheet{width:min(100%,430px);background:#fff;border-radius:18px 18px 0 0;padding:10px 20px 28px;box-shadow:0 -8px 30px #0002}.sheet-handle{width:36px;height:4px;background:#d5d5d8;border-radius:5px;margin:0 auto 18px}.sheet h2{font-size:16px;margin:0 0 10px}.sheet>button{width:100%;text-align:left;padding:13px 2px;border-bottom:1px solid #f0f0f2;font-size:13px}.sheet>button span{float:right;color:#b800b3}.sheet>button.chosen{font-weight:650}.sheet .sheet-cancel{text-align:center;border:0;margin-top:4px;font-weight:650}@media(min-width:700px){.phone{min-height:100vh;border-left:1px solid #eee;border-right:1px solid #eee}.page{padding-left:22px;padding-right:22px}}
+
+  </style>
+  <style>
+    :root { --status-height: calc(24px + env(safe-area-inset-top, 0px)); }
+    html, body { background: #fff; }
+      body::before { top:0; bottom:0; }
+    body { overscroll-behavior-x: none; }
+    .phone { min-height: 100vh; min-height: 100dvh; box-shadow: none; }
+    .status-bar { position: sticky; top: 0; z-index: 12; height: var(--status-height); padding: env(safe-area-inset-top, 0px) 14px 0; display: flex; align-items: center; justify-content: space-between; background: #fff; color: #141518; font-size: 10px; line-height: 1; font-weight: 650; }
+    .status-symbols { display: flex; align-items: center; gap: 4px; height: 14px; }
+    .status-symbols svg { width: 14px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; }
+    .battery { display: inline-flex; width: 15px; height: 8px; padding: 1px; border: 1px solid currentColor; border-radius: 2px; position: relative; }
+    .battery::after { content: ""; position: absolute; width: 2px; height: 4px; right: -3px; top: 1px; background: currentColor; border-radius: 0 1px 1px 0; }
+    .battery i { width: 72%; height: 100%; display: block; background: currentColor; }
+    .topbar { top: var(--status-height); }
+    .tabs { top: calc(var(--status-height) + 52px); }
+    .chart-line { stroke: #c300b8; }
+    .dot.pink, .bar-track i, .demo-track i { background-color: #d62fbd; }
+    .dot.purple { background-color: #6100c9; }
+    .active-chart i { background: #bd00b8; }
+    @media (max-width: 360px) {
+      .page { padding-left: 14px; padding-right: 14px; }
+      .tabs { padding-left: 10px; padding-right: 10px; }
+      .metric-grid { gap: 5px; }
+      .metric-card { padding: 8px 6px; }
+      .metric-card span { font-size: 9px; }
+      .metric-card strong { font-size: 14px; }
+      .chart-card { padding-left: 23px; }
+      .bar-row { grid-template-columns: 64px minmax(0, 1fr) 30px; gap: 5px; }
+      .panel-title h3 { font-size: 12px; }
+      .day-pills .pill { padding-left: 7px; padding-right: 7px; }
+    }
+    @media (max-width: 430px) {
+      html, body { background: #fff; }
+      body::before { top:0; bottom:0; }
+      .phone { width: 100%; border: 0; }
+    }
+    @media (min-width: 431px) {
+      body { background: #f2f2f3; }
+      .phone { box-shadow: 0 0 30px #0000000b; }
+    }
+    .panel-title { grid-template-columns: minmax(0, 1fr) auto; }
+    .panel-title h3 { min-width: 0; }
+    .panel-title-value { grid-template-columns: minmax(0, 1fr) 22px auto; }
+    .top-content .panel-title { grid-template-columns: minmax(0, 1fr) auto; }
+    .panel-title > strong { white-space: nowrap; }
+    /* Keep the recorded two-line category bars even after the narrow-screen overrides. */
+    .panel .bar-row { grid-template-columns: minmax(0, 1fr) 54px; grid-template-rows: auto 8px; column-gap: 9px; row-gap: 9px; }
+    .panel .bar-row > span { grid-column: 1 / -1; grid-row: 1; }
+    .panel .bar-row > .bar-track { grid-column: 1; grid-row: 2; width: 100%; }
+    .panel .bar-row > b { grid-column: 2; grid-row: 2; }
+    .thumb-row { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(5px, 1.8vw, 8px); }
+    .thumb { height: auto; aspect-ratio: .72; min-width: 0; }
+    .thumb img { display: block; object-fit: cover; object-position: center; }
+    .pills { max-width: 100%; overscroll-behavior-inline: contain; -webkit-overflow-scrolling: touch; touch-action: pan-x; }
+    .panel { min-width: 0; }
+    .bar-row { grid-template-columns: clamp(62px, 19vw, 74px) minmax(0, 1fr) 34px; }
+    @media (max-width: 360px) {
+      .panel-title-value { grid-template-columns: minmax(0, 1fr) 20px auto; gap: 4px; }
+      .bar-row { grid-template-columns: 58px minmax(0, 1fr) 30px; gap: 5px; }
+      .thumb-row { gap: 5px; }
+      .thumb > b { font-size: 9px; padding: 12px 4px 4px; }
+    }
+  </style>
+  <style>
+    :root { --status-height: 44px; }
+    html, body { background: #fff; font-family: Roboto, Arial, sans-serif; }
+    .phone { width: min(100%, 578px); min-height: 100vh; min-height: 100dvh; box-shadow: none; }
+    .status-bar { height: var(--status-height); padding: 0 24px; font-size: 15px; }
+    .status-symbols { gap: 7px; }
+    .status-symbols svg { width: 17px; height: 15px; }
+    .battery { width: 18px; height: 11px; }
+    .topbar { height: 100px; top: var(--status-height); grid-template-columns: 44px 1fr 42px 42px; padding: 0 20px; gap: 14px; }
+    .topbar h1 { font-size: 24px; font-weight: 700; }
+    .icon-button { width: 38px; height: 40px; }
+    .icon-button svg { width: 30px; height: 30px; stroke-width: 2; }
+    .tabs { height: 64px; top: calc(var(--status-height) + 100px); padding: 0 24px; }
+    .tab { font-size: 18px; }
+    .tab.active:after { height: 3px; }
+    .page { padding: 40px 24px 0; }
+    .section-heading { height: 40px; margin-bottom: 14px; }
+    .section-heading h2 { font-size: 23px; font-weight: 700; }
+    #content .section-heading { margin-bottom: 5px; }
+    .title-chevron { font-size: 18px; font-weight: 500; margin-left: 4px; vertical-align: 2px; }
+    .date-select { background: transparent; border-radius: 0; padding: 0; font-size: 18px; }
+    .date-select span { font-size: 19px; }
+    .metric-grid { display: flex; gap: 18px; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: none; margin-right: -24px; padding-right: 24px; }
+    .metric-grid::-webkit-scrollbar { display: none; }
+    .metric-card { flex: 0 0 220px; height: 118px; padding: 22px; border: 1px solid #edf0f1; border-radius: 18px; background: #f1f3f4; }
+    .metric-card.selected { border: 2px solid #17181a; box-shadow: none; }
+    .metric-card span { font-size: 16px; }
+    .metric-card strong { font-size: 25px; font-weight: 720; }
+    .split-legend { align-items: flex-start; flex-direction: column; gap: 4px; padding: 18px 0 8px; font-size: 16px; }
+    .split-legend .dot { display: none; }
+    .chart-card { height: 345px; padding: 78px 0 0 59px; }
+    .chart-labels { font-size: 15px; top: 69px; bottom: 75px; }
+    .line-chart { height: 203px; }
+    .chart-line { stroke: #cf00c5; stroke-width: 3; }
+    .secondary-line { stroke: #79008f; stroke-width: 2; }
+    .secondary-line { stroke: #79008f; stroke-width: 2; }
+    .chart-dates { font-size: 15px; }
+    .panel { margin-left: -24px; margin-right: -24px; padding: 62px 24px 22px; }
+    .panel-title { min-height: 28px; margin-bottom: 19px; }
+    .viewers-total { display: flex; align-items: center; justify-content: space-between; margin-top: 52px; padding: 10px 0 14px; border-bottom: 1px solid #eceef0; font-size: 15px; }
+    .viewers-total strong { font-size: 24px; font-weight: 600; }
+    .panel-title h3 { font-size: 19px; font-weight: 650; }
+    .panel-title > strong { font-size: 17px; }
+    .info-mini { font-size: 19px; width: 24px; }
+    .legend-small { gap: 19px; font-size: 14px; margin: 20px 0 19px; }
+    .dot { width: 9px; height: 9px; margin-right: 6px; }
+    .bar-row { grid-template-columns: minmax(0,1fr) 54px; grid-template-rows: auto 8px; column-gap: 9px; row-gap: 9px; align-items: center; margin: 18px 0; font-size: 15px; }
+    .bar-row > span { grid-column: 1 / -1; grid-row: 1; }
+    .bar-row > .bar-track { grid-column: 1; grid-row: 2; }
+    .bar-row > b { grid-column: 2; grid-row: 2; }
+    .bar-row b { font-size: 15px; }
+    .bar-track { height: 8px; border-radius: 3px; }
+    .bar-track:not(.muted) i { background: linear-gradient(90deg, #ce00c4, #79008f); }
+    .bar-track:not(.muted) i { background: linear-gradient(90deg, #ce00c4, #79008f); }
+    .top-content { padding-top: 42px; }
+    .top-content .panel-title { margin-bottom: 22px; }
+    .see-all { font-size: 16px; }
+    .thumb-row { display: flex; gap: 11px; overflow-x: auto; scrollbar-width: none; margin-right: -24px; padding-right: 24px; }
+    .thumb-row::-webkit-scrollbar { display: none; }
+    .thumb { flex: 0 0 136px; width: 136px; height: 181px; aspect-ratio: auto; border-radius: 12px; }
+    .thumb > span, .thumb > b { display: none; }
+    .pills { gap: 10px; margin-bottom: 21px; }
+    .pill { height: 38px; padding: 0 16px; font-size: 14px; }
+    .pill img { width: 18px; height: 18px; }
+    .activity-row { grid-template-columns: 34px 1fr auto; padding: 15px 0; font-size: 15px; }
+    .activity-row strong { font-size: 15px; }
+    .activity-icon { width: 28px; height: 28px; font-size: 20px; }
+    .content-filters { gap: 9px; margin: 3px 0 24px; }
+    .filter-chip { padding: 10px 17px; font-size: 14px; }
+    .sort-head h3 { font-size: 16px; margin-bottom: 12px; }
+    .sort-tabs { gap: 20px; }
+    .sort-tabs button { height: 43px; font-size: 15px; }
+    .content-list { padding-top: 8px; }
+    .content-item { grid-template-columns: 70px minmax(0,1fr) 62px; gap: 14px; min-height: 124px; }
+    .content-item img { width: 70px; height: 92px; border-radius: 7px; }
+    .content-copy strong { font-size: 15px; font-weight: 600; }
+    .content-copy span { font-size: 13px; margin-top: 6px; }
+    .content-value { font-size: 17px; font-weight: 650; text-align: right; }
+    .content-value small { display: block; margin-top: 4px; color: #797b82; font-size: 14px; font-weight: 400; }
+    .post-stats { display: flex; gap: 9px; align-items: center; margin-top: 7px; color: #777980; font-size: 14px; }
+    .follower-count { padding: 17px 0 34px; gap: 9px; }
+    .follower-count strong { font-size: 47px; }
+    .follower-count span { font-size: 20px; }
+    .growth-panel, .demographics, .locations, .active-times { padding-top: 24px; }
+    .growth-panel { padding-bottom: 0; }
+    .growth-panel .panel-title { margin-bottom: 35px; }
+    .growth-panel + .demographics { padding-top: 0; }
+    .audience-chart { height: 356px; padding: 51px 0 34px 34px; }
+    .audience-chart svg { height: 253px; }
+    .chart-y { font-size: 15px; top: 82px; bottom: 73px; }
+    .demographics .panel-title { margin-bottom: 21px; }
+    .demographic-row { font-size: 15px; gap: 8px 10px; margin: 19px 0 23px; }
+    .demographic-row b { font-size: 15px; }
+    .demo-track { height: 10px; }
+    .demographic-row .demo-track i { background: linear-gradient(90deg, #d329c8 0 34%, #79008f 34% 100%); }
+    .demographic-row .demo-track i { background: linear-gradient(90deg, #d329c8 0 34%, #79008f 34% 100%); }
+    .location-row { font-size: 15px; gap: 8px 10px; margin: 18px 0 22px; }
+    .location-row b { font-size: 15px; }
+    .active-times p { font-size: 15px; margin-bottom: 18px; }
+    .day-pills { gap: 7px; margin-bottom: 16px; }
+    .day-pills .pill { height: 40px; padding: 0 14px; }
+    .active-chart { height: 180px; gap: 7px; }
+    .hour-labels { font-size: 13px; }
+    .toast { bottom: 32px; font-size: 14px; padding: 12px 18px; }
+    .sheet { width: min(100%, 578px); padding: 13px 25px 35px; }
+    .sheet h2 { font-size: 21px; }
+    .sheet > button { padding: 16px 2px; font-size: 17px; }
+    .custom-range-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+    .custom-range-fields label { display: grid; gap: 7px; font-size: 14px; color: #64666d; }
+    .custom-range-fields input { width: 100%; min-width: 0; padding: 12px 9px; border: 1px solid #e1e2e5; border-radius: 10px; background: #fff; color: #17181c; font: inherit; }
+    .sheet .apply-range { text-align: center; border: 0; border-radius: 22px; background: #17181a; color: white; font-weight: 650; }
+    .title-chevron { font-size: 18px; font-weight: 500; margin-left: 4px; vertical-align: 2px; }
+    .content-kind { display: inline-flex; align-items: center; padding: 0; background: transparent; font-size: inherit; font-weight: inherit; }
+    .content-sort-tabs { margin: 4px -24px 12px 0; padding-right: 24px; border-bottom: 0; gap: 12px; }
+    .content-sort-tabs button { height: 55px; padding: 0 24px; border: 1px solid #e4e5e8; border-radius: 28px; font-size: 17px; color: #25262a; }
+    .content-sort-tabs button.active { background: #f3f4f4; border-color: #f3f4f4; font-weight: 650; }
+    .content-sort-tabs button.active:after { display: none; }
+    #content .section-heading { margin-bottom: 5px; }
+    .pill img, .pill svg { width: 21px; height: 21px; object-fit: contain; border-radius: 0; }
+    .interaction-pills .pill { height: 56px; padding: 0 20px; font-size: 18px; }
+    .interaction-pills .pill svg { width: 23px; height: 23px; }
+    .growth-pills .pill, .location-pills .pill { height: 56px; padding: 0 22px; font-size: 18px; }
+    .day-pills .pill { height: 56px; padding: 0 22px; font-size: 18px; }
+    .pill svg, .post-stats svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .post-stats span { display: inline-flex; align-items: center; gap: 5px; }
+    .post-stats svg { width: 19px; height: 19px; }
+    .content-item { min-height: 110px; }
+    .activity-row { grid-template-columns: 54px minmax(0,1fr) auto; gap: 14px; }
+    .activity-icon { width: 54px; height: 54px; border: 0; border-radius: 50%; background: #f3f4f5; }
+    .activity-icon svg { width: 31px; height: 31px; fill: none; stroke: #111216; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    @media (max-width: 578px) {
+      .phone { width: 100%; }
+      .metric-card { flex-basis: min(220px, 58vw); }
+      .content-item { grid-template-columns: 66px minmax(0,1fr) 56px; gap: 10px; }
+      .content-item img { width: 66px; height: 88px; }
+    }
+  </style>
+  <script defer>
+document.addEventListener("DOMContentLoaded", () => {
+let contentItems = [
+  { title: 'SamFrank shares her perspective on faith…', age: '4h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261021, views: '174', viewCount: 174, viewers: '174', viewerCount: 174, follows: "0", followCount: 0, likes: '5', likeCount: 5, comments: '0', commentCount: 0, shares: '0', shareCount: 0, topViews: '14T', image: "assets/content-reference-1.jpg" },
+  { title: 'SamFrank reflects on sharing Romans…', age: '6h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261020, views: '292', viewCount: 292, viewers: '292', viewerCount: 292, follows: "0", followCount: 0, likes: '7', likeCount: 7, comments: '0', commentCount: 0, shares: '0', shareCount: 0, topViews: '5.3T', image: "assets/content-reference-2.jpg" },
+  { title: 'SamFrank joins a powerful moment of…', age: '6h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261019, views: '168', viewCount: 168, viewers: '168', viewerCount: 168, follows: "0", followCount: 0, likes: '5', likeCount: 5, comments: '0', commentCount: 0, shares: '0', shareCount: 0, topViews: '4.8T', image: "assets/content-reference-3.jpg" },
+  { title: 'SamFrank embraces the moment, celebrating…', age: '12h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261018, views: '1.1K', viewCount: 1100, viewers: '1.1K', viewerCount: 1100, follows: "0", followCount: 0, likes: '25', likeCount: 25, comments: '0', commentCount: 0, shares: '0', shareCount: 0, topViews: '3.9T', image: "assets/content-reference-4.jpg" },
+  { title: 'SamFrank has an unexpected interaction…', age: '15h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261017, views: '584', viewCount: 584, viewers: '584', viewerCount: 584, follows: "0", followCount: 0, likes: '14', likeCount: 14, comments: '0', commentCount: 0, shares: '0', shareCount: 0, topViews: '3.9T', image: "assets/content-reference-5.jpg" },
+  { title: 'SamFrank opens up about his journey…', age: '18h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261016, views: '1.6K', viewCount: 1600, viewers: '1.6K', viewerCount: 1600, follows: "0", followCount: 0, likes: '55', likeCount: 55, comments: '1', commentCount: 1, shares: '1', shareCount: 1, topViews: '3.9T', image: "assets/content-reference-6.jpg" },
+  { title: 'SamFrank shares a powerful reminder…', age: '18h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261015, views: '497', viewCount: 497, viewers: '497', viewerCount: 497, follows: "0", followCount: 0, likes: '21', likeCount: 21, comments: '0', commentCount: 0, shares: '1', shareCount: 1, topViews: '3.9T', image: "assets/content-reference-7.jpg" },
+  { title: 'SamFrank shares a heartfelt conversation…', age: '20h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261014, views: '1.3K', viewCount: 1300, viewers: '1.3K', viewerCount: 1300, follows: "0", followCount: 0, likes: '33', likeCount: 33, comments: '0', commentCount: 0, shares: '3', shareCount: 3, topViews: '3.9T', image: "assets/content-reference-8.jpg" },
+  { title: 'SamFrank opens up about his personal…', age: '20h', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261013, views: '3.3K', viewCount: 3300, viewers: '3.3K', viewerCount: 3300, follows: "0", followCount: 0, likes: '77', likeCount: 77, comments: '1', commentCount: 1, shares: '6', shareCount: 6, topViews: '3.9T', image: "assets/content-reference-9.jpg" },
+  { title: 'SamFrank shares a powerful reminder …', age: '1d', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261012, views: '1.3K', viewCount: 1300, viewers: '1.3K', viewerCount: 1300, follows: "0", followCount: 0, likes: '77', likeCount: 77, comments: '1', commentCount: 1, shares: '3', shareCount: 3, topViews: '3.9T', image: "assets/content-reference-10.jpg" },
+  { title: 'SamFrank shares a powerful, heartfelt…', age: '1d', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261011, views: '1.3K', viewCount: 1300, viewers: '1.3K', viewerCount: 1300, follows: "0", followCount: 0, likes: '64', likeCount: 64, comments: '0', commentCount: 0, shares: '3', shareCount: 3, topViews: '3.9T', image: "assets/content-reference-11.jpg" },
+  { title: 'SamFrank’s conversation with Steve…', age: '1d', date: "Oct 21 · Reel", type: "Reel", dateOrder: 20261010, views: '2K', viewCount: 2000, viewers: '2K', viewerCount: 2000, follows: "0", followCount: 0, likes: '28', likeCount: 28, comments: '1', commentCount: 1, shares: '3', shareCount: 3, topViews: '3.9T', image: "assets/content-reference-12.jpg" }
+];
+let locationData = {
+ Countries: [["India", "58.1%"], ["United States", "6.8%"], ["Thailand", "4.1%"], ["Egypt", "4.1%"], ["Vietnam", "2.7%"]],
+  Cities: [["Bangalore", "2.7%"], ["Mesa", "2.7%"], ["Sitamau", "1.4%"], ["Lalsot", "1.4%"], ["Delhi", "1.4%"]]
+};
+const list = document.getElementById("contentList");
+const toast = document.querySelector(".toast");
+const PAGE_DATA_KEY = "indexInsightsPageData";
+function readPageData() {
+  try {
+    const match = location.hash.match(/^#data=(.+)$/);
+    if (match) {
+      const incoming = JSON.parse(decodeURIComponent(escape(atob(match[1]))));
+      try { localStorage.setItem(PAGE_DATA_KEY, JSON.stringify(incoming)); } catch {}
+      history.replaceState(null, "", location.pathname + location.search);
+      return incoming;
+    }
+    return JSON.parse(localStorage.getItem(PAGE_DATA_KEY) || "null") || {};
+  } catch { return {}; }
+}
+const pageData = readPageData();
+if (Array.isArray(pageData.contentItems) && pageData.contentItems.length) contentItems = pageData.contentItems;
+if (pageData.locations && typeof pageData.locations === "object") locationData = { ...locationData, ...pageData.locations };
+function showToast(message) { toast.textContent = message; toast.classList.add("show"); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove("show"), 1800); }
+let activeContentSort = "Latest";
+let activeContentFilter = "All";
+let activeDateRange = "Last 30 days";
+let activeCustomRange = null;
+function renderContent(sort = activeContentSort, filter = activeContentFilter) {
+  activeContentSort = sort;
+  activeContentFilter = filter;
+  let items = [...contentItems];
+  if (filter !== "All") { const types = { Reels: "Reel", Posts: "Post", Stories: "Story", Live: "Live" }; items = items.filter(item => item.type === types[filter]); }
+  if (activeDateRange === "Last 7 days") items = items.filter(item => item.dateOrder >= 20261004);
+  else if (activeDateRange === "Last 30 days") items = items.filter(item => item.dateOrder >= 20260922);
+  else if (activeDateRange === "Previous month") items = items.filter(item => item.dateOrder >= 20260901 && item.dateOrder <= 20260930);
+  else if (activeDateRange === "Custom range" && activeCustomRange) items = items.filter(item => item.dateOrder >= Number(activeCustomRange.start.replaceAll("-", "")) && item.dateOrder <= Number(activeCustomRange.end.replaceAll("-", "")));
+  if (sort === "Latest") items.sort((a, b) => b.dateOrder - a.dateOrder);
+  else {
+    const sortKeys = { Views: "viewCount", Viewers: "viewerCount", Follows: "followCount", Likes: "likeCount" };
+    const numberKey = sortKeys[sort] || "viewCount";
+    items.sort((a, b) => b[numberKey] - a[numberKey]);
+  }
+  list.innerHTML = items.map(item => {
+    const count = sort === "Latest" ? item.views : item[({ Views: "views", Viewers: "viewers", Follows: "follows", Likes: "likes" })[sort] || "views"];
+    const valueLabel = sort === "Latest" ? "Views" : sort;
+    return `<article class="content-item"><img src="${item.image}" alt="Reel thumbnail"><div class="content-copy"><strong><span class="post-title">${item.title}</span><time class="post-age">${item.age}</time></strong><div class="post-stats"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.8c0 5.4-8.8 11-8.8 11s-8.8-5.6-8.8-11A4.8 4.8 0 0 1 12 6a4.8 4.8 0 0 1 8.8 2.8Z"/></svg>${item.likes}</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8.5 8 8.8 8.8 0 0 1-3.7-.8L4 20l1.2-3.3a7.5 7.5 0 0 1-1.7-4.7 8 8 0 0 1 8-8.2 8 8 0 0 1 8.5 7.7Z"/></svg>${item.comments}</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 3-7.2 18-3.4-7.4L3 10.2 21 3Z"/><path d="m10.4 13.6 4-4"/></svg>${item.shares}</span></div></div><span class="content-value">${count}<small>${valueLabel}</small></span></article>`;
+  }).join("") || `<p class="empty-state">No ${filter.toLowerCase()} in this period.</p>`;
+}
+function updateRangeDates(range, custom = null) {
+  let dates = ["22 Sept", "7 Oct", "21 Oct"];
+  if (range === "Last 7 days") dates = ["15 Oct", "18 Oct", "21 Oct"];
+  else if (range === "Last 90 days") dates = ["24 Jul", "7 Sept", "21 Oct"];
+  else if (range === "Previous month") dates = ["1 Sept", "15 Sept", "30 Sept"];
+  else if (range === "Custom range" && custom) dates = [custom.start, custom.end];
+  document.querySelectorAll(".chart-dates").forEach(row => {
+    const labels = row.querySelectorAll("span");
+    if (range === "Custom range" && labels.length === 3) { labels[0].textContent = dates[0]; labels[1].textContent = ""; labels[2].textContent = dates[1]; }
+    else dates.forEach((date, index) => { if (labels[index]) labels[index].textContent = date; });
+  });
+}
+function showPage(page) {
+  document.querySelectorAll(".tab").forEach(tab => { const active = tab.dataset.page === page; tab.classList.toggle("active", active); tab.setAttribute("aria-selected", String(active)); });
+  document.querySelectorAll(".page").forEach(panel => { const active = panel.id === page; panel.classList.toggle("active", active); panel.hidden = !active; });
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+document.querySelectorAll(".tab, [data-page-link]").forEach(button => button.addEventListener("click", () => showPage(button.dataset.page || button.dataset.pageLink)));
+function applyPageData() {
+  const overview = pageData.overview || {};
+  document.querySelectorAll(".metric-card").forEach(card => { const value = overview.metrics?.[card.dataset.metric]; if (value != null) card.querySelector("strong").textContent = value; });
+  const legend = document.querySelectorAll(".split-legend span");
+  if (overview.followerShare != null && legend[0]) legend[0].innerHTML = `<i class="dot pink"></i>${overview.followerShare}`;
+  if (overview.nonFollowerShare != null && legend[1]) legend[1].innerHTML = `<i class="dot purple"></i>${overview.nonFollowerShare}`;
+  const path = document.querySelector(".views-line");
+  if (overview.chart?.path && path) path.setAttribute("d", overview.chart.path);
+  if (overview.chart?.labels) document.querySelectorAll(".chart-labels span").forEach((el, i) => { if (overview.chart.labels[i] != null) el.textContent = overview.chart.labels[i]; });
+  if (overview.chart?.dates) document.querySelectorAll(".chart-dates").forEach(row => row.querySelectorAll("span").forEach((el, i) => { if (overview.chart.dates[i] != null) el.textContent = overview.chart.dates[i]; }));
+  if (overview.viewers != null) { const total = document.querySelector(".viewers-total strong"); if (total) total.textContent = overview.viewers; }
+  if (overview.contentTypes) document.querySelectorAll(".overview-content-types .bar-row").forEach((row, i) => { const item = overview.contentTypes[i]; if (!item) return; row.querySelector("span").textContent = item.name; row.querySelector("b").textContent = item.value; row.querySelector(".bar-track i").style.width = `${Math.max(0, Math.min(100, Number(item.width) || 0))}%`; });
+  const audience = pageData.audience || {};
+  if (audience.followers != null) document.querySelector(".follower-count strong").textContent = audience.followers;
+  if (audience.trend != null) document.querySelector(".follower-count span").textContent = audience.trend;
+  if (audience.gender) document.querySelectorAll(".gender-demographics .demographic-row").forEach((row, i) => { const item = audience.gender[i]; if (!item) return; row.querySelector("span").textContent = item.label; row.querySelector("b").textContent = item.percent; const fill = row.querySelector(".demo-track i"); fill.style.width = item.percent; if (item.color) fill.style.background = item.color; });
+  if (audience.ageRanges) document.querySelectorAll(".demographics:not(.gender-demographics) .demographic-row").forEach((row, i) => { const item = audience.ageRanges[i]; if (!item) return; row.querySelector("span").textContent = item.label; row.querySelector("b").textContent = item.percent; const fill = row.querySelector(".demo-track i"); fill.style.width = item.percent; if (item.women != null && item.men != null) fill.style.background = `linear-gradient(90deg,#d000c2 0 ${item.women}%,#79008f ${item.women}% ${Number(item.women) + Number(item.men)}%,#f0f0f2 ${Number(item.women) + Number(item.men)}% 100%)`; });
+  if (pageData.profileActivity) document.querySelectorAll(".activity-row").forEach((row, i) => { const item = pageData.profileActivity[i]; if (item) { row.querySelectorAll("span")[1].textContent = item.label; row.querySelector("strong").textContent = item.value; } });
+  if (Array.isArray(audience.activeTimes) && audience.activeTimes.length) activityPatterns = audience.activeTimes;
+  if (audience.growth) { const selected = document.querySelector(".growth-pills .pill.active")?.textContent.trim() || "Overall"; if (audience.growth[selected]) document.querySelector(".growth-line").setAttribute("d", audience.growth[selected]); }
+  if (audience.growthDates) document.querySelectorAll(".growth-panel .chart-dates span").forEach((el, i) => { if (audience.growthDates[i] != null) el.textContent = audience.growthDates[i]; });
+  const top = document.querySelectorAll(".thumb img");
+  contentItems.slice(0, top.length).forEach((item, i) => { if (item.image) top[i].src = item.image; });
+  if (pageData.interactionTotals) interactionTotals = { ...interactionTotals, ...pageData.interactionTotals };
+  const firstAmount = Number(interactionTotals.All) || 0;
+  document.querySelector(".interaction-total").textContent = firstAmount >= 1000 ? `${(firstAmount / 1000).toFixed(1)}K` : firstAmount;
+  document.querySelector(".interaction-fill").style.width = "100%";
+}
+renderContent();
+document.querySelectorAll(".content-sort-tabs button").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".content-sort-tabs button").forEach(item => item.classList.toggle("active", item === button)); renderContent(button.textContent.trim(), activeContentFilter); }));
+document.querySelectorAll(".content-kind").forEach(button => button.addEventListener("click", () => { document.getElementById("typeModal").hidden = false; }));
+document.querySelectorAll("[data-content-filter]").forEach(button => button.addEventListener("click", () => { const filter = button.dataset.contentFilter; const title = filter === "All" ? "All content" : filter === "Live" ? "Live videos" : filter; document.querySelectorAll("[data-content-filter]").forEach(item => { item.classList.toggle("chosen", item === button); item.innerHTML = (item.dataset.contentFilter === "All" ? "All content" : item.dataset.contentFilter === "Live" ? "Live videos" : item.dataset.contentFilter) + (item === button ? " <span>✓</span>" : ""); }); document.querySelectorAll(".content-kind").forEach(item => item.innerHTML = `${title} <span class="title-chevron">⌄</span>`); document.getElementById("typeModal").hidden = true; renderContent(activeContentSort, filter); }));
+document.querySelector(".type-cancel").addEventListener("click", () => document.getElementById("typeModal").hidden = true);
+document.getElementById("typeModal").addEventListener("click", event => { if (event.target.id === "typeModal") event.currentTarget.hidden = true; });
+document.querySelectorAll(".date-select").forEach(button => button.addEventListener("click", () => { document.getElementById("dateModal").hidden = false; }));
+document.querySelectorAll("[data-range]").forEach(button => button.addEventListener("click", () => { const range = button.dataset.range; if (range === "Custom range") { document.getElementById("dateModal").hidden = true; document.getElementById("customRangeModal").hidden = false; return; } activeDateRange = range; activeCustomRange = null; document.querySelectorAll("[data-range]").forEach(item => { item.classList.toggle("chosen", item === button); item.innerHTML = item.dataset.range + (item === button ? " <span>✓</span>" : ""); }); document.querySelectorAll(".date-select").forEach(select => select.innerHTML = `${range.replace("Last ", "")} <span>⌄</span>`); updateRangeDates(range); document.getElementById("dateModal").hidden = true; renderContent(); showToast(`${range} selected`); }));
+document.querySelector(".apply-range").addEventListener("click", () => { const start = document.getElementById("rangeStart").value; const end = document.getElementById("rangeEnd").value; if (!start || !end || start > end) { showToast("Enter a valid date range"); return; } activeDateRange = "Custom range"; activeCustomRange = { start, end }; document.querySelectorAll("[data-range]").forEach(item => { item.classList.toggle("chosen", item.dataset.range === "Custom range"); item.innerHTML = item.dataset.range + (item.dataset.range === "Custom range" ? " <span>✓</span>" : ""); }); document.querySelectorAll(".date-select").forEach(select => select.innerHTML = `${start.slice(5).replace("-", "/")}–${end.slice(5).replace("-", "/")} <span>⌄</span>`); updateRangeDates(activeDateRange, activeCustomRange); document.getElementById("customRangeModal").hidden = true; renderContent(); showToast("Custom date range applied"); });
+document.querySelector(".custom-cancel").addEventListener("click", () => document.getElementById("customRangeModal").hidden = true);
+document.getElementById("customRangeModal").addEventListener("click", event => { if (event.target.id === "customRangeModal") event.currentTarget.hidden = true; });
+document.querySelector(".sheet-cancel").addEventListener("click", () => document.getElementById("dateModal").hidden = true);
+document.getElementById("dateModal").addEventListener("click", event => { if (event.target.id === "dateModal") event.currentTarget.hidden = true; });
+document.querySelectorAll(".pills").forEach(group => group.addEventListener("click", event => { const button = event.target.closest(".pill"); if (!button) return; group.querySelectorAll(".pill").forEach(item => item.classList.toggle("active", item === button)); if (group.classList.contains("location-pills")) renderLocations(button.textContent.trim()); if (group.classList.contains("day-pills")) renderActiveTimes([...group.children].indexOf(button)); if (group.classList.contains("growth-pills")) { const paths = { Overall: "M0 52 L60 52 L120 52 L180 52 L228 52 L250 52 L262 70 L274 52 L292 52 L340 52", Follows: "M0 52 L60 52 L120 52 L180 52 L228 52 L250 38 L262 52 L274 52 L292 52 L340 52", Unfollows: "M0 52 L60 52 L120 52 L180 52 L228 52 L250 52 L262 70 L274 52 L292 52 L340 52" }; document.querySelector(".growth-line").setAttribute("d", pageData.audience?.growth?.[button.textContent.trim()] || paths[button.textContent.trim()]); } }));
+function renderLocations(type = "Countries") { document.querySelector(".location-list").innerHTML = locationData[type].map(([name, value]) => `<div class="location-row"><span>${name}</span><b>${value}</b><div class="demo-track"><i style="width:${parseFloat(value)}%"></i></div></div>`).join(""); }
+let activityPatterns = [[100,100,100,30,100,100,30,30], [82,92,100,72,88,100,76,65], [70,85,96,100,80,94,72,60], [92,100,84,70,91,100,76,62], [78,90,100,82,72,96,88,70], [65,78,92,100,90,72,84,96], [72,86,100,92,76,88,96,80]];
+function renderActiveTimes(day = 0) { document.querySelector(".active-chart").innerHTML = activityPatterns[day].map((height, i) => `<i title="${Math.round(height * 0.12)} active followers" style="height:${height}%"></i>`).join(""); }
+let interactionTotals = { All: 5512, Likes: 4260, Comments: 430, Reposts: 210, Saves: 405, Shares: 207 };
+applyPageData();
+renderLocations(); renderActiveTimes();
+document.querySelectorAll(".interaction-pills [data-interaction]").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".interaction-pills [data-interaction]").forEach(item => item.classList.toggle("active", item === button)); const amount = Number(interactionTotals[button.dataset.interaction]) || 0; document.querySelector(".interaction-total").textContent = amount >= 1000 ? `${(amount / 1000).toFixed(1)}K` : amount; const max = Math.max(...Object.values(interactionTotals).map(Number), 1); document.querySelector(".interaction-fill").style.width = `${amount / max * 100}%`; }));
+document.querySelectorAll(".metric-card").forEach(card => card.addEventListener("click", () => { document.querySelectorAll(".metric-card").forEach(item => item.classList.toggle("selected", item === card)); const metric = card.dataset.metric; const chart = document.querySelector(".line-chart"); const line = document.querySelector(".views-line"); const point = document.querySelector(".chart-point"); const labels = { Views: ["19.3K", "9.6K", "0"], "Net followers": ["2", "0", "-2"], Interactions: ["1.8K", "900", "0"] }; const paths = { Views: "M0 24 L10 4 L21 55 L34 88 L47 49 L60 72 L73 64 L86 91 L99 90 L112 87 L125 64 L138 90 L151 98 L164 83 L177 87 L190 97 L203 81 L216 99 L229 90 L242 86 L255 98 L268 82 L281 93 L294 84 L307 71 L320 18 L328 31 L334 20 L340 34", "Net followers": "M0 45 L28 45 L48 45 L60 45 L70 45 L82 45 L92 45 L106 45 L120 45 L132 45 L185 45 L240 45 L274 45 L290 67 L302 45 L340 45", Interactions: "M0 89 L28 84 L48 86 L60 80 L70 65 L82 24 L92 73 L106 83 L120 68 L132 77 L185 70 L240 82 L290 58 L340 78" }; line.setAttribute("d", metric === "Views" ? (pageData.overview?.chart?.path || paths[metric]) : paths[metric]); document.querySelectorAll(".chart-labels span").forEach((item, index) => item.textContent = metric === "Views" ? (pageData.overview?.chart?.labels?.[index] || labels[metric][index]) : labels[metric][index]); chart.setAttribute("aria-label", `${metric} over time`); point.style.display = metric === "Views" ? "" : "none"; document.querySelector(".secondary-line").style.display = metric === "Views" ? "" : "none"; document.querySelector(".split-legend").style.display = metric === "Views" ? "" : "none"; }));
+document.querySelectorAll(".thumb").forEach(button => button.addEventListener("click", () => showToast(`Content insights · ${contentItems[Number(button.dataset.item)].topViews} views`)));
+document.getElementById("backButton").addEventListener("click", () => { if (history.length > 1) history.back(); else showToast("You're viewing Insights"); });
+document.getElementById("shareButton").addEventListener("click", async () => { try { await navigator.clipboard.writeText(location.href); showToast("Insights link copied"); } catch { showToast("Share insights from your browser menu"); } });
+document.getElementById("infoButton").addEventListener("click", () => showToast("Insights show how your content is performing"));
+});
+  </script>
+  <style>
+    :root { --status-height: 0px; }
+    html, body { width:100%; min-height:100%; margin:0; overflow-x:clip; background:#fff; color:#15171a; font-family:Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; }
+    .tablet { width:720px; min-height:1120px; margin:0 auto; padding:0 0 0 144px; position:relative; background:#fff; }
+    .status-bar { display:none; }
+    .overview-side-nav { position:fixed; z-index:15; top:34%; left:max(calc((100vw - 720px)/2),0px); width:68px; display:flex; flex-direction:column; align-items:center; gap:32px; }
+    .overview-side-nav svg { width:24px; height:24px; fill:none; stroke:#161616; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .overview-side-nav .side-avatar { width:32px; height:32px; border-radius:50%; border:2px solid #e6e6e6; object-fit:cover; }
+    .insights-fixed { position:fixed; z-index:50; inset:0 0 auto; width:100%; height:114px; background:#fff; }
+    .insights-fixed-inner { position:absolute; top:0; left:calc(50% - 216px); width:444px; height:114px; }
+    .insights-spacer { height:114px; }
+    .topbar { width:444px; height:70px; margin-left:0; padding:0 16px; display:grid; grid-template-columns:42px 1fr 42px 42px; column-gap:8px; position:relative; top:auto; z-index:1; background:#fff; }
+    .topbar h1 { margin:0; font-size:19px; line-height:1; font-weight:700; letter-spacing:0; padding:0; }
+    .icon-button { width:38px; height:38px; display:grid; place-items:center; }
+    .icon-button svg { width:23px; height:23px; fill:none; stroke:#111; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+    #infoButton svg { stroke-width:2.25; }
+    .tabs { width:444px; height:44px; margin-left:-6px; padding:0; display:grid; grid-template-columns:repeat(3,1fr); border-bottom:1px solid #d7dce0; position:relative; top:auto; z-index:1; background:#fff; }
+    .tab { height:44px; display:grid; place-items:center; position:relative; color:#5e636d; font-size:15px; }
+    .tab.active { color:#111; font-weight:650; }
+    .tab.active:after { content:""; position:absolute; left:32px; right:32px; bottom:-1px; height:2px; background:#12171c; border-radius:4px 4px 0 0; }
+    .page { width:430px; margin:0 0 0 9px; padding:22px 0 0; display:none; }
+    .page.active { display:block; }
+    .page[hidden] { display:none; }
+    .section-heading { height:30px; display:flex; align-items:center; justify-content:space-between; margin:0 0 14px; }
+    .section-heading h2 { margin:0; font-size:18px; font-weight:780; }
+    .content-kind { display:inline-flex; align-items:center; gap:7px; font-weight:inherit; }
+    .title-chevron { display:inline-block; position:relative; width:9px; height:9px; margin-left:1px; overflow:hidden; font-size:0; vertical-align:2px; }
+    .title-chevron::after { content:""; position:absolute; left:1px; top:0; width:5px; height:5px; border-right:1.7px solid #34363a; border-bottom:1.7px solid #34363a; transform:rotate(45deg); }
+    .date-select { padding:0; border-radius:0; background:transparent; font-size:14px; font-weight:550; white-space:nowrap; }
+    .date-select span { display:inline-block; position:relative; width:9px; height:9px; margin-left:5px; overflow:hidden; font-size:0; color:transparent; vertical-align:2px; }
+    .date-select span::after { content:""; position:absolute; left:1px; top:0; width:5px; height:5px; border-right:1.7px solid #5f6268; border-bottom:1.7px solid #5f6268; transform:rotate(45deg); }
+    .metric-grid { display:flex; gap:12px; overflow-x:auto; margin:0; padding:0; scrollbar-width:none; }
+    .metric-grid::-webkit-scrollbar { display:none; }
+    .metric-card { flex:0 0 158px; height:84px; padding:13px 14px; border:1px solid #e7e9eb; border-radius:10px; background:#f0f3f4; display:flex; flex-direction:column; justify-content:space-between; text-align:left; overflow:hidden; }
+    .metric-card.selected { border:2px solid #111216; box-shadow:none; }
+    .metric-card span { color:#555960; font-size:13px; white-space:nowrap; }
+    .metric-card strong { font-size:19px; line-height:1; font-weight:720; }
+    .split-legend { display:flex; flex-direction:column; align-items:flex-start; gap:0; padding:11px 0 0; font-size:12px; line-height:1.3; color:#33363b; }
+    .split-legend .dot { display:none; }
+    .chart-card { position:relative; height:225px; padding:60px 22px 0 49px; }
+    .chart-labels { position:absolute; left:0; top:60px; bottom:28px; display:flex; flex-direction:column; justify-content:space-between; color:#8b8c92; font-size:11px; }
+    .line-chart { width:100%; height:145px; overflow:visible; }
+    .gridline { fill:none; stroke:#ededf0; stroke-width:1; }
+    .chart-line { fill:none; stroke:#d000c2; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .chart-point, .secondary-line { display:none!important; }
+    .chart-dates { display:flex; justify-content:space-between; color:#898a90; font-size:12px; }
+    .page#overview > .panel:first-of-type { margin-top:22px; border-top:8px solid #f1f2f3; padding-top:28px; }
+    .panel { border-top:1px solid #f0f0f2; padding:16px 0 18px; }
+    .panel-title { display:flex; align-items:center; min-height:22px; margin-bottom:14px; gap:6px; }
+    .panel-title h3 { margin:0; font-size:14px; font-weight:690; }
+    .info-mini { flex:0 0 20px; width:20px; height:20px; padding:0; display:grid; place-items:center; position:relative; overflow:visible; color:transparent; font-size:0; }
+    .info-mini::before { content:"i"; width:14px; height:14px; border:2px solid #55585e; border-radius:50%; color:#55585e; font:700 10px/12px Arial,sans-serif; text-align:center; }
+    .growth-pills .pill.active, .location-pills .pill.active, .day-pills .pill.active { background:#f1f2f3; border-color:#f1f2f3; color:#292a2e; }
+    .viewers-total { display:flex; justify-content:space-between; align-items:center; font-size:13px; padding:2px 0 12px; border-bottom:1px solid #ededee; }
+    .viewers-total strong { font-size:14px; }
+    .legend-small { display:flex; gap:14px; margin:12px 0 14px; color:#666870; font-size:11px; }
+    .dot { width:6px; height:6px; border-radius:50%; display:inline-block; margin-right:5px; vertical-align:1px; }
+    .dot.pink { background:#d000c2; }
+    .dot.purple { background:#79008f; }
+    .bar-row { display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-rows:auto 5px; align-items:center; gap:7px 8px; margin:15px 0; color:#44464c; font-size:12px; }
+    .bar-row>span { grid-column:1; grid-row:1; }
+    .bar-row>.bar-track { grid-column:1/3; grid-row:2; width:100%; }
+    .bar-row>b { grid-column:2; grid-row:1; font-size:12px; text-align:right; font-weight:550; }
+    .bar-track { height:5px; background:#f0e5f2; border-radius:8px; overflow:hidden; }
+    .bar-track i { height:100%; display:block; border-radius:8px; background:#d000c2; }
+    .bar-track.muted { background:#ededee; }
+    .bar-track.muted i { background:#b8b9be; }
+    .top-content { padding-bottom:14px; }
+    .panel-title:has(.see-all) { justify-content:space-between; }
+    .see-all { margin-left:auto; color:#5844d8; font-size:13px; font-weight:600; }
+    .thumb-row { display:flex; gap:8px; overflow:hidden; }
+    .thumb { flex:0 0 97px; height:130px; position:relative; overflow:hidden; border-radius:6px; background:#ddd; }
+    .thumb img { width:100%; height:100%; object-fit:cover; }
+    .pills { display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; margin:0 0 14px; }
+    .pills::-webkit-scrollbar { display:none; }
+    .pill { flex:none; height:29px; padding:0 11px; border:1px solid #e4e5e8; border-radius:18px; display:inline-flex; align-items:center; gap:4px; color:#44464c; font-size:10px; white-space:nowrap; }
+    .pill.active { background:#f5f5f6; border-color:#bfc0c5; font-weight:620; }
+    .pill svg { width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+    .activity-row { display:grid; grid-template-columns:28px 1fr auto; align-items:center; padding:10px 0; color:#33353a; font-size:12px; }
+    .activity-row strong { font-size:12px; }
+    .activity-icon { width:20px; height:20px; display:grid; place-items:center; color:#60636a; }
+    .activity-icon svg { width:20px; height:20px; fill:none; stroke:#111216; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+    .content-sort-tabs { gap:8px; margin:8px 0 14px; border:0; }
+    .content-sort-tabs button { height:29px; padding:0 11px; border:1px solid #e3e3e6; border-radius:24px; font-size:10px; white-space:nowrap; }
+    .content-sort-tabs button.active { background:#f4f4f5; border-color:#999ba1; }
+    .content-sort-tabs button.active:after { display:none; }
+    .content-list { padding-top:4px; }
+    .content-item { display:grid; grid-template-columns:56px minmax(0,1fr) 50px; gap:10px; align-items:center; min-height:76px; border-bottom:1px solid #f1f1f2; }
+    .content-item img { width:48px; height:66px; object-fit:cover; border-radius:4px; }
+    .content-copy { min-width:0; }
+    .content-copy strong { display:flex; align-items:center; gap:6px; min-width:0; overflow:hidden; color:#24262a; font-size:11px; font-weight:610; white-space:nowrap; }
+    .content-copy .post-title { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .post-age { flex:none; color:#74767d; font-size:10px; font-weight:400; }
+    .content-copy span { display:block; margin-top:5px; color:#7b7c82; font-size:9px; }
+    .post-stats { display:flex; gap:8px; margin-top:4px; color:#777980; font-size:9px; }
+    .post-stats span { display:inline-flex; align-items:center; gap:3px; }
+    .post-stats svg { width:11px; height:11px; fill:none; stroke:currentColor; stroke-width:1.5; }
+    .content-value { font-size:11px; font-weight:600; text-align:right; }
+    .content-value small { display:block; margin-top:3px; color:#85868c; font-size:9px; font-weight:400; }
+    .follower-count { display:flex; flex-direction:column; gap:5px; padding:8px 0 16px; }
+    .follower-count strong { font-size:27px; line-height:1; font-weight:740; }
+    .follower-count span { color:#73757c; font-size:11px; }
+    .growth-panel { padding-top:16px; }
+    .growth-pills { margin-bottom:4px; }
+    .audience-chart { height:145px; position:relative; padding:11px 0 20px 22px; }
+    .audience-chart svg { width:100%; height:100px; }
+    .chart-y { position:absolute; left:0; top:10px; bottom:33px; display:flex; flex-direction:column; justify-content:space-between; color:#8c8d92; font-size:10px; }
+    .audience-chart .chart-dates { margin-left:0; }
+    .demographics .panel-title { margin-bottom:12px; }
+    .demographic-row { display:grid; grid-template-columns:1fr auto; grid-template-rows:auto 5px; gap:6px 8px; margin:14px 0 16px; color:#404249; font-size:11px; }
+    .demographic-row b { color:#55575e; font-size:11px; font-weight:500; }
+    .demo-track { height:5px; grid-column:1/3; overflow:hidden; border-radius:5px; background:#ededee; }
+    .demo-track i { height:100%; display:block; border-radius:5px; background:#d000c2; }
+    .gender-demographics .gender-women .demo-track i { background:#d000c2; }
+    .gender-demographics .gender-men .demo-track i { background:#79008f; }
+    .demographic-legend { margin:0 0 10px; font-size:11px; }
+    .demographics:nth-of-type(3) .demographic-row:nth-of-type(3) .demo-track i { background:#79008f; }
+    .demographics:nth-of-type(3) .demographic-row:nth-of-type(4) .demo-track i { background:linear-gradient(90deg,#d000c2 0 12%,#79008f 12% 100%); }
+    .demographics:nth-of-type(3) .demographic-row:nth-of-type(5) .demo-track i { background:linear-gradient(90deg,#d000c2 0 70%,#79008f 70% 100%); }
+    .demographics:nth-of-type(3) .demographic-row:nth-of-type(6) .demo-track i { background:linear-gradient(90deg,#d000c2 0 22%,#79008f 22% 100%); }
+    .locations .location-pills { margin-bottom:14px; }
+    .location-row { display:grid; grid-template-columns:1fr auto; grid-template-rows:auto 5px; gap:6px 8px; margin:13px 0 15px; font-size:11px; }
+    .location-row b { color:#565860; font-size:11px; font-weight:500; }
+    .location-row .demo-track { grid-column:1/3; }
+    .active-times .panel-title { margin-bottom:6px; }
+    .active-times p { margin:0 0 12px; color:#74767d; font-size:12px; }
+    .day-pills { justify-content:space-between; gap:3px; margin-bottom:10px; }
+    .day-pills .pill { height:27px; padding:0 9px; }
+    .active-chart { height:170px; display:flex; align-items:end; gap:5px; padding:5px 3px 0; border-bottom:1px solid #dedee1; }
+    .active-chart i { flex:1; min-width:5px; border-radius:4px 4px 0 0; background:#d000c2; transition:height .2s; }
+    /* Match the larger touch targets, bars, and activity icons visible in the tablet recording. */
+    .interaction-pills .pill, .growth-pills .pill, .location-pills .pill { height:40px; padding:0 16px; font-size:14px; }
+    .day-pills .pill { height:38px; padding:0 13px; font-size:14px; }
+    .content-sort-tabs button { height:40px; padding:0 16px; font-size:14px; }
+    .activity-row { grid-template-columns:54px minmax(0,1fr) auto; gap:14px; padding:13px 0; font-size:14px; }
+    .activity-row strong { font-size:14px; }
+    .activity-icon { width:54px; height:54px; display:grid; place-items:center; border:0; border-radius:50%; background:#f3f4f5; color:#111216; }
+    .activity-icon svg { width:26px; height:26px; fill:none; stroke:#111216; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+    .audience-chart .chart-line { stroke:#a9009f; stroke-width:2.3; }
+    .active-chart i { background:#d000c2; border-radius:4px 4px 0 0; }
+    .day-pills .pill { height:40px; }
+    .demographic-row { grid-template-rows:auto 9px; font-size:13px; }
+    .demographic-row b, .location-row, .location-row b { font-size:13px; }
+    .demo-track { height:9px; }
+    .hour-labels { display:flex; justify-content:space-between; padding:5px 0; color:#8c8d92; font-size:9px; }
+    .bottom-space { height:24px; }
+    .toast { position:fixed; z-index:20; left:50%; bottom:20px; transform:translate(-50%,12px); opacity:0; pointer-events:none; padding:10px 15px; border-radius:20px; background:#202124; color:white; font-size:11px; white-space:nowrap; transition:.2s; }
+    .toast.show { opacity:1; transform:translate(-50%,0); }
+    .modal-backdrop { position:fixed; z-index:30; inset:0; display:flex; align-items:end; justify-content:center; background:#0006; }
+    .modal-backdrop[hidden] { display:none; }
+    .sheet { width:min(430px,100%); padding:10px 20px 28px; border-radius:18px 18px 0 0; background:#fff; box-shadow:0 -8px 30px #0002; }
+    .sheet-handle { width:36px; height:4px; margin:0 auto 18px; border-radius:5px; background:#d5d5d8; }
+    .sheet h2 { margin:0 0 10px; font-size:16px; }
+    .sheet>button { width:100%; padding:13px 2px; border-bottom:1px solid #f0f0f2; text-align:left; font-size:13px; }
+    .sheet>button span { float:right; color:#b800b3; }
+    .sheet>button.chosen { font-weight:650; }
+    .sheet .sheet-cancel { margin-top:4px; border:0; text-align:center; font-weight:650; }
+    @media (max-width:720px) {
+      .tablet { width:100vw; min-height:1152px; padding-left:144px; }
+      .overview-side-nav { left:0; }
+      .insights-fixed-inner { left:144px; }
+      .topbar { width:444px; margin-left:0; }
+      .tabs { width:444px; margin-left:-6px; }
+      .page { width:min(430px,calc(100vw - 153px)); margin-left:9px; }
+    }
+    /* Keep the recording's tablet canvas and rail even when the preview viewport is narrow. */
+    @media (max-width:560px) {
+      html,body { background:#fff; min-width:720px; }
+      .tablet { width:720px; min-height:1120px; margin:0; padding-left:144px; }
+      .overview-side-nav { display:flex; left:0; width:68px; }
+      .insights-fixed-inner { left:144px; }
+      .topbar { width:444px; margin-left:0; }
+      .tabs { width:444px; margin-left:-6px; }
+      .page { width:430px; margin:0 0 0 9px; padding-top:22px; }
+      .metric-grid { gap:12px; }
+      .metric-card { flex-basis:158px; }
+      .content-item { grid-template-columns:56px minmax(0,1fr) 50px; }
+    }
+    @media (min-width:1000px) {
+      /* Present the same 819px tablet preview width inside a wide desktop browser. */
+      .tablet { transform:scale(1.1375); transform-origin:top center; }
+      .overview-side-nav { left:calc((100vw - 819px)/2); top:34%; gap:34px; transform:scale(1.1375); transform-origin:top left; }
+      .insights-fixed { height:130px; }
+      .insights-fixed-inner { left:calc(50% - 246px); transform:scale(1.1375); transform-origin:top left; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="overview-side-nav" aria-label="Instagram navigation">
+    <svg viewBox="0 0 24 24" aria-label="Home"><path d="m3 10.5 9-7 9 7v9.2a1.3 1.3 0 0 1-1.3 1.3h-4.3v-6.6H9.6V21H5a2 2 0 0 1-2-2z"/></svg>
+    <svg viewBox="0 0 24 24" aria-label="Search"><circle cx="10.6" cy="10.6" r="7.3"/><path d="m16 16 5 5"/></svg>
+    <svg viewBox="0 0 24 24" aria-label="Reels"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><path d="m10 8 6 4-6 4z"/></svg>
+    <svg viewBox="0 0 24 24" aria-label="Messages"><path d="M21 3 3 10.6l7.4 2.8L13.2 21z"/><path d="m10.4 13.4 5.3-5.1"/></svg>
+    <svg viewBox="0 0 24 24" aria-label="Notifications"><path d="M20.7 5.7c-2.1-2.1-5.4-1.9-7.3.3L12 7.6 10.6 6c-1.9-2.2-5.2-2.4-7.3-.3-2.3 2.3-2 6.1.5 8.2L12 21l8.2-7.1c2.5-2.1 2.8-5.9.5-8.2z"/></svg>
+    <svg viewBox="0 0 24 24" aria-label="Create"><path d="M12 4v16M4 12h16"/></svg>
+    <img class="side-avatar" src="assets/reel-profile-avatar.jpg" alt="Profile">
+  </nav>
+  <div class="insights-fixed">
+    <div class="insights-fixed-inner">
+      <header class="topbar">
+      <button class="icon-button" aria-label="Go back" id="backButton"><svg viewBox="0 0 24 24"><path d="M19 12H5m7 7-7-7 7-7"/></svg></button>
+      <h1>Insights</h1>
+      <button class="icon-button" aria-label="Share insights" id="shareButton"><svg viewBox="0 0 24 24"><path d="M12 16V3m0 0L7.5 7.5M12 3l4.5 4.5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></button>
+      <button class="icon-button" aria-label="About insights" id="infoButton"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></svg></button>
+    </header>
+    <nav class="tabs" role="tablist" aria-label="Insight sections">
+      <button class="tab active" role="tab" aria-selected="true" data-page="overview">Overview</button>
+      <button class="tab" role="tab" aria-selected="false" data-page="content">Content</button>
+      <button class="tab" role="tab" aria-selected="false" data-page="audience">Audience</button>
+      </nav>
+    </div>
+  </div>
+  <main class="tablet" aria-label="Creator insights">
+    <div class="insights-spacer" aria-hidden="true"></div>
+    <div class="status-bar" aria-label="Phone status bar"><span class="status-time">8:40</span><span class="status-symbols"><svg viewBox="0 0 18 14" aria-hidden="true"><path d="M1 5a11 11 0 0 1 16 0M4 8a7 7 0 0 1 10 0M7 11a3 3 0 0 1 4 0"/><circle cx="9" cy="13" r="1" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 18 14" aria-hidden="true"><path d="M1 4h2v8H1zM5 2h2v10H5zM9 6h2v6H9zM13 1h2v11h-2z" fill="currentColor" stroke="none"/></svg><span class="battery"><i></i></span></span></div>
+    <section class="page active" id="overview" role="tabpanel">
+      <div class="section-heading"><h2><button class="content-kind">All content <span class="title-chevron">⌄</span></button></h2><button class="date-select">30 days <span>⌄</span></button></div>
+      <div class="metric-grid">
+        <button class="metric-card selected" data-metric="Views"><span>Views</span><strong>206,077</strong></button>
+        <button class="metric-card" data-metric="Net followers"><span>Net followers</span><strong>--</strong></button>
+        <button class="metric-card" data-metric="Interactions"><span>Interactions</span><strong>5,512</strong></button>
+      </div>
+      <div class="split-legend"><span><i class="dot pink"></i>0.5% followers</span><span><i class="dot purple"></i>99.5% non-followers</span></div>
+      <div class="chart-card"><div class="chart-labels"><span>19.3K</span><span>9.6K</span><span>0</span></div><svg class="line-chart" viewBox="0 0 340 100" preserveAspectRatio="none" aria-label="Views over time"><path class="gridline" d="M0 0H340M0 45H340M0 90H340"/><path class="chart-line views-line" d="M0 24 L10 4 L21 55 L34 88 L47 49 L60 72 L73 64 L86 91 L99 90 L112 87 L125 64 L138 90 L151 98 L164 83 L177 87 L190 97 L203 81 L216 99 L229 90 L242 86 L255 98 L268 82 L281 93 L294 84 L307 71 L320 18 L328 31 L334 20 L340 34"/><path class="chart-line secondary-line" d="M0 90.5 L340 90.5"/><circle class="chart-point" cx="59" cy="0" r="4"/></svg><div class="chart-dates"><span>22 Sept</span><span>7 Oct</span><span>21 Oct</span></div></div>
+      <article class="panel overview-content-types"><div class="panel-title"><h3>Views by content type</h3><button class="info-mini" aria-label="About views by content type">ⓘ</button></div><div class="viewers-total"><span>Viewers</span><strong>111,948</strong></div><div class="legend-small"><span><i class="dot pink"></i>Followers</span><span><i class="dot purple"></i>Non-followers</span></div><div class="bar-row"><span>Reels</span><div class="bar-track"><i style="width:100%;background:linear-gradient(90deg,#d000c2 0 0.5%,#79008f 0.5% 100%)"></i></div><b>205K</b></div><div class="bar-row"><span>Posts</span><div class="bar-track muted"><i style="width:0%"></i></div><b>0</b></div><div class="bar-row"><span>Stories</span><div class="bar-track muted"><i style="width:0%"></i></div><b>0</b></div><div class="bar-row"><span>Live videos</span><div class="bar-track muted"><i style="width:0%"></i></div><b>0</b></div></article>
+      <article class="panel top-content"><div class="panel-title"><h3>Top content by views</h3><button class="see-all" data-page-link="content">See all</button></div><div class="thumb-row"><button class="thumb" data-item="0"><img src="assets/insights-reference-1.jpg" alt="Top reel thumbnail"></button><button class="thumb" data-item="1"><img src="assets/insights-reference-2.jpg" alt="Top reel thumbnail"></button><button class="thumb" data-item="2"><img src="assets/insights-reference-3.jpg" alt="Top reel thumbnail"></button><button class="thumb" data-item="3"><img src="assets/insights-reference-4.jpg" alt="Top reel thumbnail"></button><button class="thumb" data-item="4"><img src="assets/insights-reference-5.jpg" alt="Top reel thumbnail"></button></div></article>
+      <article class="panel interactions-panel"><div class="panel-title"><h3>Interactions by content type</h3><button class="info-mini" aria-label="About interactions">ⓘ</button></div><div class="pills interaction-pills" role="group" aria-label="Interaction type"><button class="pill active" data-interaction="All">All</button><button class="pill" data-interaction="Likes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.8c0 5.4-8.8 11-8.8 11s-8.8-5.6-8.8-11A4.8 4.8 0 0 1 12 6a4.8 4.8 0 0 1 8.8 2.8Z"/></svg> Likes</button><button class="pill" data-interaction="Comments"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8.5 8 8.8 8.8 0 0 1-3.7-.8L4 20l1.2-3.3a7.5 7.5 0 0 1-1.7-4.7 8 8 0 0 1 8-8.2 8 8 0 0 1 8.5 7.7Z"/></svg> Comments</button><button class="pill" data-interaction="Reposts"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h12l-3-3m3 3-3 3M17 17H5l3 3m-3-3 3-3"/></svg> Reposts</button><button class="pill" data-interaction="Saves"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h12v16L12 16l-6 4.5v-16Z"/></svg> Saves</button><button class="pill" data-interaction="Shares"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 3-7.2 18-3.4-7.4L3 10.2 21 3Z"/><path d="m10.4 13.6 4-4"/></svg> Shares</button></div><div class="legend-small"><span><i class="dot pink"></i>Followers</span><span><i class="dot purple"></i>Non-followers</span></div><div class="bar-row"><span>Reels</span><div class="bar-track"><i class="interaction-fill" style="width:100%;background:linear-gradient(90deg,#d000c2 0 0.5%,#79008f 0.5% 100%)"></i></div><b class="interaction-total">5.5K</b></div><div class="bar-row"><span>Posts</span><div class="bar-track muted"><i style="width:0%"></i></div><b>0</b></div><div class="bar-row"><span>Stories</span><div class="bar-track muted"><i style="width:0%"></i></div><b>0</b></div><div class="bar-row"><span>Live videos</span><div class="bar-track muted"><i style="width:0%"></i></div><b>0</b></div></article>
+      <article class="panel activity"><div class="panel-title"><h3>Profile activity</h3><button class="info-mini" aria-label="About profile activity">ⓘ</button></div><div class="activity-row"><span class="activity-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 19a6.5 6.5 0 0 1 13 0"/><circle cx="12" cy="12" r="10"/></svg></span><span>Profile visits</span><strong>430</strong></div><div class="activity-row"><span class="activity-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5h6v6m-.5-5.5L10 14"/><path d="M18 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></span><span>Bio link taps</span><strong>0</strong></div><div class="activity-row"><span class="activity-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v10h16V10M3 10l2-6h14l2 6"/><path d="M3 10a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 2-2M9 20v-6h6v6"/></svg></span><span>Business address taps</span><strong>0</strong></div></article>
+      <div class="bottom-space"></div>
+    </section>
+    <section class="page" id="content" role="tabpanel" hidden>
+      <div class="section-heading"><h2><button class="content-kind">All content <span class="title-chevron">⌄</span></button></h2><button class="date-select">30 days <span>⌄</span></button></div>
+      <div class="sort-tabs content-sort-tabs" role="group" aria-label="Sort content"><button class="active">Latest</button><button>Views</button><button>Viewers</button><button>Follows</button><button>Likes</button></div>
+      <div class="content-list" id="contentList"></div><div class="bottom-space"></div>
+    </section>
+    <section class="page" id="audience" role="tabpanel" hidden>
+      <div class="section-heading"><h2>Followers</h2><button class="date-select">30 days <span>⌄</span></button></div>
+      <div class="follower-count"><strong>114</strong><span>−0.9% since 22 Sept</span></div>
+      <article class="panel growth-panel"><div class="panel-title"><h3>Follower growth over time</h3><button class="info-mini" aria-label="About follower growth">ⓘ</button></div><div class="pills growth-pills"><button class="pill active">Overall</button><button class="pill">Follows</button><button class="pill">Unfollows</button></div><div class="audience-chart"><div class="chart-y"><span>2</span><span>0</span><span>-2</span></div><svg viewBox="0 0 340 100" preserveAspectRatio="none"><path class="gridline" d="M0 16H340M0 52H340M0 88H340"/><path class="chart-line growth-line" d="M0 52 L60 52 L120 52 L180 52 L228 52 L250 52 L262 70 L274 52 L292 52 L340 52"/></svg><div class="chart-dates"><span>22 Sept</span><span>6 Oct</span><span>20 Oct</span></div></div></article>
+      <article class="panel demographics gender-demographics"><div class="panel-title"><h3>Gender</h3><button class="info-mini" aria-label="About gender">ⓘ</button></div><div class="demographic-row gender-women"><span>Women</span><b>23.5%</b><div class="demo-track"><i style="width:23.5%"></i></div></div><div class="demographic-row gender-men"><span>Men</span><b>76.5%</b><div class="demo-track"><i style="width:76.5%"></i></div></div></article>
+      <article class="panel demographics"><div class="panel-title"><h3>Age range</h3><button class="info-mini" aria-label="About age range">ⓘ</button></div><div class="legend-small demographic-legend"><span><i class="dot pink"></i>Women</span><span><i class="dot purple"></i>Men</span></div><div class="demographic-row"><span>13–17</span><b>5.9%</b><div class="demo-track"><i style="width:5.9%"></i></div></div><div class="demographic-row"><span>18–24</span><b>53.0%</b><div class="demo-track"><i style="width:53%"></i></div></div><div class="demographic-row"><span>25–34</span><b>17.6%</b><div class="demo-track"><i style="width:17.6%"></i></div></div><div class="demographic-row"><span>35–44</span><b>23.5%</b><div class="demo-track"><i style="width:23.5%"></i></div></div><div class="demographic-row"><span>45–54</span><b>0.0%</b><div class="demo-track"><i style="width:0%"></i></div></div><div class="demographic-row"><span>55–64</span><b>0.0%</b><div class="demo-track"><i style="width:0%"></i></div></div><div class="demographic-row"><span>65+</span><b>0.0%</b><div class="demo-track"><i style="width:0%"></i></div></div></article>
+      <article class="panel locations"><div class="panel-title"><h3>Top locations</h3><button class="info-mini" aria-label="About locations">ⓘ</button></div><div class="pills location-pills"><button class="pill active">Countries</button><button class="pill">Cities</button></div><div class="location-list"></div></article>
+      <article class="panel active-times"><div class="panel-title"><h3>Follower active times</h3><button class="info-mini" aria-label="About active times">ⓘ</button></div><p>Based on your current time zone (IST)</p><div class="pills day-pills"><button class="pill active">Su</button><button class="pill">M</button><button class="pill">Tu</button><button class="pill">W</button><button class="pill">Th</button><button class="pill">F</button><button class="pill">Sa</button></div><div class="active-chart"></div><div class="hour-labels"><span>12a</span><span>6a</span><span>12p</span><span>6p</span><span>12a</span></div></article>
+      <div class="bottom-space"></div>
+    </section>
+    <div class="toast" role="status" aria-live="polite"></div>
+    <div class="modal-backdrop" id="typeModal" hidden><div class="sheet"><div class="sheet-handle"></div><h2>Content type</h2><button data-content-filter="All" class="chosen">All content <span>✓</span></button><button data-content-filter="Reels">Reels</button><button data-content-filter="Posts">Posts</button><button data-content-filter="Stories">Stories</button><button data-content-filter="Live">Live videos</button><button class="sheet-cancel type-cancel">Cancel</button></div></div>
+    <div class="modal-backdrop" id="dateModal" hidden><div class="sheet"><div class="sheet-handle"></div><h2>Date range</h2><button data-range="Last 7 days">Last 7 days</button><button data-range="Last 30 days" class="chosen">Last 30 days <span>✓</span></button><button data-range="Last 90 days">Last 90 days</button><button data-range="Previous month">Previous month</button><button data-range="Custom range">Custom range</button><button class="sheet-cancel">Cancel</button></div></div>
+    <div class="modal-backdrop" id="customRangeModal" hidden><div class="sheet"><div class="sheet-handle"></div><h2>Choose date range</h2><div class="custom-range-fields"><label>From<input type="date" id="rangeStart" value="2026-09-22"></label><label>To<input type="date" id="rangeEnd" value="2026-10-21"></label></div><button class="apply-range">Apply range</button><button class="sheet-cancel custom-cancel">Cancel</button></div></div>
+  </main>
+</body>
+</html>

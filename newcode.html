@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>Insights · Creator dashboard</title>
+  <style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#f3f3f4;color:#101114;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}.phone{width:min(100%,430px);min-height:100vh;margin:0 auto;background:#fff;position:relative;box-shadow:0 0 30px #0000000d}.topbar{height:52px;display:grid;grid-template-columns:42px 1fr 36px 36px;align-items:center;padding:0 14px;gap:8px;position:sticky;top:0;background:#fff;z-index:8}.topbar h1{font-size:18px;font-weight:720;margin:0}.icon-button{width:32px;height:34px;display:grid;place-items:center}.icon-button svg{width:22px;height:22px;fill:none;stroke:#16171a;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.tabs{height:43px;display:grid;grid-template-columns:repeat(3,1fr);padding:0 18px;border-bottom:1px solid #f0f0f1;position:sticky;top:52px;background:#fff;z-index:7}.tab{font-size:12px;color:#777980;position:relative}.tab.active{font-weight:650;color:#18191c}.tab.active:after{content:"";height:2px;position:absolute;bottom:0;left:0;right:0;background:#17181a;border-radius:2px}.page{padding:18px 18px 0;display:none}.page.active{display:block}.page[hidden]{display:none}.section-heading{height:36px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.section-heading h2{font-size:14px;margin:0;font-weight:700}.date-select{background:#f5f5f6;border-radius:20px;padding:8px 11px;font-size:11px;font-weight:550;white-space:nowrap}.date-select span{font-size:15px;margin-left:5px;color:#676970}.metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.metric-card{height:66px;border:1px solid #ededf0;border-radius:12px;text-align:left;padding:9px 8px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}.metric-card.selected{border-color:#c8cbd1;box-shadow:0 0 0 1px #e1e2e5 inset}.metric-card span{font-size:10px;color:#60636b;white-space:nowrap}.metric-card strong{font-size:15px;line-height:1;font-weight:720}.split-legend{display:flex;justify-content:center;gap:13px;padding:14px 0 6px;font-size:9px;color:#51535a}.dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:1px}.dot.pink{background:#db38bf}.dot.purple{background:#6400c9}.chart-card{position:relative;padding:12px 0 0 28px;height:177px}.chart-labels{position:absolute;left:0;top:11px;bottom:28px;display:flex;flex-direction:column;justify-content:space-between;color:#8b8c92;font-size:8px}.line-chart{width:100%;height:128px;overflow:visible}.gridline{fill:none;stroke:#ededf0;stroke-width:1}.chart-line{fill:none;stroke:#bf00ba;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.chart-point{fill:#fff;stroke:#c900c3;stroke-width:2}.chart-dates{display:flex;justify-content:space-between;padding:0 0 0 0;color:#898a90;font-size:9px}.panel{border-top:1px solid #f0f0f2;padding:17px 0 18px}.panel-title{display:grid;grid-template-columns:1fr 22px auto;align-items:center;min-height:22px;margin-bottom:15px;gap:6px}.panel-title h3{font-size:13px;margin:0;font-weight:690}.panel-title>strong{font-size:12px}.info-mini{font-size:14px;color:#777a81;width:20px;text-align:center}.legend-small{display:flex;gap:12px;color:#666870;font-size:9px;margin:0 0 15px}.bar-row{display:grid;grid-template-columns:74px 1fr 34px;align-items:center;gap:7px;margin:14px 0;font-size:10px;color:#44464c}.bar-row b{font-size:10px;text-align:right;font-weight:550}.bar-track{height:4px;background:#f0e5f2;border-radius:8px;overflow:hidden}.bar-track i{height:100%;display:block;border-radius:8px;background:#ba00b8}.bar-track.muted{background:#ededee}.bar-track.muted i{background:#b8b9be}.top-content{padding-bottom:16px}.see-all{font-size:11px;color:#5844d8;font-weight:600;justify-self:end}.panel-title:has(.see-all){grid-template-columns:1fr auto}.thumb-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.thumb{height:96px;border-radius:6px;overflow:hidden;position:relative;text-align:left;background:#ddd}.thumb img{width:100%;height:100%;object-fit:cover}.thumb>span{position:absolute;right:5px;top:4px;color:#fff;font-size:8px;text-shadow:0 1px 3px #000}.thumb>b{position:absolute;bottom:0;left:0;right:0;padding:15px 5px 5px;color:#fff;font-size:10px;background:linear-gradient(transparent,#0009)}.pills{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 17px}.pills::-webkit-scrollbar{display:none}.pill{flex:none;height:29px;border:1px solid #e4e5e8;border-radius:18px;padding:0 11px;font-size:10px;color:#44464c;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}.pill.active{background:#f5f5f6;border-color:#bfc0c5;font-weight:620}.pill img{width:12px;height:12px;object-fit:contain;border-radius:50%}.activity{padding-bottom:12px}.activity .panel-title{margin-bottom:7px}.activity-row{display:grid;grid-template-columns:28px 1fr auto;align-items:center;padding:11px 0;font-size:11px;color:#33353a}.activity-row strong{font-size:11px}.activity-icon{width:20px;height:20px;border:1px solid #777;border-radius:50%;display:grid;place-items:center;font-size:14px;color:#60636a}.bottom-space{height:26px}.content-filters{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;margin:2px 0 20px}.filter-chip{padding:8px 13px;border:1px solid #e8e8eb;border-radius:18px;font-size:11px;white-space:nowrap}.filter-chip.active{background:#17181a;color:#fff;border-color:#17181a}.sort-head h3{font-size:13px;margin:0 0 12px}.sort-tabs{display:flex;gap:14px;overflow-x:auto;border-bottom:1px solid #eee;scrollbar-width:none}.sort-tabs button{height:35px;white-space:nowrap;font-size:10px;color:#777980;position:relative}.sort-tabs button.active{font-weight:700;color:#191a1d}.sort-tabs button.active:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:#17181a}.content-list{padding-top:5px}.content-item{display:grid;grid-template-columns:48px 1fr auto;gap:10px;align-items:center;min-height:69px;border-bottom:1px solid #f1f1f2}.content-item img{width:46px;height:56px;object-fit:cover;border-radius:4px}.content-copy{min-width:0}.content-copy strong{display:block;font-size:11px;font-weight:610;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.content-copy span{display:block;color:#7b7c82;font-size:9px;margin-top:5px}.content-value{font-size:11px;font-weight:600}.follower-count{padding:8px 0 20px;display:flex;flex-direction:column;gap:5px}.follower-count strong{font-size:27px;line-height:1;font-weight:740}.follower-count span{font-size:10px;color:#73757c}.growth-panel{padding-top:15px}.growth-panel .panel-title{margin-bottom:10px}.growth-pills{margin-bottom:4px}.growth-pills .pill,.location-pills .pill,.day-pills .pill{height:27px}.audience-chart{height:145px;position:relative;padding:11px 0 20px 22px}.audience-chart svg{width:100%;height:100px}.chart-y{position:absolute;left:0;top:10px;bottom:33px;display:flex;flex-direction:column;justify-content:space-between;color:#8c8d92;font-size:8px}.audience-chart .chart-dates{margin-left:0}.demographics .panel-title{margin-bottom:16px}.demographic-row{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 5px;gap:6px 8px;margin:16px 0 19px;font-size:10px;color:#404249}.demographic-row b{font-weight:500;color:#55575e}.demo-track{height:4px;background:#ededee;border-radius:5px;grid-column:1/3;overflow:hidden}.demo-track i{height:100%;display:block;background:#bc00ba;border-radius:5px}.location-pills{margin-bottom:17px}.location-row{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 5px;gap:6px 8px;margin:15px 0 18px;font-size:10px}.location-row b{font-weight:500;color:#565860}.location-row .demo-track{grid-column:1/3}.active-times .panel-title{margin-bottom:6px}.active-times p{margin:0 0 14px;color:#74767d;font-size:9px}.day-pills{justify-content:space-between;gap:3px;margin-bottom:12px}.day-pills .pill{padding:0 9px}.active-chart{height:125px;display:flex;align-items:end;gap:5px;padding:5px 3px 0;border-bottom:1px solid #dedee1}.active-chart i{flex:1;background:#c100bd;border-radius:4px 4px 0 0;min-width:5px;transition:height .2s}.hour-labels{display:flex;justify-content:space-between;color:#8c8d92;font-size:8px;padding:5px 0}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,12px);opacity:0;pointer-events:none;transition:.2s;background:#202124;color:#fff;padding:10px 15px;border-radius:20px;font-size:11px;z-index:20;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}.modal-backdrop{position:fixed;inset:0;background:#0006;z-index:30;display:flex;align-items:end;justify-content:center}.modal-backdrop[hidden]{display:none}.sheet{width:min(100%,430px);background:#fff;border-radius:18px 18px 0 0;padding:10px 20px 28px;box-shadow:0 -8px 30px #0002}.sheet-handle{width:36px;height:4px;background:#d5d5d8;border-radius:5px;margin:0 auto 18px}.sheet h2{font-size:16px;margin:0 0 10px}.sheet>button{width:100%;text-align:left;padding:13px 2px;border-bottom:1px solid #f0f0f2;font-size:13px}.sheet>button span{float:right;color:#b800b3}.sheet>button.chosen{font-weight:650}.sheet .sheet-cancel{text-align:center;border:0;margin-top:4px;font-weight:650}@media(min-width:700px){.phone{min-height:100vh;border-left:1px solid #eee;border-right:1px solid #eee}.page{padding-left:22px;padding-right:22px}}
+
+  </style>
+  <style>
+    :root { --status-height: calc(24px + env(safe-area-inset-top, 0px)); }
+    html, body { background: #fff; }
+    body { overscroll-behavior-x: none; }
+    .phone { min-height: 100vh; min-height: 100dvh; box-shadow: none; }
+    .status-bar { position: sticky; top: 0; z-index: 12; height: var(--status-height); padding: env(safe-area-inset-top, 0px) 14px 0; display: flex; align-items: center; justify-content: space-between; background: #fff; color: #141518; font-size: 10px; line-height: 1; font-weight: 650; }
+    .status-symbols { display: flex; align-items: center; gap: 4px; height: 14px; }
+    .status-symbols svg { width: 14px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; }
+    .battery { display: inline-flex; width: 15px; height: 8px; padding: 1px; border: 1px solid currentColor; border-radius: 2px; position: relative; }
+    .battery::after { content: ""; position: absolute; width: 2px; height: 4px; right: -3px; top: 1px; background: currentColor; border-radius: 0 1px 1px 0; }
+    .battery i { width: 72%; height: 100%; display: block; background: currentColor; }
+    .topbar { top: var(--status-height); }
+    .tabs { top: calc(var(--status-height) + 52px); }
+    .gesture-area { position: fixed; z-index: 15; left: 50%; bottom: 0; transform: translateX(-50%); width: min(100vw, 430px); height: calc(18px + env(safe-area-inset-bottom, 0px)); padding-bottom: max(5px, env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; justify-content: center; background: #fff; pointer-events: none; }
+    .gesture-area span { display: block; width: 108px; height: 4px; border-radius: 10px; background: #222326; }
+    .chart-line { stroke: #c300b8; }
+    .dot.pink, .bar-track i, .demo-track i { background-color: #d62fbd; }
+    .dot.purple { background-color: #6100c9; }
+    .active-chart i { background: #bd00b8; }
+    @media (max-width: 360px) {
+      .page { padding-left: 14px; padding-right: 14px; }
+      .tabs { padding-left: 10px; padding-right: 10px; }
+      .metric-grid { gap: 5px; }
+      .metric-card { padding: 8px 6px; }
+      .metric-card span { font-size: 9px; }
+      .metric-card strong { font-size: 14px; }
+      .chart-card { padding-left: 23px; }
+      .bar-row { grid-template-columns: 64px minmax(0, 1fr) 30px; gap: 5px; }
+      .panel-title h3 { font-size: 12px; }
+      .day-pills .pill { padding-left: 7px; padding-right: 7px; }
+    }
+    @media (max-width: 430px) {
+      html, body { background: #fff; }
+      .phone { width: 100%; border: 0; }
+    }
+    @media (min-width: 431px) {
+      body { background: #f2f2f3; }
+      .phone { box-shadow: 0 0 30px #0000000b; }
+    }
+    .panel-title { grid-template-columns: minmax(0, 1fr) auto; }
+    .panel-title h3 { min-width: 0; }
+    .panel-title-value { grid-template-columns: minmax(0, 1fr) 22px auto; }
+    .top-content .panel-title { grid-template-columns: minmax(0, 1fr) auto; }
+    .panel-title > strong { white-space: nowrap; }
+    .thumb-row { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(5px, 1.8vw, 8px); }
+    .thumb { height: auto; aspect-ratio: .72; min-width: 0; }
+    .thumb img { display: block; object-fit: cover; object-position: center; }
+    .pills { max-width: 100%; overscroll-behavior-inline: contain; -webkit-overflow-scrolling: touch; touch-action: pan-x; }
+    .panel { min-width: 0; }
+    .bar-row { grid-template-columns: clamp(62px, 19vw, 74px) minmax(0, 1fr) 34px; }
+    @media (max-width: 360px) {
+      .panel-title-value { grid-template-columns: minmax(0, 1fr) 20px auto; gap: 4px; }
+      .bar-row { grid-template-columns: 58px minmax(0, 1fr) 30px; gap: 5px; }
+      .thumb-row { gap: 5px; }
+      .thumb > b { font-size: 9px; padding: 12px 4px 4px; }
+    }
+  </style>
+  <script defer>
+const contentItems = [
+  { title: "Insane moments from the latest setup…", date: "Oct 11 · Reel", views: "2.1K", viewers: "1.8K", follows: "8", likes: "185", image: "assets/three.jpg" },
+  { title: "One good clip can bang a gaming moment…", date: "Oct 8 · Reel", views: "1.3K", viewers: "1.1K", follows: "4", likes: "92", image: "assets/tablet-reel-thumb.png" },
+  { title: "Find the best moments from the game…", date: "Oct 5 · Reel", views: "1.2K", viewers: "980", follows: "3", likes: "78", image: "assets/top-content-3.jpg" },
+  { title: "Your gameplay can change in one move…", date: "Oct 1 · Reel", views: "1.1K", viewers: "915", follows: "2", likes: "64", image: "assets/top-content-4.jpg" },
+  { title: "BRO THOUGHT HE COULD ESCAPE…", date: "Sep 26 · Reel", views: "1.2K", viewers: "890", follows: "1", likes: "59", image: "assets/three.jpg" },
+  { title: "HE REALLY THOUGHT HE WAS SAFE…", date: "Sep 21 · Reel", views: "2K", viewers: "1.6K", follows: "6", likes: "144", image: "assets/tablet-reel-thumb.png" },
+  { title: "A quick look behind the scenes", date: "Sep 18 · Post", views: "640", viewers: "510", follows: "1", likes: "37", image: "assets/three.jpg" }
+];
+const locationData = {
+  Countries: [["India", "51.9%"], ["United States", "8.8%"], ["Indonesia", "6.8%"], ["Uzbekistan", "4.9%"], ["Russia", "3.4%"]],
+  Cities: [["Ciudad Guayana", "2.3%"], ["Mesa", "2.3%"], ["Bangalore", "2.3%"], ["Silvassa", "2.3%"], ["Tula", "1.7%"]]
+};
+const list = document.getElementById("contentList");
+const toast = document.querySelector(".toast");
+function showToast(message) { toast.textContent = message; toast.classList.add("show"); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove("show"), 1800); }
+function renderContent(sort = "Views", filter = "All") {
+  const key = sort.toLowerCase();
+  let items = [...contentItems];
+  if (filter !== "All") items = items.filter(item => item.date.includes(filter === "Live" ? "Live" : filter.slice(0, -1)) || item.date.includes(filter));
+  if (sort === "Latest") items.reverse();
+  else items.sort((a, b) => Number(b[key]) - Number(a[key]));
+  list.innerHTML = items.map(item => `<article class="content-item"><img src="${item.image}" alt="Content thumbnail"><div class="content-copy"><strong>${item.title}</strong><span>${item.date}</span></div><span class="content-value">${item[key]}</span></article>`).join("") || `<p class="empty-state">No ${filter.toLowerCase()} in this period.</p>`;
+}
+function showPage(page) {
+  document.querySelectorAll(".tab").forEach(tab => { const active = tab.dataset.page === page; tab.classList.toggle("active", active); tab.setAttribute("aria-selected", String(active)); });
+  document.querySelectorAll(".page").forEach(panel => { const active = panel.id === page; panel.classList.toggle("active", active); panel.hidden = !active; });
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+document.querySelectorAll(".tab, [data-page-link]").forEach(button => button.addEventListener("click", () => showPage(button.dataset.page || button.dataset.pageLink)));
+renderContent();
+document.querySelectorAll(".sort-tabs button").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".sort-tabs button").forEach(item => item.classList.toggle("active", item === button)); renderContent(button.textContent.trim(), document.querySelector(".content-filters .active").textContent.trim()); }));
+document.querySelectorAll(".content-filters .filter-chip").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".content-filters .filter-chip").forEach(item => item.classList.toggle("active", item === button)); renderContent(document.querySelector(".sort-tabs .active").textContent.trim(), button.textContent.trim()); }));
+document.querySelectorAll(".date-select").forEach(button => button.addEventListener("click", () => { document.getElementById("dateModal").hidden = false; }));
+document.querySelectorAll("[data-range]").forEach(button => button.addEventListener("click", () => { document.querySelectorAll("[data-range]").forEach(item => { item.classList.toggle("chosen", item === button); item.innerHTML = item.dataset.range + (item === button ? " <span>✓</span>" : ""); }); document.querySelectorAll(".date-select").forEach(select => select.innerHTML = `${button.dataset.range.replace("Last ", "Last ")} <span>⌄</span>`); document.getElementById("dateModal").hidden = true; showToast(`${button.dataset.range} selected`); }));
+document.querySelector(".sheet-cancel").addEventListener("click", () => document.getElementById("dateModal").hidden = true);
+document.getElementById("dateModal").addEventListener("click", event => { if (event.target.id === "dateModal") event.currentTarget.hidden = true; });
+document.querySelectorAll(".pills").forEach(group => group.addEventListener("click", event => { const button = event.target.closest(".pill"); if (!button) return; group.querySelectorAll(".pill").forEach(item => item.classList.toggle("active", item === button)); if (group.classList.contains("location-pills")) renderLocations(button.textContent.trim()); if (group.classList.contains("day-pills")) renderActiveTimes([...group.children].indexOf(button)); if (group.classList.contains("growth-pills")) showToast(`${button.textContent.trim()} growth`); }));
+function renderLocations(type = "Countries") { document.querySelector(".location-list").innerHTML = locationData[type].map(([name, value]) => `<div class="location-row"><span>${name}</span><b>${value}</b><div class="demo-track"><i style="width:${parseFloat(value)}%"></i></div></div>`).join(""); }
+const activityPatterns = [[60,82,70,95,72,56,98,77,86,65,100,73,58,80,92,65,85,72,60,94,75,88,69,100], [30,48,62,85,94,100,91,88,76,70,65,60,58,64,75,84,92,88,82,70,60,48,38,30], [38,55,70,96,100,85,72,68,74,86,94,91,80,69,61,57,66,78,92,100,88,72,60,45], [72,65,60,78,88,100,96,82,70,65,72,84,91,86,75,68,62,70,82,95,100,86,72,60], [58,70,86,98,90,78,70,74,86,100,96,82,70,66,72,84,96,90,80,72,64,70,82,90], [45,56,75,90,100,92,84,80,86,94,100,90,80,72,68,74,82,90,96,88,75,65,55,48], [50,62,78,92,100,90,82,75,80,88,96,100,90,78,70,68,74,86,98,94,82,72,62,55]];
+function renderActiveTimes(day = 0) { document.querySelector(".active-chart").innerHTML = activityPatterns[day].map((height, i) => `<i title="${Math.round(height * 0.12)} active followers" style="height:${height}%"></i>`).join(""); }
+renderLocations(); renderActiveTimes();
+document.querySelectorAll(".metric-card").forEach(card => card.addEventListener("click", () => { document.querySelectorAll(".metric-card").forEach(item => item.classList.toggle("selected", item === card)); const labels = { Views: "Views over time", "Net followers": "Net followers over time", Interactions: "Interactions over time" }; document.querySelector(".line-chart").setAttribute("aria-label", labels[card.dataset.metric]); showToast(`${card.dataset.metric} selected`); }));
+document.querySelectorAll(".thumb").forEach(button => button.addEventListener("click", () => showToast(`Content insights · ${contentItems[Number(button.dataset.item)].views} views`)));
+document.getElementById("backButton").addEventListener("click", () => { if (history.length > 1) history.back(); else showToast("You're viewing Insights"); });
+document.getElementById("shareButton").addEventListener("click", async () => { try { await navigator.clipboard.writeText(location.href); showToast("Insights link copied"); } catch { showToast("Share insights from your browser menu"); } });
+document.getElementById("infoButton").addEventListener("click", () => showToast("Insights show how your content is performing"));
+
+  </script>
+</head>
+<body>
+  <main class="phone" aria-label="Creator insights">
+    <div class="status-bar" aria-label="Phone status bar"><span class="status-time">8:40</span><span class="status-symbols"><svg viewBox="0 0 18 14" aria-hidden="true"><path d="M1 5a11 11 0 0 1 16 0M4 8a7 7 0 0 1 10 0M7 11a3 3 0 0 1 4 0"/><circle cx="9" cy="13" r="1" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 18 14" aria-hidden="true"><path d="M1 4h2v8H1zM5 2h2v10H5zM9 6h2v6H9zM13 1h2v11h-2z" fill="currentColor" stroke="none"/></svg><span class="battery"><i></i></span></span></div>
+    <header class="topbar">
+      <button class="icon-button" aria-label="Go back" id="backButton"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+      <h1>Insights</h1>
+      <button class="icon-button" aria-label="Share insights" id="shareButton"><svg viewBox="0 0 24 24"><path d="M12 16V3m0 0L7.5 7.5M12 3l4.5 4.5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></button>
+      <button class="icon-button" aria-label="About insights" id="infoButton"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></svg></button>
+    </header>
+    <nav class="tabs" role="tablist" aria-label="Insight sections">
+      <button class="tab active" role="tab" aria-selected="true" data-page="overview">Overview</button>
+      <button class="tab" role="tab" aria-selected="false" data-page="content">Content</button>
+      <button class="tab" role="tab" aria-selected="false" data-page="audience">Audience</button>
+    </nav>
+    <section class="page active" id="overview" role="tabpanel">
+      <div class="section-heading"><h2>All content</h2><button class="date-select">Last 30 days <span>⌄</span></button></div>
+      <div class="metric-grid">
+        <button class="metric-card selected" data-metric="Views"><span>Views</span><strong>9,292</strong></button>
+        <button class="metric-card" data-metric="Net followers"><span>Net followers</span><strong>-1</strong></button>
+        <button class="metric-card" data-metric="Interactions"><span>Interactions</span><strong>204</strong></button>
+      </div>
+      <div class="split-legend"><span><i class="dot pink"></i>0.0% followers</span><span><i class="dot purple"></i>100.0% non-followers</span></div>
+      <div class="chart-card"><div class="chart-labels"><span>3.0K</span><span>1.5K</span><span>0</span></div><svg class="line-chart" viewBox="0 0 340 128" preserveAspectRatio="none" aria-label="Views over time"><path class="gridline" d="M0 24H340M0 65H340M0 106H340"/><path class="chart-line" d="M0 104 L24 104 L40 101 L54 80 L70 14 L82 87 L95 101 L140 103 L190 104 L235 104 L280 104 L340 104"/><circle class="chart-point" cx="70" cy="14" r="4"/></svg><div class="chart-dates"><span>Sep 13</span><span>Sep 28</span><span>Oct 12</span></div></div>
+      <article class="panel"><div class="panel-title panel-title-value"><h3>Views by content type</h3><button class="info-mini" aria-label="About views by content type">ⓘ</button><strong>2,638</strong></div><div class="legend-small"><span><i class="dot pink"></i>Followers</span><span><i class="dot purple"></i>Non-followers</span></div><div class="bar-row"><span>Reels</span><div class="bar-track"><i style="width:96%"></i></div><b>1.4K</b></div><div class="bar-row"><span>Posts</span><div class="bar-track muted"><i style="width:1%"></i></div><b>0</b></div><div class="bar-row"><span>Stories</span><div class="bar-track muted"><i style="width:1%"></i></div><b>0</b></div><div class="bar-row"><span>Live videos</span><div class="bar-track muted"><i style="width:1%"></i></div><b>0</b></div></article>
+      <article class="panel top-content"><div class="panel-title"><h3>Top content by views</h3><button class="see-all" data-page-link="content">See all</button></div><div class="thumb-row"><button class="thumb" data-item="0"><img src="assets/three.jpg" alt="Reel thumbnail"><span>▶</span><b>2.1K</b></button><button class="thumb" data-item="1"><img src="assets/tablet-reel-thumb.png" alt="Reel thumbnail"><span>▶</span><b>1.3K</b></button><button class="thumb" data-item="2"><img src="assets/top-content-3.jpg" alt="Reel thumbnail"><span>▶</span><b>1.2K</b></button><button class="thumb" data-item="3"><img src="assets/top-content-4.jpg" alt="Reel thumbnail"><span>▶</span><b>1.1K</b></button></div></article>
+      <article class="panel"><div class="panel-title"><h3>Interactions by content type</h3><button class="info-mini" aria-label="About interactions">ⓘ</button></div><div class="pills" role="group" aria-label="Interaction type"><button class="pill active">All</button><button class="pill"><img src="assets/icon-like-rate.jpg" alt=""> Likes</button><button class="pill"><img src="assets/icon-comment-rate.jpg" alt=""> Comments</button><button class="pill"><img src="assets/icon-repost-rate.jpg" alt=""> Reposts</button><button class="pill"><img src="assets/icon-save-rate.jpg" alt=""> Saves</button><button class="pill"><img src="assets/icon-share-rate.jpg" alt=""> Shares</button></div><div class="legend-small"><span><i class="dot pink"></i>Followers</span><span><i class="dot purple"></i>Non-followers</span></div><div class="bar-row"><span>Reels</span><div class="bar-track"><i style="width:93%"></i></div><b>204</b></div><div class="bar-row"><span>Posts</span><div class="bar-track muted"><i style="width:1%"></i></div><b>0</b></div><div class="bar-row"><span>Stories</span><div class="bar-track muted"><i style="width:1%"></i></div><b>0</b></div></article>
+      <article class="panel activity"><div class="panel-title"><h3>Profile activity</h3><button class="info-mini" aria-label="About profile activity">ⓘ</button></div><div class="activity-row"><span class="activity-icon">◎</span><span>Profile visits</span><strong>16</strong></div><div class="activity-row"><span class="activity-icon">↗</span><span>External link taps</span><strong>0</strong></div></article>
+      <div class="bottom-space"></div>
+    </section>
+    <section class="page" id="content" role="tabpanel" hidden>
+      <div class="section-heading"><h2>All content</h2><button class="date-select">Last 30 days <span>⌄</span></button></div>
+      <div class="content-filters"><button class="filter-chip active">All</button><button class="filter-chip">Reels</button><button class="filter-chip">Posts</button><button class="filter-chip">Stories</button><button class="filter-chip">Live</button></div>
+      <div class="sort-head"><h3>Sort by</h3><div class="sort-tabs"><button>Latest</button><button class="active">Views</button><button>Viewers</button><button>Follows</button><button>Likes</button></div></div>
+      <div class="content-list" id="contentList"></div><div class="bottom-space"></div>
+    </section>
+    <section class="page" id="audience" role="tabpanel" hidden>
+      <div class="section-heading"><h2>Followers</h2><button class="date-select">Last 30 days <span>⌄</span></button></div>
+      <div class="follower-count"><strong>114</strong><span>−0.9% since Sep 13</span></div>
+      <article class="panel growth-panel"><div class="panel-title"><h3>Follower growth over time</h3><button class="info-mini" aria-label="About follower growth">ⓘ</button></div><div class="pills growth-pills"><button class="pill active">Overall</button><button class="pill">Follows</button><button class="pill">Unfollows</button></div><div class="audience-chart"><div class="chart-y"><span>2</span><span>1</span><span>0</span></div><svg viewBox="0 0 340 100" preserveAspectRatio="none"><path class="gridline" d="M0 16H340M0 52H340M0 88H340"/><path class="chart-line" d="M0 86 L60 86 L120 86 L180 86 L228 86 L250 88 L262 98 L274 88 L292 86 L340 86"/></svg><div class="chart-dates"><span>Sep 13</span><span>Sep 28</span><span>Oct 12</span></div></div></article>
+      <article class="panel demographics"><div class="panel-title"><h3>Gender</h3><button class="info-mini" aria-label="About gender">ⓘ</button></div><div class="demographic-row"><span>Women</span><b>23.5%</b><div class="demo-track"><i style="width:23.5%"></i></div></div><div class="demographic-row"><span>Men</span><b>76.5%</b><div class="demo-track"><i style="width:76.5%"></i></div></div></article>
+      <article class="panel demographics"><div class="panel-title"><h3>Age range</h3><button class="info-mini" aria-label="About age range">ⓘ</button></div><div class="demographic-row"><span>13–17</span><b>5.0%</b><div class="demo-track"><i style="width:5%"></i></div></div><div class="demographic-row"><span>18–24</span><b>31.0%</b><div class="demo-track"><i style="width:31%"></i></div></div><div class="demographic-row"><span>25–34</span><b>53.0%</b><div class="demo-track"><i style="width:53%"></i></div></div><div class="demographic-row"><span>35–44</span><b>8.7%</b><div class="demo-track"><i style="width:8.7%"></i></div></div><div class="demographic-row"><span>45–54</span><b>2.3%</b><div class="demo-track"><i style="width:2.3%"></i></div></div><div class="demographic-row"><span>55–64</span><b>0.0%</b><div class="demo-track"><i style="width:0%"></i></div></div><div class="demographic-row"><span>65+</span><b>0.0%</b><div class="demo-track"><i style="width:0%"></i></div></div></article>
+      <article class="panel locations"><div class="panel-title"><h3>Top locations</h3><button class="info-mini" aria-label="About locations">ⓘ</button></div><div class="pills location-pills"><button class="pill active">Countries</button><button class="pill">Cities</button></div><div class="location-list"></div></article>
+      <article class="panel active-times"><div class="panel-title"><h3>Follower active times</h3><button class="info-mini" aria-label="About active times">ⓘ</button></div><p>Based on your current timezone (GMT-07:00)</p><div class="pills day-pills"><button class="pill active">Su</button><button class="pill">M</button><button class="pill">Tu</button><button class="pill">W</button><button class="pill">Th</button><button class="pill">F</button><button class="pill">Sa</button></div><div class="active-chart"></div><div class="hour-labels"><span>12a</span><span>6a</span><span>12p</span><span>6p</span><span>12a</span></div></article>
+      <div class="bottom-space"></div>
+    </section>
+    <div class="toast" role="status" aria-live="polite"></div>
+    <div class="modal-backdrop" id="dateModal" hidden><div class="sheet"><div class="sheet-handle"></div><h2>Date range</h2><button data-range="Last 7 days">Last 7 days</button><button data-range="Last 30 days" class="chosen">Last 30 days <span>✓</span></button><button data-range="Last 90 days">Last 90 days</button><button data-range="Previous month">Previous month</button><button data-range="Custom range">Custom range</button><button class="sheet-cancel">Cancel</button></div></div>
+    <div class="gesture-area" aria-hidden="true"><span></span></div>
+  </main>
+</body>
+</html>

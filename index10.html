@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instagram Reel Insights</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Roboto", Arial, sans-serif; }
+    body { background: #fafafa; color: #262626; }
+    button { border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+    .container { max-width: 348px; margin: 0 auto; background: #fff; min-height: 100vh; }
+    .header { display: flex; align-items: center; padding: 16px; border-bottom: 1px solid #dbdbdb; position: sticky; top: 0; background: #fff; z-index: 100; }
+    .back-button { font-size: 20px; margin-right: 16px; color: #262626; padding: 4px; }
+    .header h1 { font-size: 16px; font-weight: 600; }
+    .section { padding: 16px; width: 100%; max-width: 100%; }
+    .divider { height: 6px; background: #f2f2f2cc; width: 100%; }
+    .divider2 { height: 2px; background: #f2f2f2cc; width: 100%; }
+    .divider3 { height: 2px; margin-top: 12px; background: #f2f2f2cc; width: 100%; }
+
+    .reel-preview-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; }
+    .video-thumbnail { width: 110px; height: 190px; background: #000; border-radius: 9px; overflow: hidden; position: relative; margin-bottom: 12px; }
+    .video-thumbnail img, .video-thumbnail video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .play-button { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-size: 20px; opacity: .95; pointer-events: none; }
+    .reel-info { text-align: center; }
+    .reel-description { font-size: 14px; font-weight: 600; margin-bottom: 4px; line-height: 1.3; }
+    .reel-meta { font-size: 12px; color: #8e8e8e; }
+    .reel-stats { display: flex; justify-content: space-around; padding: 12px 0; }
+    .stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; font-size: 14px; }
+    .stat-icon { width: 17px; height: 22px; margin-bottom: 4px; }
+    .stat-icon2 { width: 22px; height: 22px; margin-bottom: 4px; }
+    .stat-value { font-weight: 500; font-size: 14px; }
+
+    .section-title { margin-bottom: 12px; font-weight: 700; font-size: 18px; display: flex; align-items: center; gap: 5px; }
+    .info-symbol { width: 16px; height: 16px; color: #1f2933; stroke: currentColor; stroke-width: 2.05; flex: 0 0 auto; }
+    .info-symbol .info-dot, .info-symbol .info-bar { fill: currentColor; stroke: none; }
+    .metric-card { background: #fff; padding: 12px; width: 100%; max-width: 100%; }
+    .metric-row { display: flex; justify-content: space-between; padding: 16px 0; }
+    .metric-name { font-size: 14px; }
+    .metric-value { font-size: 14px; font-weight: 300; }
+
+    .ig-donut-wrap { position: relative; width: 220px; height: 220px; margin: 0 auto; }
+    .ig-donut-wrap svg { width: 220px; height: 220px; display: block; }
+    .ig-donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .ig-donut-label { font-size: 13px; color: #444; }
+    .ig-donut-value { font-size: 36px; font-weight: 700; color: #111; }
+    .legend-row { margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 15px; }
+    .legend-dot { font-size: 18px; }
+    .source-block { margin: 12px 0; }
+    .source-label { margin-bottom: 4px; font-size: 12px; }
+    .source-row { display: flex; align-items: center; }
+    .source-track { flex: 1; background: #eee; height: 8px; border-radius: 2px; margin-right: 10px; position: relative; }
+    .source-fill { height: 8px; background: #e338c1; border-radius: 2px; }
+    .source-percent { font-size: 12px; }
+
+    .ret-title { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+    .ret-thumb-wrap { display: flex; justify-content: center; margin-bottom: 8px; padding-top: 18px; padding-bottom: 17px; }
+    .ret-thumb { width: 70px; height: 124px; border-radius: 12px; overflow: hidden; background: #000; position: relative; margin: 0 auto; }
+    .ret-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .play-overlay, .ret-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; background: rgba(0,0,0,.18); }
+    .ret-graph-wrap { position: relative; width: 100%; padding-left: 20px; }
+    .ret-canvas { width: 100% !important; height: 199px !important; display: block; border-radius: 6px; background: #fff; margin-bottom: -16px; }
+    .ret-yaxis { position: absolute; left: -9px; top: 3px; height: 170px; display: flex; flex-direction: column; justify-content: space-between; font-size: 12px; color: #999; }
+    .ret-x { display: flex; justify-content: space-between; font-size: 12px; color: #999; padding-left: 0; }
+    .ret-tooltip { position: absolute; display: none; background: #fff; padding: 6px 10px; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.15); font-size: 13px; text-align: center; transform: translate(-50%, -120%); pointer-events: none; z-index: 20; min-width: 64px; }
+
+    .audience-tab { padding: 6px 12px; border-radius: 20px; font-size: 13px; border: 1px solid #dcdcdc; background: #fff; color: #000; }
+    .selected-tab { background: #f2f2f2; font-weight: 500; height: 35px; }
+    .aud-row { margin: 12px 0; }
+    .aud-label { margin-bottom: 4px; font-size: 12px; }
+    .aud-line { display: flex; align-items: center; }
+    .aud-track { flex: 1; background: #eee; height: 7px; border-radius: 5px; margin-right: 10px; position: relative; }
+    .aud-fill { height: 7px; background: #e338c1; border-radius: 5px; }
+    .aud-percent { font-size: 12px; }
+    .boost-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; cursor: pointer; padding-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <button class="back-button" aria-label="Back"><i class="fas fa-arrow-left"></i></button>
+      <h1>Reel insights</h1>
+    </div>
+
+    <div class="section">
+      <div class="reel-preview-container">
+        <div class="video-thumbnail">
+          <img src="assets/three.jpg" alt="Reel thumbnail">
+          <div class="play-button"></div>
+        </div>
+        <div class="reel-info">
+          <div class="reel-description">Two athletes go...</div>
+          <div class="reel-meta">May 27 · Duration 0:15</div>
+        </div>
+      </div>
+      <div class="reel-stats">
+        <div class="stat-item"><img src="https://www.svgrepo.com/show/535436/heart.svg" class="stat-icon" alt="likes"><span class="stat-value">41</span></div>
+        <div class="stat-item"><img src="https://www.svgrepo.com/show/522064/comment-1.svg" class="stat-icon" alt="comments"><span class="stat-value">0</span></div>
+        <div class="stat-item"><img src="https://www.svgrepo.com/show/458021/send.svg" class="stat-icon2" alt="shares"><span class="stat-value">0</span></div>
+        <div class="stat-item"><img src="https://www.svgrepo.com/show/381428/repeat.svg" class="stat-icon" alt="reposts"><span class="stat-value">0</span></div>
+        <div class="stat-item"><img src="https://www.svgrepo.com/show/485636/bookmark.svg" class="stat-icon2" alt="saves"><span class="stat-value">5</span></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section">
+      <div class="section-title">Overview <svg class="info-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><circle class="info-dot" cx="12" cy="7.8" r="1.45"/><rect class="info-bar" x="10.75" y="10.15" width="2.5" height="7.45" rx="1.25"/></svg></div>
+      <div class="metric-row"><span class="metric-name">Views</span><span class="metric-value" data-reel-field="overviewViews">4,674</span></div>
+      <div class="metric-row"><span class="metric-name">Watch time</span><span class="metric-value" data-reel-field="overviewWatchTime">8h 57m 16s</span></div>
+      <div class="metric-row"><span class="metric-name">Interactions</span><span class="metric-value" data-reel-field="overviewInteractions">46</span></div>
+      <div class="metric-row"><span class="metric-name">Profile activity</span><span class="metric-value" data-reel-field="overviewProfileActivity">7</span></div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section">
+      <div class="section-title">Views <svg class="info-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><circle class="info-dot" cx="12" cy="7.8" r="1.45"/><rect class="info-bar" x="10.75" y="10.15" width="2.5" height="7.45" rx="1.25"/></svg></div>
+      <div style="text-align:center;margin-top:20px;">
+        <div class="ig-donut-wrap" data-donut="views">
+          <svg viewBox="0 0 220 220">
+            <circle cx="110" cy="110" r="94" fill="none" stroke="#ececec" stroke-width="10"/>
+            <circle class="donut-nonfollowers" cx="110" cy="110" r="94" fill="none" stroke="#5903e1" stroke-width="10" stroke-linecap="round" transform="rotate(-65 110 110)"/>
+            <circle class="donut-followers" cx="110" cy="110" r="94" fill="none" stroke="#cb00c5" stroke-width="10" stroke-linecap="round" transform="rotate(-90 110 110)"/>
+          </svg>
+          <div class="ig-donut-center"><div class="ig-donut-label">Views</div><div class="ig-donut-value" data-reel-field="viewsTotal">4,674</div></div>
+        </div>
+        <div style="margin-top:22px;">
+          <div class="legend-row"><div><span class="legend-dot" style="color:#e338c1;">●</span> <span>Followers</span></div><span data-reel-field="viewsFollowers">0.5%</span></div>
+          <div class="legend-row"><div><span class="legend-dot" style="color:#5a00f6;">●</span> <span>Non-followers</span></div><span data-reel-field="viewsNonFollowers">99.5%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider2"></div>
+    <div class="section-title" style="margin-top:16px;margin-left:10px;font-size:16px;">Top sources of views</div>
+    <div class="metric-card">
+      <div class="sources-list">
+        <div class="source-block" data-source="sourceReelsTab"><div class="source-label">Reels tab</div><div class="source-row"><div class="source-track"><div class="source-fill"></div></div><span class="source-percent">85.3%</span></div></div>
+        <div class="source-block" data-source="sourceExplore"><div class="source-label">Explore</div><div class="source-row"><div class="source-track"><div class="source-fill"></div></div><span class="source-percent">8.4%</span></div></div>
+        <div class="source-block" data-source="sourceProfile"><div class="source-label">Feed</div><div class="source-row"><div class="source-track"><div class="source-fill"></div></div><span class="source-percent">2.9%</span></div></div>
+      </div>
+    </div>
+    <div class="divider3"></div>
+    <div class="section-title" style="margin-top:20px;margin-left:7px;font-size:14px;height:44px;">Accounts reached <span style="margin-left:auto;margin-right:8px;font-weight:400;" data-reel-field="accountsReached">4,127</span></div>
+
+    <div class="divider"></div>
+    <div class="section">
+      <div class="ret-title">Retention <svg class="info-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><circle class="info-dot" cx="12" cy="7.8" r="1.45"/><rect class="info-bar" x="10.75" y="10.15" width="2.5" height="7.45" rx="1.25"/></svg></div>
+      <div class="ret-thumb-wrap"><div class="ret-thumb"><video id="retThumb" src="assets/threee.mp4" preload="metadata" muted></video><div id="retPlayOverlay" class="play-overlay"><i class="fas fa-play"></i></div></div></div>
+      <div class="ret-graph-wrap">
+        <div class="ret-yaxis"><div>100%</div><div>50%</div><div>0</div></div>
+        <canvas id="retCanvas" class="ret-canvas"></canvas>
+        <div id="retTip" class="ret-tooltip">0%<br><small>0:00</small></div>
+        <div class="ret-x"><div>0:00</div><div id="retXRight">0:15</div></div>
+      </div>
+      <div style="padding:16px 0;">
+        <div style="font-size:18px;font-weight:700;margin-bottom:18px;">Skip rate</div>
+        <div class="metric-row"><span>This reel’s skip rate</span><span data-reel-field="skipRate">27.4%</span></div>
+        <div class="metric-row"><span>Your typical skip rate</span><span data-reel-field="typicalSkipRate">30.1%</span></div>
+      </div>
+    </div>
+
+    <div class="divider2"></div>
+    <div class="metric-card">
+      <div class="metric-row"><span>Watch time</span><span data-reel-field="watchTime">8h 57m 16s</span></div>
+      <div class="metric-row"><span>Average watch time</span><span data-reel-field="averageWatchTime">7 sec</span></div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="metric-card">
+      <div class="section-title" style="font-size:16px;">Interactions <svg class="info-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><circle class="info-dot" cx="12" cy="7.8" r="1.45"/><rect class="info-bar" x="10.75" y="10.15" width="2.5" height="7.45" rx="1.25"/></svg></div>
+      <div style="text-align:center;margin-top:20px;">
+        <div class="ig-donut-wrap" data-donut="interactions">
+          <svg viewBox="0 0 220 220">
+            <circle cx="110" cy="110" r="94" fill="none" stroke="#ececec" stroke-width="10"/>
+            <circle class="donut-nonfollowers" cx="110" cy="110" r="94" fill="none" stroke="#5903e1" stroke-width="10" stroke-linecap="round" transform="rotate(-73 110 110)"/>
+            <circle class="donut-followers" cx="110" cy="110" r="94" fill="none" stroke="#cb00c5" stroke-width="10" stroke-linecap="round" transform="rotate(-89 110 110)"/>
+          </svg>
+          <div class="ig-donut-center"><div class="ig-donut-label">Interactions</div><div class="ig-donut-value" data-reel-field="interactionsTotal">46</div></div>
+        </div>
+        <div style="margin-top:22px;">
+          <div class="legend-row"><div><span class="legend-dot" style="color:#e338c1;">●</span> <span>Followers</span></div><span data-reel-field="interactionsFollowers">0.5%</span></div>
+          <div class="legend-row"><div><span class="legend-dot" style="color:#5a00f6;">●</span> <span>Non-followers</span></div><span data-reel-field="interactionsNonFollowers">99.5%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider2"></div>
+    <div class="retention-instance" data-retention>
+      <div class="ret-title" style="padding:16px 16px 0;">When people liked your reel</div>
+      <div class="ret-thumb-wrap"><div class="ret-thumb"><video class="ret-video" src="assets/threee.mp4" preload="metadata" muted></video><div class="ret-play">▶</div></div></div>
+      <div class="ret-graph-wrap" style="margin:0 16px 16px;width:calc(100% - 32px);">
+        <div class="ret-yaxis"><div>50%</div><div>25%</div><div>0</div></div>
+        <canvas class="ret-canvas"></canvas>
+        <div class="ret-tooltip"></div>
+        <div class="ret-x"><span>0:00</span><span class="ret-duration">0:15</span></div>
+      </div>
+    </div>
+
+    <div class="divider2"></div>
+    <div class="section">
+      <div class="metric-row"><span class="metric-name">Likes</span><span class="metric-value" data-reel-field="likes">41</span></div>
+      <div class="metric-row"><span class="metric-name">Shares</span><span class="metric-value" data-reel-field="shares">0</span></div>
+      <div class="metric-row"><span class="metric-name">Comments</span><span class="metric-value" data-reel-field="comments">0</span></div>
+      <div class="metric-row"><span class="metric-name">Reposts</span><span class="metric-value" data-reel-field="reposts">0</span></div>
+      <div class="metric-row"><span class="metric-name">Saves</span><span class="metric-value" data-reel-field="saves">5</span></div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="metric-card">
+      <div class="section-title" style="font-size:16px;padding-top:20px;">Profile activity <svg class="info-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><circle class="info-dot" cx="12" cy="7.8" r="1.45"/><rect class="info-bar" x="10.75" y="10.15" width="2.5" height="7.45" rx="1.25"/></svg></div>
+      <div class="metric-row" style="padding-bottom:0;"><span class="metric-name">Follows</span><span class="metric-value" data-reel-field="profileFollows">4</span></div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="metric-card">
+      <div class="section-title" style="font-size:16px;padding-top:20px;">Audience <svg class="info-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><circle class="info-dot" cx="12" cy="7.8" r="1.45"/><rect class="info-bar" x="10.75" y="10.15" width="2.5" height="7.45" rx="1.25"/></svg></div>
+      <div style="display:flex;gap:8px;margin:12px 0;"><button class="audience-tab selected-tab" onclick="showTab('gender', event)">Gender</button><button class="audience-tab" onclick="showTab('country', event)">Country</button><button class="audience-tab" onclick="showTab('age', event)">Age</button></div>
+      <div id="gender" class="tab-content" style="display:block;">
+        <div class="aud-row"><div class="aud-label">Men</div><div class="aud-line"><div class="aud-track"><div class="aud-fill" data-bar="genderMen"></div></div><span class="aud-percent" data-reel-field="genderMen">77.1%</span></div></div>
+        <div class="aud-row"><div class="aud-label">Women</div><div class="aud-line"><div class="aud-track"><div class="aud-fill" data-bar="genderWomen" style="background:#7508fa;"></div></div><span class="aud-percent" data-reel-field="genderWomen">22.9%</span></div></div>
+      </div>
+      <div id="country" class="tab-content" style="display:none;"></div>
+      <div id="age" class="tab-content" style="display:none;margin-top:16px;"><p style="font-size:14px;color:#555;">Age distribution data will appear here.</p></div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="metric-card">
+      <div class="section-title" style="font-size:16px;">Ad</div>
+      <div class="boost-row"><div style="display:flex;align-items:center;gap:8px;"><img src="https://cdn-icons-png.flaticon.com/128/5405/5405826.png" alt="" style="width:16px;height:16px;"><span style="font-size:14px;">Boost this reel</span></div><i class="fas fa-chevron-right" style="font-size:14px;color:gray;"></i></div>
+    </div>
+    <br>
+  </div>
+
+  <script>
+    const REEL_DATA_KEY = "reelEditorCloneData";
+    const defaultReelData = {
+      templateVersion: "reel-v2-athletes",
+      thumbnailImage: "",
+      reelVideo: "",
+      description: "Two athletes go...",
+      meta: "May 27 · Duration 0:15",
+      likes: "41",
+      comments: "0",
+      shares: "0",
+      reposts: "0",
+      saves: "5",
+      overviewViews: "4,674",
+      overviewWatchTime: "8h 57m 16s",
+      overviewInteractions: "46",
+      overviewProfileActivity: "7",
+      viewsTotal: "4,674",
+      viewsFollowers: "0.5%",
+      viewsNonFollowers: "99.5%",
+      sourceProfile: "2.9%",
+      sourceReelsTab: "85.3%",
+      sourceExplore: "8.4%",
+      accountsReached: "4,127",
+      retentionDuration: "0:15",
+      retentionCurve: "100,88,66,8",
+      retentionPath: "100,88,81,76,72,69,66,63,60,58,55,53,51,49,47,45,43,41,39,37,34,31,28,26,24,22,20,18,16,14,11,8",
+      skipRate: "27.4%",
+      typicalSkipRate: "30.1%",
+      watchTime: "8h 57m 16s",
+      averageWatchTime: "7 sec",
+      interactionsTotal: "46",
+      interactionsFollowers: "0.5%",
+      interactionsNonFollowers: "99.5%",
+      likeGraph: "1,5,11,4,6,27,23,3,3,6,3,7,22,22,47,9,21,13,8,7,45",
+      likeGraphManual: "",
+      genderMen: "77.1%",
+      genderWomen: "22.9%",
+      country1Label: "United States",
+      country1Percent: "44.7%",
+      country2Label: "United Kingdom",
+      country2Percent: "19.2%",
+      country3Label: "Canada",
+      country3Percent: "11.7%",
+      country4Label: "Australia",
+      country4Percent: "9.5%",
+      country5Label: "Germany",
+      country5Percent: "5.1%",
+      profileFollows: "4"
+    };
+
+    function readReelEditorData() {
+      const hash = window.location.hash || "";
+      if (hash.startsWith("#data=")) {
+        try {
+          const decoded = JSON.parse(decodeURIComponent(escape(atob(hash.slice(6)))));
+          const next = { ...defaultReelData, ...decoded, templateVersion: defaultReelData.templateVersion };
+          localStorage.setItem(REEL_DATA_KEY, JSON.stringify(next));
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+          return next;
+        } catch {
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+        }
+      }
+      try {
+        const saved = JSON.parse(localStorage.getItem(REEL_DATA_KEY));
+        if (saved?.templateVersion !== defaultReelData.templateVersion) return { ...defaultReelData };
+        return { ...defaultReelData, ...saved };
+      } catch {
+        return { ...defaultReelData };
+      }
+    }
+
+    function parsePercent(value, fallback = 0) {
+      const number = parseFloat(String(value ?? "").replace("%", ""));
+      return Number.isFinite(number) ? number : fallback;
+    }
+
+    function parseNumberList(value, fallback) {
+      const values = String(value ?? "").split(",").map(item => Number(item.trim())).filter(Number.isFinite);
+      return values.length ? values : fallback;
+    }
+
+    function isIndexedDbMediaRef(value) {
+      return String(value || "").startsWith("idb-media:");
+    }
+
+    function openReelMediaDb() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("reelEditorMediaDb", 1);
+        request.onupgradeneeded = () => {
+          request.result.createObjectStore("media");
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function getReelMediaUrl(ref) {
+      if (!isIndexedDbMediaRef(ref)) return ref || "";
+      const key = ref.replace("idb-media:", "");
+      const db = await openReelMediaDb();
+      const record = await new Promise((resolve, reject) => {
+        const request = db.transaction("media", "readonly").objectStore("media").get(key);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      db.close();
+      return record?.blob ? URL.createObjectURL(record.blob) : "";
+    }
+
+    function setDonut(kind, total, followers, nonFollowers) {
+      const wrap = document.querySelector(`[data-donut="${kind}"]`);
+      if (!wrap) return;
+      const circumference = 2 * Math.PI * 94;
+      const follower = Math.max(0, Math.min(100, parsePercent(followers)));
+      const nonFollower = Math.max(0, 100 - follower);
+      const nonCircle = wrap.querySelector(".donut-nonfollowers");
+      const followerCircle = wrap.querySelector(".donut-followers");
+      if (nonCircle) {
+        nonCircle.style.strokeDasharray = `${circumference * nonFollower / 100} ${circumference}`;
+        nonCircle.style.strokeDashoffset = "23";
+      }
+      if (followerCircle) {
+        followerCircle.style.strokeDasharray = `${Math.max(4, circumference * follower / 100)} ${circumference}`;
+        followerCircle.style.strokeDashoffset = "-21";
+      }
+      const value = wrap.querySelector(".ig-donut-value");
+      if (value) value.textContent = total;
+    }
+
+    async function setVideoSources(data) {
+      const reelVideo = await getReelMediaUrl(data.reelVideo);
+      const thumbnailSrc = await getReelMediaUrl(data.thumbnailImage);
+      const previewBox = document.querySelector(".video-thumbnail");
+      const thumbnail = previewBox?.querySelector("img");
+      if (previewBox && thumbnailSrc) {
+        const previewVideo = previewBox.querySelector("video");
+        if (previewVideo) {
+          const image = document.createElement("img");
+          image.src = thumbnailSrc;
+          image.alt = "Reel thumbnail";
+          previewVideo.replaceWith(image);
+        } else if (thumbnail) {
+          thumbnail.src = thumbnailSrc;
+        }
+      } else if (previewBox && reelVideo && !previewBox.querySelector("video")) {
+        const previewVideo = document.createElement("video");
+        previewVideo.src = reelVideo;
+        previewVideo.muted = true;
+        previewVideo.loop = true;
+        previewVideo.playsInline = true;
+        previewVideo.preload = "metadata";
+        if (thumbnail) thumbnail.replaceWith(previewVideo);
+      }
+      document.querySelectorAll("video").forEach(video => {
+        if (reelVideo) video.src = reelVideo;
+      });
+    }
+
+    function renderCountries(data) {
+      const country = document.getElementById("country");
+      country.innerHTML = "";
+      for (let i = 1; i <= 5; i += 1) {
+        const label = data[`country${i}Label`];
+        const percent = data[`country${i}Percent`];
+        const row = document.createElement("div");
+        row.className = "aud-row";
+        row.innerHTML = `<div class="aud-label"></div><div class="aud-line"><div class="aud-track"><div class="aud-fill"></div></div><span class="aud-percent"></span></div>`;
+        row.querySelector(".aud-label").textContent = label;
+        row.querySelector(".aud-percent").textContent = percent;
+        row.querySelector(".aud-fill").style.width = parsePercent(percent) + "%";
+        country.appendChild(row);
+      }
+    }
+
+    async function applyReelEditorData() {
+      const data = readReelEditorData();
+      window.reelEditorData = data;
+      await setVideoSources(data).catch(() => {});
+      document.querySelector(".reel-description").textContent = data.description;
+      document.querySelector(".reel-meta").textContent = data.meta;
+      document.querySelectorAll(".reel-stats .stat-value").forEach((item, index) => {
+        item.textContent = [data.likes, data.comments, data.shares, data.reposts, data.saves][index];
+      });
+      document.querySelectorAll("[data-reel-field]").forEach(item => {
+        const key = item.dataset.reelField;
+        if (key in data) item.textContent = data[key];
+      });
+      setDonut("views", data.viewsTotal, data.viewsFollowers, data.viewsNonFollowers);
+      setDonut("interactions", data.interactionsTotal, data.interactionsFollowers, data.interactionsNonFollowers);
+      document.querySelectorAll("[data-source]").forEach(block => {
+        const value = data[block.dataset.source];
+        block.querySelector(".source-percent").textContent = value;
+        block.querySelector(".source-fill").style.width = parsePercent(value) + "%";
+      });
+      document.getElementById("retXRight").textContent = data.retentionDuration;
+      const likeDuration = document.querySelector(".ret-duration");
+      if (likeDuration) likeDuration.textContent = data.retentionDuration;
+      document.querySelector('[data-bar="genderMen"]').style.width = parsePercent(data.genderMen) + "%";
+      document.querySelector('[data-bar="genderWomen"]').style.width = parsePercent(data.genderWomen) + "%";
+      renderCountries(data);
+    }
+
+    function showTab(tabId, event) {
+      document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
+      document.querySelectorAll(".audience-tab").forEach(btn => btn.classList.remove("selected-tab"));
+      document.getElementById(tabId).style.display = "block";
+      event.target.classList.add("selected-tab");
+    }
+
+    document.querySelector(".back-button").addEventListener("click", () => history.back());
+    applyReelEditorData();
+  </script>
+
+  <script>
+    function initRetentionGraph() {
+      const canvas = document.getElementById("retCanvas");
+      const tip = document.getElementById("retTip");
+      const video = document.getElementById("retThumb");
+      const play = document.getElementById("retPlayOverlay");
+      const ctx = canvas.getContext("2d");
+      const dpr = window.devicePixelRatio || 1;
+      const data = window.reelEditorData || defaultReelData;
+      const retention = parseNumberList(data.retentionPath || data.retentionCurve, [100,88,81,76,72,69,66,63,60,58,55,53,51,49,47,45,43,41,39,37,34,31,28,26,24,22,20,18,16,14,11,8]);
+      let duration = Math.max(1, retention.length - 1);
+      function resize() {
+        const r = canvas.getBoundingClientRect();
+        canvas.width = r.width * dpr;
+        canvas.height = r.height * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        drawBase();
+      }
+      function y(percent) {
+        const padTop = 8;
+        const padBottom = 26;
+        return padTop + (1 - percent / 100) * (canvas.clientHeight - padTop - padBottom);
+      }
+      function formatTime(sec) {
+        sec = Math.floor(sec);
+        return Math.floor(sec / 60) + ":" + (sec % 60 < 10 ? "0" : "") + (sec % 60);
+      }
+      function valueAt(t) {
+        const raw = t * (retention.length - 1);
+        const left = Math.floor(raw);
+        const right = Math.min(retention.length - 1, Math.ceil(raw));
+        const mix = raw - left;
+        return retention[left] + (retention[right] - retention[left]) * mix;
+      }
+      function drawBase() {
+        const w = canvas.clientWidth;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "#efefef";
+        ctx.lineWidth = 1;
+        [100, 50, 0].forEach(v => {
+          ctx.beginPath();
+          ctx.moveTo(0, y(v));
+          ctx.lineTo(w, y(v));
+          ctx.stroke();
+        });
+        ctx.beginPath();
+        for (let i = 0; i <= 240; i += 1) {
+          const t = i / 240;
+          const px = t * w;
+          const py = y(valueAt(t));
+          i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+        }
+        ctx.strokeStyle = "#e338c1";
+        ctx.lineWidth = 4;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.stroke();
+      }
+      function updateMarker(time) {
+        const t = Math.max(0, Math.min(1, time / duration));
+        const percent = valueAt(t);
+        const x = t * canvas.clientWidth;
+        const pointY = y(percent);
+        drawBase();
+        ctx.strokeStyle = "rgba(0,0,0,.25)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, y(0));
+        ctx.lineTo(x, y(100));
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(x, pointY, 7, 0, Math.PI * 2);
+        ctx.fillStyle = "#e338c1";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x, pointY, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff";
+        ctx.fill();
+        tip.style.left = x + "px";
+        tip.style.top = pointY + "px";
+        tip.innerHTML = Math.round(percent) + "%<br><small>" + formatTime(time) + "</small>";
+        tip.style.display = "block";
+      }
+      canvas.addEventListener("pointermove", event => {
+        const r = canvas.getBoundingClientRect();
+        updateMarker(((event.clientX - r.left) / r.width) * duration);
+      });
+      canvas.addEventListener("pointerleave", () => { tip.style.display = "none"; drawBase(); });
+      video.addEventListener("timeupdate", () => updateMarker(video.currentTime));
+      video.addEventListener("loadedmetadata", () => { duration = Math.round(video.duration) || duration; resize(); });
+      play.addEventListener("click", () => { video.paused ? video.play() : video.pause(); play.style.display = video.paused ? "flex" : "none"; });
+      window.addEventListener("resize", resize);
+      resize();
+    }
+
+    function initSecondRetention(block) {
+      const canvas = block.querySelector(".ret-canvas");
+      const tip = block.querySelector(".ret-tooltip");
+      const video = block.querySelector(".ret-video");
+      const play = block.querySelector(".ret-play");
+      const ctx = canvas.getContext("2d");
+      const dpr = window.devicePixelRatio || 1;
+      const data = window.reelEditorData || defaultReelData;
+      const retention = parseNumberList(data.likeGraphManual || data.likeGraph, [1,5,11,4,6,27,23,3,3,6,3,7,22,22,47,9,21,13,8,7,45]);
+      const total = Math.max(1, retention.length - 1);
+      function resize() {
+        const r = canvas.getBoundingClientRect();
+        canvas.width = r.width * dpr;
+        canvas.height = r.height * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        drawBase();
+      }
+      function y(percent) {
+        return 10 + (1 - percent / 100) * (canvas.clientHeight - 38);
+      }
+      function x(index) {
+        return (index / total) * canvas.clientWidth;
+      }
+      function formatTime(sec) {
+        sec = Math.floor(sec);
+        return Math.floor(sec / 60) + ":" + (sec % 60 < 10 ? "0" : "") + (sec % 60);
+      }
+      function drawBase() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "#efefef";
+        ctx.lineWidth = 1;
+        [50, 25, 0].forEach(v => {
+          ctx.beginPath();
+          ctx.moveTo(0, y(v));
+          ctx.lineTo(canvas.clientWidth, y(v));
+          ctx.stroke();
+        });
+        ctx.beginPath();
+        retention.forEach((value, index) => {
+          index === 0 ? ctx.moveTo(x(index), y(value)) : ctx.lineTo(x(index), y(value));
+        });
+        ctx.strokeStyle = "#e338c1";
+        ctx.lineWidth = 4;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.stroke();
+      }
+      function updateAtIndex(index) {
+        index = Math.max(0, Math.min(total, Math.round(index)));
+        drawBase();
+        const px = x(index);
+        const py = y(retention[index]);
+        ctx.strokeStyle = "rgba(0,0,0,.25)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(px, y(0));
+        ctx.lineTo(px, y(100));
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(px, py, 7, 0, Math.PI * 2);
+        ctx.fillStyle = "#e338c1";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff";
+        ctx.fill();
+        tip.style.left = px + "px";
+        tip.style.top = py + "px";
+        tip.innerHTML = retention[index] + "%<br><small>" + formatTime(index) + "</small>";
+        tip.style.display = "block";
+      }
+      canvas.addEventListener("pointermove", event => {
+        const r = canvas.getBoundingClientRect();
+        updateAtIndex(((event.clientX - r.left) / r.width) * total);
+      });
+      canvas.addEventListener("pointerleave", () => { tip.style.display = "none"; drawBase(); });
+      video.addEventListener("timeupdate", () => updateAtIndex(video.currentTime));
+      play.onclick = () => { video.paused ? video.play() : video.pause(); play.style.display = video.paused ? "flex" : "none"; };
+      window.addEventListener("resize", resize);
+      resize();
+    }
+
+    initRetentionGraph();
+    document.querySelectorAll(".retention-instance").forEach(initSecondRetention);
+  </script>
+</body>
+</html>
