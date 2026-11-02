@@ -400,7 +400,7 @@
         <section><h2>Overview metrics</h2><div id="indexOverviewFields" class="grid"></div></section>
         <section><h2>Overview graph</h2><div class="grid"><label>Y-axis labels (top, middle, bottom)<input data-index-scalar="overview.chart.labels" data-index-type="list"></label><label>Date labels (left, middle, right)<input data-index-scalar="overview.chart.dates" data-index-type="list"></label></div><label>Graph points (comma separated)<textarea id="indexOverviewPoints" rows="3"></textarea></label><p class="editor-help">Graph preview mein point par touch/click karke upar ya neeche drag karo. Values neeche khud update hongi.</p><svg class="index-graph-preview" viewBox="0 0 340 100" preserveAspectRatio="none" aria-label="Overview graph preview"><path d="M0 0H340M0 50H340M0 100H340" stroke="#e4e7ec" fill="none"/><path id="indexOverviewPreviewLine" d="" fill="none" stroke="#bd00b5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><g id="indexOverviewHandles"></g></svg></section>
         <section><h2>Views by content type</h2><div id="indexContentTypes"></div></section>
-        <section><h2>All content (Content tab)</h2><p class="editor-help">Yahan har post/reel ki row edit karo. Title, time, date, type, views, viewers, follows, likes, comments, shares aur thumbnail path badal sakte ho. Sorting ke extra numbers “More stats and sorting” mein hain. Naya item jodne ke liye Add content dabao.</p><div id="indexContentItems"></div><button type="button" data-index-add="contentItems">Add content</button></section>
+        <section><h2>All content (Content tab)</h2><p class="editor-help">Yahan har post/reel ki row edit karo. Title, time, date, type, views, viewers, follows, likes, comments, shares aur thumbnail image badal sakte ho. Sorting ke extra numbers “More stats and sorting” mein hain. Naya item jodne ke liye Add content dabao.</p><div id="indexContentItems"></div><button type="button" data-index-add="contentItems">Add content</button></section>
         <section><h2>Audience overview</h2><div id="indexAudienceFields" class="grid"></div><label>Follower growth date labels<input data-index-scalar="audience.growthDates" data-index-type="list"></label><h3>Gender</h3><div id="indexGenderRows"></div><h3>Age ranges</h3><div id="indexAgeRows"></div><h3>Follower growth graph values</h3><p class="editor-help">Graph ke points ko touch/click karke drag karo; teenon graphs alag edit hote hain.</p><div class="grid"><label>Overall points<input data-index-growth="Overall"><svg class="index-graph-preview" viewBox="0 0 340 100" preserveAspectRatio="none"><path data-index-growth-preview="Overall" fill="none" stroke="#bd00b5" stroke-width="3"/><g data-index-growth-handles="Overall"></g></svg></label><label>Follows points<input data-index-growth="Follows"><svg class="index-graph-preview" viewBox="0 0 340 100" preserveAspectRatio="none"><path data-index-growth-preview="Follows" fill="none" stroke="#bd00b5" stroke-width="3"/><g data-index-growth-handles="Follows"></g></svg></label><label>Unfollows points<input data-index-growth="Unfollows"><svg class="index-graph-preview" viewBox="0 0 340 100" preserveAspectRatio="none"><path data-index-growth-preview="Unfollows" fill="none" stroke="#bd00b5" stroke-width="3"/><g data-index-growth-handles="Unfollows"></g></svg></label></div></section>
         <section><h2>Top locations</h2><h3>Countries</h3><div id="indexCountries"></div><h3>Cities</h3><div id="indexCities"></div></section>
         <section><h2>Follower active times</h2><p class="editor-help">Har din ke bars ko touch/click karke upar-neeche drag karo; har bar ek time slot hai. Values neeche input mein bhi update hongi.</p><div id="indexActiveTimes"></div></section>
@@ -420,8 +420,8 @@
         <div class="thumb-edit phone-only">
           <img class="thumb-preview" data-preview-index="0" src="" alt="">
           <div class="actions">
-            <label>Insights post image
-              <input type="file" accept="image/*" data-image-index="0">
+            <label>Choose image or video
+              <input type="file" accept="image/*,video/*" data-image-index="0">
             </label>
             <button type="button" data-remove-image="0">Remove image</button>
           </div>
@@ -960,7 +960,14 @@
       const root = document.getElementById(containerId);
       root.innerHTML = rows.map((row, index) => {
         const item = tuple ? { name: row[0], value: row[1] } : row;
-        const makeInput = ([key, label]) => `<label>${label}<input data-index-field="${arrayKey}|${index}|${key}" value="${escapeAttr(item?.[key] ?? "")}"></label>`;
+        const makeInput = ([key, label]) => {
+          if (arrayKey === "contentItems" && key === "image") return `<label>Thumbnail image
+            <input type="file" accept="image/*" data-index-image="${index}">
+            <input type="hidden" data-index-field="${arrayKey}|${index}|${key}" value="${escapeAttr(item?.[key] ?? "")}">
+            <img class="thumb-preview" data-index-image-preview="${index}" src="${escapeAttr(item?.[key] || "")}" alt="Selected thumbnail" style="${item?.[key] ? "" : "display:none;"}">
+          </label>`;
+          return `<label>${label}<input data-index-field="${arrayKey}|${index}|${key}" value="${escapeAttr(item?.[key] ?? "")}"></label>`;
+        };
         const inputs = fields.filter(field => !field[2]).map(makeInput).join("");
         const advancedFields = fields.filter(field => field[2]);
         const advanced = advancedFields.length ? `<details class="index-advanced"><summary>More stats and sorting</summary><div class="index-row-grid">${advancedFields.map(makeInput).join("")}</div></details>` : "";
@@ -986,7 +993,7 @@
       drawIndexGraphPreview(graphPreview, pointField);
       pointField.oninput = () => { try { drawIndexGraphPreview(graphPreview, pointField); } catch {} };
       renderIndexRows("indexContentTypes", "overview.contentTypes", overview.contentTypes, [["name","Type name"],["value","Displayed total"],["width","Bar width %"]]);
-      renderIndexRows("indexContentItems", "contentItems", data.contentItems, [["title","Content title"],["age","Age/time"],["date","Date/category text"],["type","Type"],["views","Views"],["viewCount","Views number for sorting",true],["viewers","Viewers"],["viewerCount","Viewers number for sorting",true],["follows","Follows"],["followCount","Follows number for sorting",true],["likes","Likes"],["likeCount","Likes number for sorting",true],["comments","Comments"],["commentCount","Comments number",true],["shares","Shares"],["shareCount","Shares number",true],["topViews","Top views label",true],["dateOrder","Date sort number",true],["image","Thumbnail path"]]);
+      renderIndexRows("indexContentItems", "contentItems", data.contentItems, [["title","Content title"],["age","Age/time"],["date","Date/category text"],["type","Type"],["views","Views"],["viewCount","Views number for sorting",true],["viewers","Viewers"],["viewerCount","Viewers number for sorting",true],["follows","Follows"],["followCount","Follows number for sorting",true],["likes","Likes"],["likeCount","Likes number for sorting",true],["comments","Comments"],["commentCount","Comments number",true],["shares","Shares"],["shareCount","Shares number for sorting",true],["topViews","Top views label",true],["dateOrder","Date sort number",true],["image","Thumbnail image"]]);
       const audience = data.audience;
       document.getElementById("indexAudienceFields").innerHTML = `<label>Followers<input data-index-value="audience.followers" value="${escapeAttr(audience.followers)}"></label><label>Follower change text<input data-index-value="audience.trend" value="${escapeAttr(audience.trend)}"></label>`;
       renderIndexRows("indexGenderRows", "audience.gender", audience.gender, [["label","Gender label"],["percent","Percent"],["color","Bar color"]]);
@@ -1110,8 +1117,8 @@
           <div class="thumb-edit">
             <img class="thumb-preview" data-preview-index="${index}" src="${escapeAttr(item.image || "")}" alt="">
             <div class="actions">
-              <label>Video image
-                <input type="file" accept="image/*" data-image-index="${index}">
+              <label>Choose image or video
+                <input type="file" accept="image/*,video/*" data-image-index="${index}">
               </label>
               <button type="button" data-remove-image="${index}">Remove image</button>
             </div>
@@ -1700,6 +1707,21 @@
     }
 
     document.addEventListener("change", async (event) => {
+      const indexImage = event.target.closest("[data-index-image]");
+      if (indexImage?.files?.[0]) {
+        const preview = document.querySelector(`[data-index-image-preview="${indexImage.dataset.indexImage}"]`);
+        const hidden = document.querySelector(`[data-index-field="contentItems|${indexImage.dataset.indexImage}|image"]`);
+        try {
+          const imageData = await readImageFile(indexImage.files[0]);
+          hidden.value = imageData;
+          preview.src = imageData;
+          preview.style.display = "";
+          showStatus("Thumbnail selected. Save changes to apply it.");
+        } catch {
+          showStatus("Could not read this image file.");
+        }
+        return;
+      }
       const reelFile = event.target.closest("[data-reel-file]");
       if (reelFile && reelFile.files?.[0]) {
         const file = reelFile.files[0];
@@ -1717,15 +1739,56 @@
       const input = event.target.closest("[data-image-index]");
       if (!input || !input.files?.[0]) return;
       const index = Number(input.dataset.imageIndex);
-      const reader = new FileReader();
-      reader.onload = () => {
+      const file = input.files[0];
+      try {
+        const imageData = file.type.startsWith("video/")
+          ? await createVideoPoster(file)
+          : await readImageFile(file);
         const data = collectData();
-        data.topContent[index].image = reader.result;
+        data.topContent[index].image = imageData;
         saveActiveData(data, "Image saved. Selected page thumbnail updated.");
-      };
-      reader.onerror = () => showStatus("Could not read this image file.");
-      reader.readAsDataURL(input.files[0]);
+      } catch {
+        showStatus("Could not use this file. Choose a valid image or video.");
+      }
     });
+
+    function readImageFile(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error || new Error("Could not read image"));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function createVideoPoster(file) {
+      return new Promise((resolve, reject) => {
+        const video = document.createElement("video");
+        const url = URL.createObjectURL(file);
+        video.preload = "metadata";
+        video.muted = true;
+        video.playsInline = true;
+        video.onloadeddata = () => {
+          try {
+            const canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            if (!canvas.width || !canvas.height) throw new Error("Video has no usable frame");
+            canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL("image/jpeg", 0.88));
+          } catch (error) {
+            reject(error);
+          } finally {
+            URL.revokeObjectURL(url);
+          }
+        };
+        video.onerror = () => {
+          URL.revokeObjectURL(url);
+          reject(new Error("Could not read video"));
+        };
+        video.src = url;
+      });
+    }
 
     document.addEventListener("click", (event) => {
       const removeReelFile = event.target.closest("[data-remove-reel-file]");
